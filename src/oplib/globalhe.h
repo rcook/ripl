@@ -18,13 +18,13 @@
 
 /* Command-line version. */
 int globalHEExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *globalHEHelp(void);
 /* Internal entrypoint. */
 riplBool globalHEApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    riplGreyMap *poutputGreyMap);
 
 #endif
 

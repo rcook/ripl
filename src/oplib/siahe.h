@@ -19,15 +19,15 @@
 
 /* Command-line version. */
 int siaheExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *siaheHelp(void);
 /* Internal entrypoint. */
 riplBool siaheApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	miscWindowFunction win_func,
-	unsigned window_size);
+    riplGreyMap *poutputGreyMap,
+    miscWindowFunction win_func,
+    unsigned window_size);
 
 #endif
 

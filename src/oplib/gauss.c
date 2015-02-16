@@ -16,84 +16,84 @@
 
 /* Internal entrypoint. */
 riplBool gaussApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	double variance) {
+    riplGreyMap *poutputGreyMap,
+    double variance) {
 
-	unsigned kernel_size;
-	double *kernel;
-	riplGrey *inP, *outP;
-	unsigned i;
+    unsigned kernel_size;
+    double *kernel;
+    riplGrey *inP, *outP;
+    unsigned i;
 
-	RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
-	RIPL_VALIDATE(variance>=0)
+    RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
+    RIPL_VALIDATE(variance>=0)
 
-	/* Generate appropriate Gaussian kernel. */
-	miscGenerateGaussian(variance, &kernel_size, &kernel);
-	RIPL_VALIDATE(kernel)
+    /* Generate appropriate Gaussian kernel. */
+    miscGenerateGaussian(variance, &kernel_size, &kernel);
+    RIPL_VALIDATE(kernel)
 
-	/* Perform 1D convolution in x-direction: i is row number. */
-	inP=pinputGreyMap->data;
-	outP=poutputGreyMap->data;
-	for (i=0; i<pinputGreyMap->rows; i++) {
-		miscConvolve1DFP(inP, outP, pinputGreyMap->cols,
-			1, kernel, kernel_size);
-		inP+=pinputGreyMap->cols;		/* Go to next row. */
-		outP+=pinputGreyMap->cols;
-	}
+    /* Perform 1D convolution in x-direction: i is row number. */
+    inP=pinputGreyMap->data;
+    outP=poutputGreyMap->data;
+    for (i=0; i<pinputGreyMap->rows; i++) {
+        miscConvolve1DFP(inP, outP, pinputGreyMap->cols,
+            1, kernel, kernel_size);
+        inP+=pinputGreyMap->cols;		/* Go to next row. */
+        outP+=pinputGreyMap->cols;
+    }
 
-	/* Perform 1D convolution in y-direction: i is column number. */
-	inP=poutputGreyMap->data;
-	outP=pinputGreyMap->data;
-	for (i=0; i<pinputGreyMap->cols; i++) {
-		miscConvolve1DFP(inP, outP, pinputGreyMap->rows,
-			pinputGreyMap->cols, kernel, kernel_size);
-		inP++;								/* Go to next column. */
-		outP++;
-	}
+    /* Perform 1D convolution in y-direction: i is column number. */
+    inP=poutputGreyMap->data;
+    outP=pinputGreyMap->data;
+    for (i=0; i<pinputGreyMap->cols; i++) {
+        miscConvolve1DFP(inP, outP, pinputGreyMap->rows,
+            pinputGreyMap->cols, kernel, kernel_size);
+        inP++;								/* Go to next column. */
+        outP++;
+    }
 
-	/* Swap pointers round so the output's in the right place. */
-	outP=pinputGreyMap->data;
-	pinputGreyMap->data=poutputGreyMap->data;
-	poutputGreyMap->data=outP;
+    /* Swap pointers round so the output's in the right place. */
+    outP=pinputGreyMap->data;
+    pinputGreyMap->data=poutputGreyMap->data;
+    poutputGreyMap->data=outP;
 
-	/* Deallocate kernel and return. */
-	riplFree(kernel);
-	return true;
+    /* Deallocate kernel and return. */
+    riplFree(kernel);
+    return true;
 }
 
 /* Command-line version. */
 int gaussExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap) {
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap) {
 
-	double variance;
+    double variance;
 
-	if (argc<1) {
-		riplMessage(itError, "Incorrect number of parameters!\n"
-			"Usage: " RIPL_EXENAME " " RIPL_CMDLINE
-			" gaussian <var>\n");
-		return RIPL_PARAMERROR;
-	}
-	if (!riplArgGet_double(argv[0], &variance)) {
-		riplMessage(itError, "gauss: <var> should be a double >= 0.\n");
-		return RIPL_PARAMERROR;
-	}
-	if (variance<0) {
-		riplMessage(itError, "gauss: <var> should be a double >= 0.\n");
-		return RIPL_PARAMERROR;
-	}
-	if (!gaussApplyOperator(pinputGreyMap,
-		poutputGreyMap,
-		variance))
-		return RIPL_EXECUTEERROR;
-	return 1;
+    if (argc<1) {
+        riplMessage(itError, "Incorrect number of parameters!\n"
+            "Usage: " RIPL_EXENAME " " RIPL_CMDLINE
+            " gaussian <var>\n");
+        return RIPL_PARAMERROR;
+    }
+    if (!riplArgGet_double(argv[0], &variance)) {
+        riplMessage(itError, "gauss: <var> should be a double >= 0.\n");
+        return RIPL_PARAMERROR;
+    }
+    if (variance<0) {
+        riplMessage(itError, "gauss: <var> should be a double >= 0.\n");
+        return RIPL_PARAMERROR;
+    }
+    if (!gaussApplyOperator(pinputGreyMap,
+        poutputGreyMap,
+        variance))
+        return RIPL_EXECUTEERROR;
+    return 1;
 }
 
 /* Display help screen. */
 const char *gaussHelp(void) {
-	return "gaussian <var>\n\n"
-		"   Smoothes image by convolving it with a Gaussian kernel\n"
-		"   where <var> is the variance of the kernel.\n";
+    return "gaussian <var>\n\n"
+        "   Smoothes image by convolving it with a Gaussian kernel\n"
+        "   where <var> is the variance of the kernel.\n";
 }
 

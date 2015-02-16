@@ -18,14 +18,14 @@
 
 /* Command-line version. */
 int gaussExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *gaussHelp(void);
 /* Internal entrypoint. */
 riplBool gaussApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	double variance);
+    riplGreyMap *poutputGreyMap,
+    double variance);
 
 #endif
 

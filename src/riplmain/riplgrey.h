@@ -23,9 +23,9 @@
 #include "riplmisc.h"
 
 typedef struct tagriplGreyMap {
-	unsigned cols, rows;
-	unsigned long size;
-	riplGrey *data;
+    unsigned cols, rows;
+    unsigned long size;
+    riplGrey *data;
 } riplGreyMap;
 
 #endif

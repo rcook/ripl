@@ -21,8 +21,8 @@
 
 /* Enumerated data type defining transform direction. */
 typedef enum tagriplTransformType {
-	ttForward=1,
-	ttInverse=-1
+    ttForward=1,
+    ttInverse=-1
 } riplTransformType;
 
 #endif

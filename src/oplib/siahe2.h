@@ -21,18 +21,18 @@
 
 /* Command-line version. */
 int siahe2Execute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputgrey,
-	riplGreyMap *poutputgrey);
+    const char **argv,
+    riplGreyMap *pinputgrey,
+    riplGreyMap *poutputgrey);
 const char *siahe2Help(void);
 /* Internal entrypoint. */
 riplBool siahe2ApplyOperator(riplGreyMap *pinputgrey,
-	riplGreyMap *poutputgrey,
-	unsigned w_r,
-	unsigned w_c,
-	unsigned d_r,
-	unsigned d_c,
-	miscWindowProfile wp);
+    riplGreyMap *poutputgrey,
+    unsigned w_r,
+    unsigned w_c,
+    unsigned d_r,
+    unsigned d_c,
+    miscWindowProfile wp);
 
 #endif
 

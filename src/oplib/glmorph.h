@@ -24,17 +24,17 @@
 
 /* Command-line version. */
 int glmorphExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *glmorphHelp(void);
 /* Internal entrypoint. */
 riplBool glmorphApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	miscOperatorType operator_type,
-	miscPredefinedStruct predefined_struct,
-	unsigned struct_el_cols,
-	unsigned struct_el_rows,
-	riplBool *struct_el);
+    riplGreyMap *poutputGreyMap,
+    miscOperatorType operator_type,
+    miscPredefinedStruct predefined_struct,
+    unsigned struct_el_cols,
+    unsigned struct_el_rows,
+    riplBool *struct_el);
 
 #endif

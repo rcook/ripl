@@ -20,8 +20,8 @@
 
 riplGreyMap *riplLoadImage(const char *pfileName);
 riplBool riplSaveImage(const char *pfileName,
-	riplGraphicFormat graphicFormat,
-	const riplGreyMap *pgreyMap);
+    riplGraphicFormat graphicFormat,
+    const riplGreyMap *pgreyMap);
 riplGraphicFormat riplReadGraphicFormat(const char *pfileName);
 
 #endif

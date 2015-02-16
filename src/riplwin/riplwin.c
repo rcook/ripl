@@ -30,54 +30,54 @@ int main(int argc, char **argv);
 #			pragma argsused
 #		endif
 int WINAPI WinMain(HINSTANCE hInstance,
-	HINSTANCE hPrevInstance,
-	LPSTR lpszCmdLine,
-	int nCmdShow) {
+    HINSTANCE hPrevInstance,
+    LPSTR lpszCmdLine,
+    int nCmdShow) {
 
-	char *ptr1, *ptr2, *ptr3;
-	unsigned argc, i;
-	char **argv;
-	int return_val;
+    char *ptr1, *ptr2, *ptr3;
+    unsigned argc, i;
+    char **argv;
+    int return_val;
 
-	/* Count number of command-line arguments. */
-	argc=0;
-	ptr1=lpszCmdLine;
-	while (*ptr1) {
-		if (isspace(*ptr1)) {
-			while (isspace(*ptr1)) ptr1++;
-			continue;
-		}
-		argc++;
-		while (*ptr1 && !isspace(*ptr1)) ptr1++;
-	}
+    /* Count number of command-line arguments. */
+    argc=0;
+    ptr1=lpszCmdLine;
+    while (*ptr1) {
+        if (isspace(*ptr1)) {
+            while (isspace(*ptr1)) ptr1++;
+            continue;
+        }
+        argc++;
+        while (*ptr1 && !isspace(*ptr1)) ptr1++;
+    }
 
-	/* Allocate memory for pointers to them. */
-	argv=(char **)calloc(argc, sizeof(char *));
+    /* Allocate memory for pointers to them. */
+    argv=(char **)calloc(argc, sizeof(char *));
 
-	/* Parse 'em! */
-	ptr1=lpszCmdLine;
-	for (i=0; i<argc; i++) {
-		if (isspace(*ptr1)) {
-			while (isspace(*ptr1)) ptr1++;
-		}
-		ptr2=ptr1;
-		while (*ptr2 && !isspace(*ptr2)) ptr2++;
-		ptr3=argv[i]=(char *)calloc(ptr2-ptr1+1, sizeof(char));
-		while (ptr1<ptr2) {
-			*ptr3++=*ptr1++;
-		}
-		*ptr3=0;
-	}
+    /* Parse 'em! */
+    ptr1=lpszCmdLine;
+    for (i=0; i<argc; i++) {
+        if (isspace(*ptr1)) {
+            while (isspace(*ptr1)) ptr1++;
+        }
+        ptr2=ptr1;
+        while (*ptr2 && !isspace(*ptr2)) ptr2++;
+        ptr3=argv[i]=(char *)calloc(ptr2-ptr1+1, sizeof(char));
+        while (ptr1<ptr2) {
+            *ptr3++=*ptr1++;
+        }
+        *ptr3=0;
+    }
 
-	/* Execute main function recording return value. */
-	return_val=main(argc, argv);
+    /* Execute main function recording return value. */
+    return_val=main(argc, argv);
 
-	/* Deallocate memory used for parsed arguments. */
-	for (i=0; i<argc; i++) free(argv[i]);
-	free(argv);
+    /* Deallocate memory used for parsed arguments. */
+    for (i=0; i<argc; i++) free(argv[i]);
+    free(argv);
 
-	/* Return to operating system. */
-	return return_val;
+    /* Return to operating system. */
+    return return_val;
 }
 #	endif
 #else

@@ -18,14 +18,14 @@
 
 /* Command-line version. */
 int marrhildExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *marrhildHelp(void);
 /* Internal entrypoint. */
 riplBool marrhildApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	double variance);
+    riplGreyMap *poutputGreyMap,
+    double variance);
 
 #endif
 

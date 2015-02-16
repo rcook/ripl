@@ -22,16 +22,16 @@
 
 /* Command-line version. */
 int sobelExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *sobelHelp(void);
 /* Internal entrypoint. */
 riplBool sobelApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	unsigned neighbourhood,
-	riplGrey threshold,
-	riplBool overlay);
+    riplGreyMap *poutputGreyMap,
+    unsigned neighbourhood,
+    riplGrey threshold,
+    riplBool overlay);
 
 #endif
 

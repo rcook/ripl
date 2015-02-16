@@ -19,25 +19,25 @@
 
 /* Enumeration typedef identifying type of dllconvolution. */
 typedef enum tagdllconvKernelType {
-	dllktInvalid,
-	dllktint,
-	dllktdouble
+    dllktInvalid,
+    dllktint,
+    dllktdouble
 } dllconvKernelType;
 
 /* Command-line version. */
 int dllconvExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *dllconvHelp(void);
 /* Internal entrypoint. */
 riplBool dllconvApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	unsigned scale,
-	riplBool store_abs,
-	unsigned kernel_columns,
-	unsigned kernel_rows,
-	dllconvKernelType kernel_type,
-	void *kernel);
+    riplGreyMap *poutputGreyMap,
+    unsigned scale,
+    riplBool store_abs,
+    unsigned kernel_columns,
+    unsigned kernel_rows,
+    dllconvKernelType kernel_type,
+    void *kernel);
 
 #endif

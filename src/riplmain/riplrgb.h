@@ -19,19 +19,19 @@
 #include "ripldefs.h"
 
 typedef enum tagriplRGBComponent {
-	rgbcRed,
-	rgbcGreen,
-	rgbcBlue,
-	rgbcMono
+    rgbcRed,
+    rgbcGreen,
+    rgbcBlue,
+    rgbcMono
 } riplRGBComponent;
 
 typedef struct tagriplRGBMap {
-	unsigned cols, rows;
-	unsigned long size;
-	riplGrey *red,
-		*green,
-		*blue,
-		*mono;
+    unsigned cols, rows;
+    unsigned long size;
+    riplGrey *red,
+        *green,
+        *blue,
+        *mono;
 } riplRGBMap;
 
 #endif

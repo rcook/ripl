@@ -18,23 +18,23 @@
 
 /* Enumeration typedef identifying type of convolution. */
 typedef enum tagconvKernelType {
-	ktInvalid,
-	ktint,
-	ktdouble
+    ktInvalid,
+    ktint,
+    ktdouble
 } convKernelType;
 
 /* Command-line version. */
 int convExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *convHelp(void);
 /* Internal entrypoint. */
 riplBool convApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	unsigned kernel_columns,
-	unsigned kernel_rows,
-	convKernelType kernel_type,
-	void *kernel);
+    riplGreyMap *poutputGreyMap,
+    unsigned kernel_columns,
+    unsigned kernel_rows,
+    convKernelType kernel_type,
+    void *kernel);
 
 #endif

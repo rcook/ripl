@@ -18,13 +18,13 @@
 
 /* Command-line version. */
 int testExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *testHelp(void);
 /* Internal entrypoint. */
 riplBool testApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    riplGreyMap *poutputGreyMap);
 
 #endif
 

@@ -17,15 +17,15 @@
 
 /* Command-line version. */
 int wmraExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *wmraHelp(void);
 /* Internal entrypoint. */
 riplBool wmraApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	riplwtFilterType filter_type,
-	float threshold);
+    riplGreyMap *poutputGreyMap,
+    riplwtFilterType filter_type,
+    float threshold);
 
 #endif
 

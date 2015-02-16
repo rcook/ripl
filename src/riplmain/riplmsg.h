@@ -20,12 +20,12 @@
 #include "ripldefs.h"
 
 typedef enum tagriplIconType {
-	itWarning,
-	itError,
-	itConsole,
-	itInfo,
-	itNone,
-	itDebug
+    itWarning,
+    itError,
+    itConsole,
+    itInfo,
+    itNone,
+    itDebug
 } riplIconType;
 
 int riplMessage(riplIconType icon, const char *format, ...);

@@ -18,14 +18,14 @@
 
 /* Command-line version. */
 int medianExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *medianHelp(void);
 /* Internal entrypoint. */
 riplBool medianApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	unsigned window_size);
+    riplGreyMap *poutputGreyMap,
+    unsigned window_size);
 
 #endif
 

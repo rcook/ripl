@@ -27,56 +27,56 @@ static char buffer[BUFFER_LEN];
 
 /* Display message---similar format to ANSI-C printf. */
 int riplMessage(riplIconType icon, const char *format, ...) {
-	va_list ap;
-	UINT style;
+    va_list ap;
+    UINT style;
 
-	va_start(ap, format);
-	vsprintf(buffer, format, ap);
-	switch (icon) {
-		case itWarning:
-			style=MB_ICONEXCLAMATION;
-			break;
-		case itError:
-			style=MB_ICONHAND;
-			break;
-		case itConsole:
-		case itInfo:
-			style=MB_ICONINFORMATION;
-			break;
-		case itDebug:
-			return MessageBox(NULL,
-				buffer, RIPL_APPNAME " Debugging", MB_ICONHAND | MB_OK);
-		default:
-			style=0;
-			break;
-	}
-	return MessageBox(NULL, buffer, RIPL_APPNAME, style | MB_OK);
+    va_start(ap, format);
+    vsprintf(buffer, format, ap);
+    switch (icon) {
+        case itWarning:
+            style=MB_ICONEXCLAMATION;
+            break;
+        case itError:
+            style=MB_ICONHAND;
+            break;
+        case itConsole:
+        case itInfo:
+            style=MB_ICONINFORMATION;
+            break;
+        case itDebug:
+            return MessageBox(NULL,
+                buffer, RIPL_APPNAME " Debugging", MB_ICONHAND | MB_OK);
+        default:
+            style=0;
+            break;
+    }
+    return MessageBox(NULL, buffer, RIPL_APPNAME, style | MB_OK);
 }
 
 /* Display message---similar format to ANSI-C vprintf. */
 int riplVMessage(riplIconType icon, const char *format, va_list ap) {
-	UINT style;
-	
-	vsprintf(buffer, format, ap);
-	switch (icon) {
-		case itWarning:
-			style=MB_ICONEXCLAMATION;
-			break;
-		case itError:
-			style=MB_ICONHAND;
-			break;
-		case itConsole:
-		case itInfo:
-			style=MB_ICONINFORMATION;
-			break;
-		case itDebug:
-			return MessageBox(NULL,
-				buffer, RIPL_APPNAME " Debugging", MB_ICONHAND | MB_OK);
-		default:
-			style=0;
-			break;
-	}
-	return MessageBox(NULL, buffer, RIPL_APPNAME, style | MB_OK);
+    UINT style;
+    
+    vsprintf(buffer, format, ap);
+    switch (icon) {
+        case itWarning:
+            style=MB_ICONEXCLAMATION;
+            break;
+        case itError:
+            style=MB_ICONHAND;
+            break;
+        case itConsole:
+        case itInfo:
+            style=MB_ICONINFORMATION;
+            break;
+        case itDebug:
+            return MessageBox(NULL,
+                buffer, RIPL_APPNAME " Debugging", MB_ICONHAND | MB_OK);
+        default:
+            style=0;
+            break;
+    }
+    return MessageBox(NULL, buffer, RIPL_APPNAME, style | MB_OK);
 }
 #else
 #	error Tcl/Tk version is Win32/NT only.

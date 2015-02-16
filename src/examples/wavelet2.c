@@ -32,46 +32,46 @@
 #endif
 int main(int argc, char **argv) {
 
-	unsigned i, j;
-	float data[LEN], wt[LEN], partial[LEN][LEN];
-	riplwtFilter filter;
-	FILE *pfile;
+    unsigned i, j;
+    float data[LEN], wt[LEN], partial[LEN][LEN];
+    riplwtFilter filter;
+    FILE *pfile;
 
-	/*
-	 * Initialize filter coefficients struct.
-	 * Let's use a 12-coefficient Daubechies wavelet.
-	 */
-	riplwtSetupFilter(ftDaub12, &filter);
+    /*
+     * Initialize filter coefficients struct.
+     * Let's use a 12-coefficient Daubechies wavelet.
+     */
+    riplwtSetupFilter(ftDaub12, &filter);
 
-	/* Fill our data vector with some interesting (!) data. */
-	for (i=0; i<LEN; i++) wt[i]=data[i]=(float)i;
+    /* Fill our data vector with some interesting (!) data. */
+    for (i=0; i<LEN; i++) wt[i]=data[i]=(float)i;
 
-	/* Obtain partial data from individual wavelet components. */
-	for (i=0; i<LEN; i++) {
-		/* Create a unit vector with 1.0 in each position in turn. */
-		for (j=0; j<LEN; j++) partial[i][j]=0.0;
-		partial[i][i]=1.0;
+    /* Obtain partial data from individual wavelet components. */
+    for (i=0; i<LEN; i++) {
+        /* Create a unit vector with 1.0 in each position in turn. */
+        for (j=0; j<LEN; j++) partial[i][j]=0.0;
+        partial[i][i]=1.0;
 
-		/* Perform inverse wavelet transform with default filter function. */
-		riplwt1DWT(partial[i], LEN, ttInverse, NULL, &filter);
-	}
+        /* Perform inverse wavelet transform with default filter function. */
+        riplwt1DWT(partial[i], LEN, ttInverse, NULL, &filter);
+    }
 
-	/* Perform wavelet transform on data set. */
-	riplwt1DWT(wt, LEN, ttForward, NULL, &filter);
+    /* Perform wavelet transform on data set. */
+    riplwt1DWT(wt, LEN, ttForward, NULL, &filter);
 
-	/* Write the data out to a text file. */
-	pfile=fopen("daub12_1.txt", "wt");
-	fprintf(pfile, "%23s %23s", "DATA", "COEFFS");
-	for (i=0; i<LEN; i++) fprintf(pfile, "                    e%3u", i);
-	fprintf(pfile, "\n");
-	for (i=0; i<LEN; i++) {
-		fprintf(pfile, "%23g %23g", data[i], wt[i]);
-		for (j=0; j<LEN; j++) {
-			fprintf(pfile, " %23g", partial[j][i]);
-		}
-		fprintf(pfile, "\n");
-	}
-	fclose(pfile);
+    /* Write the data out to a text file. */
+    pfile=fopen("daub12_1.txt", "wt");
+    fprintf(pfile, "%23s %23s", "DATA", "COEFFS");
+    for (i=0; i<LEN; i++) fprintf(pfile, "                    e%3u", i);
+    fprintf(pfile, "\n");
+    for (i=0; i<LEN; i++) {
+        fprintf(pfile, "%23g %23g", data[i], wt[i]);
+        for (j=0; j<LEN; j++) {
+            fprintf(pfile, " %23g", partial[j][i]);
+        }
+        fprintf(pfile, "\n");
+    }
+    fclose(pfile);
 
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }

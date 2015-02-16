@@ -16,13 +16,13 @@
 
 /* Command-line version. */
 int phasesynthExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *phasesynthHelp(void);
 /* Internal entrypoint. */
 riplBool phasesynthApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    riplGreyMap *poutputGreyMap);
 
 #endif
 

@@ -33,18 +33,18 @@
  *			RIPL_USERERROR				if the user supplies illogical values etc.
  */
 typedef int (* riplExecute)(unsigned ARGC, const char **ARGV,
-	riplGreyMap *PINPUTGREYMAP, riplGreyMap *POUTPUTGREYMAP);
+    riplGreyMap *PINPUTGREYMAP, riplGreyMap *POUTPUTGREYMAP);
 
 /* This function should just display a suitable help message to the user. */
 typedef const char *(* riplHelpDisp)(void);
 
 /* Struct defines all the operators available to the user. */
 typedef struct tagriplOperator {
-	char *name;
-	unsigned match_chars;
-	char *comment;
-	riplExecute execute;
-	riplHelpDisp help;
+    char *name;
+    unsigned match_chars;
+    char *comment;
+    riplExecute execute;
+    riplHelpDisp help;
 } riplOperator;
 
 /*
@@ -58,8 +58,8 @@ extern const unsigned riplNumOperators;
 const char *riplGetOperatorSummary(void);
 riplBool riplOperatorHelp(const char *op);
 unsigned riplOperatorExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 
 #endif

@@ -24,59 +24,59 @@
 
 /* Convert real float vector into complex float vector/matrix. */
 void riplfftCreateCmplxVctF(float *data,
-	unsigned long size,
-	float *cmplx_vct);
+    unsigned long size,
+    float *cmplx_vct);
 /* Convert vector of grey levels into complex float vector/matrix. */
 void riplfftCreateCmplxVctG(riplGrey *data,
-	unsigned long size,
-	float *cmplx_vct);
+    unsigned long size,
+    float *cmplx_vct);
 /* Calculate (inverse) FT of 1D complex data set. */
 void riplfftComplex1DFT(float *data,
-	unsigned long nn,
-	riplTransformType type);
+    unsigned long nn,
+    riplTransformType type);
 /* Scale vector of complex data. */
 void riplfftComplexScale(float *data,
-	unsigned long size,
-	unsigned long scale);
+    unsigned long size,
+    unsigned long scale);
 /* Calculate (inverse) FT of 1D real data set. */
 void riplfftReal1DFT(float *data,
-	unsigned long nn,
-	riplTransformType type);
+    unsigned long nn,
+    riplTransformType type);
 /* Scale vector of real data. */
 void riplfftRealScale(float *data,
-	unsigned long size,
-	unsigned long scale);
+    unsigned long size,
+    unsigned long scale);
 /* Calculate (inverse) sine transform of 1D real data set. */
 void riplfftReal1DST(float *data,
-	unsigned long nn);
+    unsigned long nn);
 /* Calculate (inverse) cosine transform of 1D real data set. */
 void riplfftReal1DCT1(float *data,
-	unsigned long nn);
+    unsigned long nn);
 /* Calculate (inverse) staggered cosine transform of 1D real data set. */
 void riplfftReal1DCT2(float *data,
-	unsigned long nn,
-	riplTransformType type);
+    unsigned long nn,
+    riplTransformType type);
 /* Calculate (inverse) FT of n-dimensional complex data set. */
 void riplfftComplexNDFT(float *data,
-	unsigned long *dim,
-	unsigned dims,
-	riplTransformType type);
+    unsigned long *dim,
+    unsigned dims,
+    riplTransformType type);
 /* Calculate (inverse) FT of 2-dimensional complex data set. */
 void riplfftComplex2DFT(float *data,
-	unsigned long rows,
-	unsigned long cols,
-	riplTransformType type);
+    unsigned long rows,
+    unsigned long cols,
+    riplTransformType type);
 /* Calculate (inverse) FT of 2-dimensional real data set. */
 void riplfftReal2DFT(float *data,
-	float *nyquist,
-	unsigned long rows,
-	unsigned long cols,
-	riplTransformType type);
+    float *nyquist,
+    unsigned long rows,
+    unsigned long cols,
+    riplTransformType type);
 /* Convert partial spectrum into full complex spectrum. */
 void riplfftGenFullSpectrum(float *data,
-	float *nyquist,
-	unsigned long rows,
-	unsigned long cols,
-	float *spec);
+    float *nyquist,
+    unsigned long rows,
+    unsigned long cols,
+    float *spec);
 
 #endif

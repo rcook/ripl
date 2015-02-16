@@ -18,14 +18,14 @@
 
 /* Command-line version. */
 int planeExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *planeHelp(void);
 /* Internal entrypoint. */
 riplBool planeApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	riplGrey bitplane);
+    riplGreyMap *poutputGreyMap,
+    riplGrey bitplane);
 
 #endif
 

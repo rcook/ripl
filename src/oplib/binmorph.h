@@ -19,17 +19,17 @@
 
 /* Command-line version. */
 int binmorphExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *binmorphHelp(void);
 /* Internal entrypoint. */
 riplBool binmorphApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	miscOperatorType operator_type,
-	miscPredefinedStruct predefined_struct,
-	unsigned struct_el_cols,
-	unsigned struct_el_rows,
-	riplBool *struct_el);
+    riplGreyMap *poutputGreyMap,
+    miscOperatorType operator_type,
+    miscPredefinedStruct predefined_struct,
+    unsigned struct_el_cols,
+    unsigned struct_el_rows,
+    riplBool *struct_el);
 
 #endif

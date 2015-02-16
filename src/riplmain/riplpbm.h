@@ -19,9 +19,9 @@
 #include "riplgrey.h"
 
 riplGreyMap *riplPBMLoadFile(const char *pfileName,
-	riplGraphicFormat graphicFormat);
+    riplGraphicFormat graphicFormat);
 riplBool riplPBMSaveFile(const char *pfileName,
-	riplGraphicFormat graphicFormat,
-	const riplGreyMap *pgreyMap);
+    riplGraphicFormat graphicFormat,
+    const riplGreyMap *pgreyMap);
 
 #endif

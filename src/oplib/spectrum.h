@@ -20,14 +20,14 @@
 
 /* Command-line version. */
 int spectrumExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *spectrumHelp(void);
 /* Internal entrypoint. */
 riplBool spectrumApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	riplBool subtract_mean);
+    riplGreyMap *poutputGreyMap,
+    riplBool subtract_mean);
 
 #endif
 

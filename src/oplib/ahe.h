@@ -20,43 +20,43 @@
 #include "ripl.h"
 
 typedef enum tagaheHEType{
-	htStandard,
-	htFraction
+    htStandard,
+    htFraction
 } aheHEType;
 
 typedef enum tagaheAddbackType {
-	atNone,
-	atZeroInput,
-	atLocalMean
+    atNone,
+    atZeroInput,
+    atLocalMean
 } aheAddbackType;
 
 /* Configuration information. */
 typedef struct tagaheConfig {
-	unsigned num_terms;
-	unsigned win_w, win_h;
-	riplBool hamming_window;
-	riplBool prescale_mode;
-	float prescale_val;
-	aheHEType he_type;
-	float he_fraction;
-	aheAddbackType addback_mode;
-	float addback_fraction;
-	riplBool addback_cum;
-	riplBool gauss_mode;
-	float gauss_width;
-	float inoffset;
+    unsigned num_terms;
+    unsigned win_w, win_h;
+    riplBool hamming_window;
+    riplBool prescale_mode;
+    float prescale_val;
+    aheHEType he_type;
+    float he_fraction;
+    aheAddbackType addback_mode;
+    float addback_fraction;
+    riplBool addback_cum;
+    riplBool gauss_mode;
+    float gauss_width;
+    float inoffset;
 } aheConfig;
 
 /* Command-line version. */
 int aheExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *aheHelp(void);
 /* Internal entrypoint. */
 riplBool aheApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	const aheConfig *pconfig);
+    riplGreyMap *poutputGreyMap,
+    const aheConfig *pconfig);
 void aheInitializeConfig(aheConfig *pconfig);
 
 #endif

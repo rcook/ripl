@@ -17,15 +17,15 @@
 
 /* Command-line version. */
 int fftfiltExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *fftfiltHelp(void);
 /* Internal entrypoint. */
 riplBool fftfiltApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	float *pfreqResp,
-	riplBool is_complex);
+    riplGreyMap *poutputGreyMap,
+    float *pfreqResp,
+    riplBool is_complex);
 
 #endif
 

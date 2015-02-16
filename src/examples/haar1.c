@@ -27,43 +27,43 @@
 #endif
 int main(int argc, char **argv) {
 
-	float data[LEN];
-	riplwtFilter filter;
-	unsigned i, j;
-	FILE *pfile;
+    float data[LEN];
+    riplwtFilter filter;
+    unsigned i, j;
+    FILE *pfile;
 
-	/* Check command-line arguments. */
-	if (argc<2) {
-		riplMessage(itError,
-			"Usage: haar1 <filename>.\n");
-		return EXIT_FAILURE;
-	}
-	RIPL_VALIDATE(argv[1])
+    /* Check command-line arguments. */
+    if (argc<2) {
+        riplMessage(itError,
+            "Usage: haar1 <filename>.\n");
+        return EXIT_FAILURE;
+    }
+    RIPL_VALIDATE(argv[1])
 
-	/* Initialize wavelet filter coefficients. */
-	riplwtSetupFilter(ftHaar2, &filter);
+    /* Initialize wavelet filter coefficients. */
+    riplwtSetupFilter(ftHaar2, &filter);
 
-	/* Write output to specified file. */
-	pfile=fopen(argv[1], "wt");
-	RIPL_VALIDATE(pfile)
+    /* Write output to specified file. */
+    pfile=fopen(argv[1], "wt");
+    RIPL_VALIDATE(pfile)
 
-	for (i=0; i<LEN; i++) {
+    for (i=0; i<LEN; i++) {
 
-		/* Create relevant unit vector. */
-		for (j=0; j<LEN; j++) data[j]=0.0;
-		data[i]=1.0;
+        /* Create relevant unit vector. */
+        for (j=0; j<LEN; j++) data[j]=0.0;
+        data[i]=1.0;
 
-		/* Perform inverse wavelet transform to obtain basis function. */
-		riplwt1DWT(data, LEN, ttInverse, NULL, &filter);
+        /* Perform inverse wavelet transform to obtain basis function. */
+        riplwt1DWT(data, LEN, ttInverse, NULL, &filter);
 
-		/* Write it out to the file. */
-		fprintf(pfile, "basis %3u:", i);
-		for (j=0; j<LEN; j++) fprintf(pfile, " %20e", data[j]);
-		fprintf(pfile, "\n");
-	}
-	fclose(pfile);
+        /* Write it out to the file. */
+        fprintf(pfile, "basis %3u:", i);
+        for (j=0; j<LEN; j++) fprintf(pfile, " %20e", data[j]);
+        fprintf(pfile, "\n");
+    }
+    fclose(pfile);
 
-	/* Success! */
-	return EXIT_SUCCESS;
+    /* Success! */
+    return EXIT_SUCCESS;
 }
 

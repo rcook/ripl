@@ -20,21 +20,21 @@
 #include "riplmisc.h"
 
 riplBool riplArgGet_riplBool(const char *text,
-	riplBool *value);
+    riplBool *value);
 riplBool riplArgGet_riplGrey(const char *text,
-	riplGrey *value);
+    riplGrey *value);
 riplBool riplArgGet_unsigned(const char *text,
-	unsigned *value);
+    unsigned *value);
 riplBool riplArgGet_int(const char *text,
-	int *value);
+    int *value);
 riplBool riplArgGet_long(const char *text,
-	long *value);
+    long *value);
 riplBool riplArgGet_float(const char *text,
-	float *value);
+    float *value);
 riplBool riplArgGet_double(const char *text,
-	double *value);
+    double *value);
 riplBool riplMatch(const char *input,
-	const char *ref,
-	unsigned match_chars);
+    const char *ref,
+    unsigned match_chars);
 
 #endif

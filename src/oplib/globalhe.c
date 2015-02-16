@@ -16,11 +16,11 @@
 
 /* Internal entrypoint. */
 riplBool globalHEApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap) {
+    riplGreyMap *poutputGreyMap) {
 
-	RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
-	return miscHistogramEQ(pinputGreyMap->data, poutputGreyMap->data,
-		pinputGreyMap->size);
+    RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
+    return miscHistogramEQ(pinputGreyMap->data, poutputGreyMap->data,
+        pinputGreyMap->size);
 }
 
 /* Command-line version. */
@@ -28,16 +28,16 @@ riplBool globalHEApplyOperator(riplGreyMap *pinputGreyMap,
 #	pragma argsused
 #endif
 int globalHEExecute(unsigned argc, const char **argv,
-	riplGreyMap *pinputGreyMap, riplGreyMap *poutputGreyMap) {
+    riplGreyMap *pinputGreyMap, riplGreyMap *poutputGreyMap) {
 
-	if (!globalHEApplyOperator(pinputGreyMap, poutputGreyMap))
-		return RIPL_EXECUTEERROR;
-	return 0;
+    if (!globalHEApplyOperator(pinputGreyMap, poutputGreyMap))
+        return RIPL_EXECUTEERROR;
+    return 0;
 }
 
 /* Display help screen. */
 const char *globalHEHelp(void) {
-	return "globalhe\n\n"
-		"   Applies simplified global histogram equalization to the image.\n";
+    return "globalhe\n\n"
+        "   Applies simplified global histogram equalization to the image.\n";
 }
 

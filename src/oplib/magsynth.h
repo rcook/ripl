@@ -16,13 +16,13 @@
 
 /* Command-line version. */
 int magsynthExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *magsynthHelp(void);
 /* Internal entrypoint. */
 riplBool magsynthApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    riplGreyMap *poutputGreyMap);
 
 #endif
 

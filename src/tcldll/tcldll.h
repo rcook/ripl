@@ -18,7 +18,7 @@
 #define _TCLDLL_H_INCLUDED
 
 #ifdef __WATCOMC__
-	/* Bug fixes for Watcom compiler. */
+    /* Bug fixes for Watcom compiler. */
 #	pragma aux abort "*_";
 #	pragma aux riplCalloc "*_";
 #	pragma aux riplFree "*_";
@@ -36,8 +36,8 @@
 
 /* Client data structure */
 typedef struct tagripldllData {
-	char *jashe_name;
-	Tcl_CmdInfo jashe;
+    char *jashe_name;
+    Tcl_CmdInfo jashe;
 } ripldllData;
 
 int Ripldll_Init(Tcl_Interp *interp);

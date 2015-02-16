@@ -43,84 +43,84 @@
 
 int main(int argc, char **argv) {
 
-	unsigned i, j, count;
-	float data[LEN], wt[LEN], partial[LEN], approx[LEN];
-	float freq=2*RIPL_M_PI*CYCLES/LEN;
-	float thresh;
-	riplwtFilter filter;
-	FILE *pfile;
+    unsigned i, j, count;
+    float data[LEN], wt[LEN], partial[LEN], approx[LEN];
+    float freq=2*RIPL_M_PI*CYCLES/LEN;
+    float thresh;
+    riplwtFilter filter;
+    FILE *pfile;
 
-	/* Get/check command-line arguments. */
-	if (argc<2) {
-		riplMessage(itInfo, "Usage: wavelet3 <filename> <threshold>.\n"
-			"Outputs reconstruction of sinusoidal data after\n"
-			"thresholding Daubechies wavelet coefficients as\n"
-			"specified.\n");
-		return EXIT_FAILURE;
-	}
-	if (!riplArgGet_float(argv[2], &thresh)) {
-		riplMessage(itError, "Usage: wavelet3 <filename> <threshold>.\n");
-		return EXIT_FAILURE;
-	}
+    /* Get/check command-line arguments. */
+    if (argc<2) {
+        riplMessage(itInfo, "Usage: wavelet3 <filename> <threshold>.\n"
+            "Outputs reconstruction of sinusoidal data after\n"
+            "thresholding Daubechies wavelet coefficients as\n"
+            "specified.\n");
+        return EXIT_FAILURE;
+    }
+    if (!riplArgGet_float(argv[2], &thresh)) {
+        riplMessage(itError, "Usage: wavelet3 <filename> <threshold>.\n");
+        return EXIT_FAILURE;
+    }
 
-	/* Try to open output file. */
-	pfile=fopen(argv[1], "wt");
-	if (!pfile) {
-		riplMessage(itError, "wavelet3: unable to open %s for output.\n",
-			argv[1]);
-		return EXIT_FAILURE;
-	}
+    /* Try to open output file. */
+    pfile=fopen(argv[1], "wt");
+    if (!pfile) {
+        riplMessage(itError, "wavelet3: unable to open %s for output.\n",
+            argv[1]);
+        return EXIT_FAILURE;
+    }
 
-	/*
-	 * Initialize filter coefficients struct.
-	 * Let's use a 12-coefficient Daubechies wavelet.
-	 */
-	riplwtSetupFilter(ftDaub12, &filter);
+    /*
+     * Initialize filter coefficients struct.
+     * Let's use a 12-coefficient Daubechies wavelet.
+     */
+    riplwtSetupFilter(ftDaub12, &filter);
 
-	/*
-	 * Fill our data vector with sine wave. Also initialize vector
-	 * in which we accumulate the approximation later on.
-	 */
-	for (i=0; i<LEN; i++) {
-		wt[i]=data[i]=sin(freq*(float)i);
-		approx[i]=0.0;
-	}
+    /*
+     * Fill our data vector with sine wave. Also initialize vector
+     * in which we accumulate the approximation later on.
+     */
+    for (i=0; i<LEN; i++) {
+        wt[i]=data[i]=sin(freq*(float)i);
+        approx[i]=0.0;
+    }
 
-	/* Perform wavelet transform on data set. */
-	riplwt1DWT(wt, LEN, ttForward, NULL, &filter);
+    /* Perform wavelet transform on data set. */
+    riplwt1DWT(wt, LEN, ttForward, NULL, &filter);
 
-	/*
-	 * Calculate approximation to original data by accumulating weighted
-	 * sum of basis functions with coefficients greater than threshold
-	 * value.
-	 */
-	/* Obtain partial data from individual wavelet components. */
-	count=0;
-	for (i=0; i<LEN; i++) {
-		if (fabs(wt[i])>=thresh) {
-			count++;
-			/* Create a unit vector with 1.0 in relevant position in turn. */
-			for (j=0; j<LEN; j++) partial[j]=0.0;
-			partial[i]=1.0;
-			/*
-			 * Perform inverse wavelet transform with default filter function.
-			 * in order to obtain wavelet basis function.
-			 */
-			riplwt1DWT(partial, LEN, ttInverse, NULL, &filter);
-			for (j=0; j<LEN; j++) approx[j]+=wt[i]*partial[j];
-		}
-	}
+    /*
+     * Calculate approximation to original data by accumulating weighted
+     * sum of basis functions with coefficients greater than threshold
+     * value.
+     */
+    /* Obtain partial data from individual wavelet components. */
+    count=0;
+    for (i=0; i<LEN; i++) {
+        if (fabs(wt[i])>=thresh) {
+            count++;
+            /* Create a unit vector with 1.0 in relevant position in turn. */
+            for (j=0; j<LEN; j++) partial[j]=0.0;
+            partial[i]=1.0;
+            /*
+             * Perform inverse wavelet transform with default filter function.
+             * in order to obtain wavelet basis function.
+             */
+            riplwt1DWT(partial, LEN, ttInverse, NULL, &filter);
+            for (j=0; j<LEN; j++) approx[j]+=wt[i]*partial[j];
+        }
+    }
 
-	/* Write the data out to the output text file. */
-	fprintf(pfile, "WAVELET3, 25/1/98\n"
-		"Reconstruction with threshold level = %g\n"
-		"Using %u out of 256 basis functions.\n", thresh, count);
-	fprintf(pfile, "%23s %23s\n", "DATA", "APPROX");
-	for (i=0; i<LEN; i++) {
-		fprintf(pfile, "%23g %23g\n", data[i], approx[i]);
-	}
-	fclose(pfile);
+    /* Write the data out to the output text file. */
+    fprintf(pfile, "WAVELET3, 25/1/98\n"
+        "Reconstruction with threshold level = %g\n"
+        "Using %u out of 256 basis functions.\n", thresh, count);
+    fprintf(pfile, "%23s %23s\n", "DATA", "APPROX");
+    for (i=0; i<LEN; i++) {
+        fprintf(pfile, "%23g %23g\n", data[i], approx[i]);
+    }
+    fclose(pfile);
 
-	/* Success! */
-	return EXIT_SUCCESS;
+    /* Success! */
+    return EXIT_SUCCESS;
 }

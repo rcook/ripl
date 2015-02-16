@@ -5,7 +5,7 @@
  *		Version 1.1, last update: 24 January 1998.
  *
  *		History:
-			24/1/98:		introduced RIPL_PARAMERROR.
+            24/1/98:		introduced RIPL_PARAMERROR.
  *			16/12/97:	updated comments.
  *			15/12/97:	first implemented.
  *
@@ -18,15 +18,15 @@
 
 /* Command-line version. */
 int addExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *addHelp(void);
 /* Internal entrypoint. */
 riplBool addApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	float weight,
-	const char *pfileName);
+    riplGreyMap *poutputGreyMap,
+    float weight,
+    const char *pfileName);
 
 #endif
 

@@ -28,30 +28,30 @@
 #endif
 int main(int argc, char **argv) {
 
-	unsigned long i;
-	float data[SIZE];				/* Our real data set. */
-	riplwtFilter filter;			/* Wavelet filter coefficients. */
-	FILE *pfile;
+    unsigned long i;
+    float data[SIZE];				/* Our real data set. */
+    riplwtFilter filter;			/* Wavelet filter coefficients. */
+    FILE *pfile;
 
-	/*
-	 * Initialize filter coefficients struct.
-	 * Let's use a 12-coefficient Daubechies wavelet.
-	 */
-	riplwtSetupFilter(ftDaub12, &filter);
+    /*
+     * Initialize filter coefficients struct.
+     * Let's use a 12-coefficient Daubechies wavelet.
+     */
+    riplwtSetupFilter(ftDaub12, &filter);
 
-	/* Fill our data vector with some interesting (!) data. */
-	for (i=0; i<SIZE; i++) data[i]=(float)i;
+    /* Fill our data vector with some interesting (!) data. */
+    for (i=0; i<SIZE; i++) data[i]=(float)i;
 
-	/* Perform forward wavelet transform with default filter function. */
-	riplwt2DWT(data, ROWS, COLS, ttForward, NULL, &filter);
+    /* Perform forward wavelet transform with default filter function. */
+    riplwt2DWT(data, ROWS, COLS, ttForward, NULL, &filter);
 
-	/* Perform inverse transform---should have original data at end. */
-	riplwt2DWT(data, ROWS, COLS, ttInverse, NULL, &filter);
+    /* Perform inverse transform---should have original data at end. */
+    riplwt2DWT(data, ROWS, COLS, ttInverse, NULL, &filter);
 
-	/* Write the data out to a text file. */
-	pfile=fopen("output.txt", "wt");
-	for (i=0; i<SIZE; i++) fprintf(pfile, "%20e\n", data[i]);
-	fclose(pfile);
+    /* Write the data out to a text file. */
+    pfile=fopen("output.txt", "wt");
+    for (i=0; i<SIZE; i++) fprintf(pfile, "%20e\n", data[i]);
+    fclose(pfile);
 
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }

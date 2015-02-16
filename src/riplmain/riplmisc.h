@@ -31,8 +31,8 @@ typedef signed short riplMidGreyS;
 typedef signed long riplBigGreyS;
 
 typedef enum tagriplBool {
-	false=0,
-	true=1
+    false=0,
+    true=1
 } riplBool;
 
 #define RIPL_MAX_COLS			4096
@@ -50,20 +50,20 @@ typedef enum tagriplBool {
 #define RIPL_USERERROR			(RIPL_FIRSTERRORCODE-2)
 
 typedef enum tagriplGraphicFormat {
-	gfInvalid=0,
-	gfPBMASCII,
-	gfPBMBinary,
-	gfPGMASCII,
-	gfPGMBinary,
-	gfPPMASCII,
-	gfPPMBinary,
-	gfPCXAny,
-	gfPCXBasic,
-	gfPCXExtended
+    gfInvalid=0,
+    gfPBMASCII,
+    gfPBMBinary,
+    gfPGMASCII,
+    gfPGMBinary,
+    gfPPMASCII,
+    gfPPMBinary,
+    gfPCXAny,
+    gfPCXBasic,
+    gfPCXExtended
 } riplGraphicFormat;
 
 char **riplParseResponseFile(const char *pfileName,
-	unsigned *pargc);
+    unsigned *pargc);
 riplBool riplFileExists(const char *pfileName);
 int riplRound(double val);
 

@@ -18,14 +18,14 @@
 
 /* Command-line version. */
 int zeroExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *zeroHelp(void);
 /* Internal entrypoint. */
 riplBool zeroApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	riplGrey threshold);
+    riplGreyMap *poutputGreyMap,
+    riplGrey threshold);
 
 #endif
 

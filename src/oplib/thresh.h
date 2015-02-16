@@ -18,14 +18,14 @@
 
 /* Command-line version. */
 int thresholdExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *thresholdHelp(void);
 /* Internal entrypoint. */
 riplBool thresholdApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	riplGrey threshold);
+    riplGreyMap *poutputGreyMap,
+    riplGrey threshold);
 
 #endif
 

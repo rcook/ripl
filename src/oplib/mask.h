@@ -18,14 +18,14 @@
 
 /* Command-line version. */
 int maskExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *maskHelp(void);
 /* Internal entrypoint. */
 riplBool maskApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	riplGrey mask);
+    riplGreyMap *poutputGreyMap,
+    riplGrey mask);
 
 #endif
 

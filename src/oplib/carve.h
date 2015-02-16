@@ -18,19 +18,19 @@
 
 /* Command-line version. */
 int carveExecute(unsigned argc,
-	const char **argv,
-	riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap);
+    const char **argv,
+    riplGreyMap *pinputGreyMap,
+    riplGreyMap *poutputGreyMap);
 const char *carveHelp(void);
 /* Internal entrypoint. */
 riplBool carveApplyOperator(riplGreyMap *pinputGreyMap,
-	riplGreyMap *poutputGreyMap,
-	unsigned win_width,
-	unsigned win_height,
-	unsigned min_width,
-	unsigned min_height,
-	unsigned nclasses,
-	riplGrey conf);
+    riplGreyMap *poutputGreyMap,
+    unsigned win_width,
+    unsigned win_height,
+    unsigned min_width,
+    unsigned min_height,
+    unsigned nclasses,
+    riplGrey conf);
 
 #endif
 
