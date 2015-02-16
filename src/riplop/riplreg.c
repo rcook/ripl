@@ -35,6 +35,7 @@
 #include "marrhild.h"
 #include "mask.h"
 #include "median.h"
+#include "nop.h"
 #include "phsynth.h"
 #include "plane.h"
 #include "siahe.h"
@@ -76,6 +77,8 @@ const riplOperator riplOperators[]={
         maskExecute, maskHelp},
     {"median", 3, "apply median filter",
         medianExecute, medianHelp},
+    {"nop", 2, "no-op filter",
+        nopExecute, nopHelp},
     {"phasesynth", 6, "perform Fourier-phase-only synthesis",
         phasesynthExecute, phasesynthHelp},
     {"plane", 3, "extract bitplane from image",
