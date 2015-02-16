@@ -241,8 +241,14 @@ static struct tagFile *open_file(const char *pfileName) {
 }
 
 static void close_file(struct tagFile *ppbmFile) {
-    fclose(ppbmFile->pfile);
-    fclose(ppbmFile->pfileHandle);
+    if (ppbmFile->pfile != NULL) {
+        fclose(ppbmFile->pfile);
+    }
+
+    if (ppbmFile->pfileHandle != NULL) {
+        fclose(ppbmFile->pfileHandle);
+    }
+
     riplFree(ppbmFile);
 }
 
