@@ -1,0 +1,28 @@
+#!/bin/bash
+SCRIPTPATH=$(readlink -f $0)
+SCRIPTDIR=$(dirname $SCRIPTPATH)
+CMAKEDIR=$SCRIPTDIR/cmake
+
+function run_cmake {
+  local build_type=$1
+  mkdir -p $CMAKEDIR/$build_type/ || exit 1
+  cd $CMAKEDIR/$build_type/ || exit 1
+  cmake -DCMAKE_BUILD_TYPE=$build_type -G "Unix Makefiles" $SCRIPTDIR/ || exit 1
+}
+
+if [[ "$1" == 'Debug' ]] || [[ "$1" == 'debug' ]]; then
+  build_type=Debug
+fi
+if [[ "$1" == 'Release' ]] || [[ "$1" == 'release' ]]; then
+  build_type=Release
+fi
+
+if [[ "$build_type" == '' ]]; then
+  echo 'Specify build type Debug or Release'
+  exit 1
+fi
+
+run_cmake $build_type
+cd $CMAKEDIR/$build_type/
+make || exit 1
+
