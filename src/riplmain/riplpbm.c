@@ -147,7 +147,12 @@ riplGreyMap *riplPBMLoadFile(const char *pfileName,
             if (return_status!=sSuccess) break;
             flush_file(pbm_file, &return_status);
             if (return_status!=sSuccess) break;
-            data_size=ceil((double)pgrey_map->cols/8)+1;
+
+            data_size = pgrey_map->cols >> 3;
+            if ((data_size % 8) != 0) {
+              ++data_size;
+            }
+
             buffer=(riplGrey *)riplCalloc(data_size, sizeof(riplGrey));
             for (ptr=pgrey_map->data, row=0; row<pgrey_map->rows; row++) {
                 if (fread(buffer, sizeof(riplGrey), data_size,
