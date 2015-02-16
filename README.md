@@ -1,5 +1,7 @@
 # Richard's image-processing library
 
+[![Build status](https://travis-ci.org/rcook/ripl.png)](https://travis-ci.org/rcook/ripl)
+
 ## Overview
 
 This is more a historial curiosity than anything else. This is the first "real"
