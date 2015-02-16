@@ -47,7 +47,7 @@
 #include "wvthrsh.h"
 #include "zero.h"
 
-extern const riplOperator riplOperators[]={
+const riplOperator riplOperators[]={
     {"add", 1, "add images together pixel by pixel",
         addExecute, addHelp},
     {"ahe", 2, "perform adaptive histogram equalization",
@@ -100,6 +100,6 @@ extern const riplOperator riplOperators[]={
         zeroExecute, zeroHelp}
 };
 
-extern const unsigned
+const unsigned
     riplNumOperators=sizeof(riplOperators)/sizeof(*riplOperators);
 
