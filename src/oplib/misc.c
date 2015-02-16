@@ -63,7 +63,7 @@ riplBool miscGenerateGaussian(double var,
     i1=i2=centre;
     *pkernelSize=2*i1+1;
     *pkernel=(double *)riplCalloc(*pkernelSize, sizeof(double));
-    if (*pkernel==NULL) return NULL;
+    if (*pkernel==NULL) return false;
     (*pkernel)[i1]=c1=1.0/var/RIPL_M_SQRT_TWICE_PI;
     c2=0.5/var/var;
     while (i1>0) {
