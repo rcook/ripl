@@ -33,7 +33,7 @@ typedef struct tagriplRGBImage {
         *green,
         *blue,
         *data;
-    riplBool grey_scale;
+    bool grey_scale;
     riplGraphicFormat format;
 } riplRGBImage;
 

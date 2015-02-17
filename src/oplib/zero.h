@@ -23,7 +23,7 @@ int zeroExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *zeroHelp(void);
 /* Internal entrypoint. */
-riplBool zeroApplyOperator(riplGreyMap *pinputGreyMap,
+bool zeroApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     riplGrey threshold);
 

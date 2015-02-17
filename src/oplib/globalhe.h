@@ -23,7 +23,7 @@ int globalHEExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *globalHEHelp(void);
 /* Internal entrypoint. */
-riplBool globalHEApplyOperator(riplGreyMap *pinputGreyMap,
+bool globalHEApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap);
 
 #endif

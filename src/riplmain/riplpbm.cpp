@@ -42,22 +42,22 @@ enum tagStatus {
 };
 
 /* Prototypes of static functions. */
-static riplBool find_char(struct tagFile *ppbmFile,
+static bool find_char(struct tagFile *ppbmFile,
     enum tagStatus *preturnStatus,
     char ch);
 static const char *get_token(struct tagFile *ppbmFile,
     enum tagStatus *preturnStatus);
 static struct tagFile *open_file(const char *pfileName);
 static void close_file(struct tagFile *ppbmFile);
-static riplBool flush_file(struct tagFile *ppbmFile,
+static bool flush_file(struct tagFile *ppbmFile,
     enum tagStatus *preturnStatus);
 static const char *read_token(struct tagFile *ppbmFile,
     enum tagStatus *preturnStatus);
 static void skip_line(struct tagFile *ppbmFile,
     enum tagStatus *preturnStatus);
-static riplBool skip_space(struct tagFile *ppbmFile,
+static bool skip_space(struct tagFile *ppbmFile,
     enum tagStatus *preturnStatus);
-static riplBool skip_chars(struct tagFile *ppbmFile,
+static bool skip_chars(struct tagFile *ppbmFile,
     enum tagStatus *preturnStatus,
     unsigned nchars);
 
@@ -217,7 +217,7 @@ riplGreyMap *riplPBMLoadFile(const char *pfileName,
 }
 
 /* Save specified greymap under specified filename and subformat. */
-riplBool riplPBMSaveFile(const char *pfileName,
+bool riplPBMSaveFile(const char *pfileName,
     riplGraphicFormat graphicFormat,
     const riplGreyMap *pgrey_map) {
     FILE *pfile;
@@ -260,9 +260,9 @@ static void close_file(struct tagFile *ppbmFile) {
 #ifdef __BORLANDC__
 #	pragma argsused
 #endif
-static riplBool flush_file(struct tagFile *ppbmFile,
+static bool flush_file(struct tagFile *ppbmFile,
     enum tagStatus *preturnStatus) {
-    riplBool result=true;
+    bool result=true;
     if (fseek(ppbmFile->pfileHandle,
         (long)ppbmFile->pos-ppbmFile->items,
         SEEK_CUR)) {
@@ -353,7 +353,7 @@ static void skip_line(struct tagFile *ppbmFile,
     skip_space(ppbmFile, preturnStatus);
 }
 
-static riplBool skip_space(struct tagFile *ppbmFile,
+static bool skip_space(struct tagFile *ppbmFile,
     enum tagStatus *preturnStatus) {
 
     do {
@@ -377,7 +377,7 @@ static riplBool skip_space(struct tagFile *ppbmFile,
 }
 
 /* New function skip_chars (15/12/97)---skips specified number of chars. */
-static riplBool skip_chars(struct tagFile *ppbmFile,
+static bool skip_chars(struct tagFile *ppbmFile,
     enum tagStatus *preturnStatus,
     unsigned nchars) {
 
@@ -405,7 +405,7 @@ static riplBool skip_chars(struct tagFile *ppbmFile,
     return true;
 }
 
-static riplBool find_char(struct tagFile *ppbmFile,
+static bool find_char(struct tagFile *ppbmFile,
     enum tagStatus *preturnStatus,
     char ch) {
 

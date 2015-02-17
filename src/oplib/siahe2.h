@@ -26,7 +26,7 @@ int siahe2Execute(unsigned argc,
     riplGreyMap *poutputgrey);
 const char *siahe2Help(void);
 /* Internal entrypoint. */
-riplBool siahe2ApplyOperator(riplGreyMap *pinputgrey,
+bool siahe2ApplyOperator(riplGreyMap *pinputgrey,
     riplGreyMap *poutputgrey,
     unsigned w_r,
     unsigned w_c,

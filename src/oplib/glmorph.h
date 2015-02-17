@@ -29,12 +29,12 @@ int glmorphExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *glmorphHelp(void);
 /* Internal entrypoint. */
-riplBool glmorphApplyOperator(riplGreyMap *pinputGreyMap,
+bool glmorphApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     miscOperatorType operator_type,
     miscPredefinedStruct predefined_struct,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el);
+    bool *struct_el);
 
 #endif

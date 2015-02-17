@@ -16,10 +16,10 @@
 #include "misc.h"
 
 /* Internal entrypoint. */
-riplBool dllconvApplyOperator(riplGreyMap *pinputGreyMap,
+bool dllconvApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned scale,
-    riplBool store_abs,
+    bool store_abs,
     unsigned kernel_columns,
     unsigned kernel_rows,
     dllconvKernelType kernel_type,
@@ -60,7 +60,7 @@ int dllconvExecute(unsigned argc,
     unsigned scale, kernel_columns, kernel_rows, kernel_elements, i;
     dllconvKernelType kernel_type=dllktInvalid;
     void *kernel;
-    riplBool store_abs, result;
+    bool store_abs, result;
     
     if (argc<6) {
         riplMessage(itError, "Incorrect number of parameters!\n"
@@ -82,7 +82,7 @@ int dllconvExecute(unsigned argc,
         riplMessage(itError, "dllconv: <scale> should be an integer >= 1.\n");
         return RIPL_PARAMERROR;
     }
-    if (!riplArgGet_riplBool(argv[2], &store_abs)) {
+    if (!riplArgGet_bool(argv[2], &store_abs)) {
         riplMessage(itError, "dllconv: <store-abs> should be a boolean value.\n");
         return RIPL_PARAMERROR;
     }

@@ -71,7 +71,7 @@ typedef enum tagmiscPredefinedStruct {
 } miscPredefinedStruct;
 
 /* Subimage-handling function prototype typedef. */
-typedef riplBool (*miscSubimageFunc)(riplGreyMap *pgreymap,
+typedef bool (*miscSubimageFunc)(riplGreyMap *pgreymap,
     unsigned col,
     unsigned row,
     unsigned width,
@@ -81,16 +81,16 @@ typedef riplBool (*miscSubimageFunc)(riplGreyMap *pgreymap,
 
 void miscSetImage(const riplGreyMap *pgreyMap,
     riplGrey grey_level);
-riplBool miscGenerateGaussian(double var,
+bool miscGenerateGaussian(double var,
     unsigned *pkernelSize,
     double **pkernel);
-riplBool miscConvolve1DFP(const riplGrey *pinputData,
+bool miscConvolve1DFP(const riplGrey *pinputData,
     riplGrey *poutputData,
     unsigned sequence_length,
     unsigned step,
     const double *pkernel,
     unsigned kernel_length);
-riplBool miscConvolve2DInt(const riplGrey *pinputData,
+bool miscConvolve2DInt(const riplGrey *pinputData,
     riplGrey *poutputData,
     unsigned image_cols,
     unsigned image_rows,
@@ -98,8 +98,8 @@ riplBool miscConvolve2DInt(const riplGrey *pinputData,
     unsigned kernel_cols,
     unsigned kernel_rows,
     unsigned scale,
-    riplBool store_abs);
-riplBool miscConvolve2DFP(const riplGrey *pinputData,
+    bool store_abs);
+bool miscConvolve2DFP(const riplGrey *pinputData,
     riplGrey *poutputData,
     unsigned image_cols,
     unsigned image_rows,
@@ -107,7 +107,7 @@ riplBool miscConvolve2DFP(const riplGrey *pinputData,
     unsigned kernel_cols,
     unsigned kernel_rows,
     unsigned scale,
-    riplBool store_abs);
+    bool store_abs);
 void miscGenerateWindowF(miscWindowFunction win_func,
     float *win_data,
     unsigned win_length);
@@ -120,13 +120,13 @@ void miscApplyWindowF(miscWindowFunction win_func,
 void miscApplyWindowD(miscWindowFunction win_func,
     double *win_data,
     unsigned win_length);
-riplBool miscHistogramEQ(const riplGrey *pinputData,
+bool miscHistogramEQ(const riplGrey *pinputData,
     riplGrey *poutputData,
     unsigned pixels);
-riplBool *miscGenerateMorphStruct(miscPredefinedStruct predef,
+bool *miscGenerateMorphStruct(miscPredefinedStruct predef,
     unsigned struct_el_cols,
     unsigned struct_el_rows);
-riplBool miscCarve(riplGreyMap *pgreymap,
+bool miscCarve(riplGreyMap *pgreymap,
     riplGrey conf,
     unsigned nclasses,
     const riplGrey *boundary,
@@ -151,7 +151,7 @@ void miscRescaleMG(riplMidGrey *in_vector,
 void miscRescaleBG(riplBigGrey *in_vector,
     riplGrey *out_vector,
     unsigned long size);
-riplBool miscSubimageF(const riplGrey *pinput,
+bool miscSubimageF(const riplGrey *pinput,
     riplGrey *poutput,
     unsigned rows,				/* originally unsigned long */
     unsigned cols,				/* originally unsigned long */
@@ -162,7 +162,7 @@ riplBool miscSubimageF(const riplGrey *pinput,
     miscWindowProfile wp,
     miscSubimageFunctionF func,
     void *arg);
-riplBool miscSubimageG(const riplGrey *pinput,
+bool miscSubimageG(const riplGrey *pinput,
     riplGrey *poutput,
     unsigned rows,				/* originally unsigned long */
     unsigned cols,				/* originally unsigned long */

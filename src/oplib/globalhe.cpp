@@ -15,7 +15,7 @@
 #include "misc.h"
 
 /* Internal entrypoint. */
-riplBool globalHEApplyOperator(riplGreyMap *pinputGreyMap,
+bool globalHEApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap) {
 
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)

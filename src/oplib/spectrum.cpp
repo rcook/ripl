@@ -18,9 +18,9 @@
 #include "riplfft.h"
 
 /* Internal entrypoint. */
-riplBool spectrumApplyOperator(riplGreyMap *pinputGreyMap,
+bool spectrumApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
-    riplBool subtract_mean) {
+    bool subtract_mean) {
 
     float *data, *nyquist, *ptr1, *ptr2;
     float mean, max_abs;
@@ -108,11 +108,11 @@ int spectrumExecute(unsigned argc,
     riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap) {
 
-    riplBool subtract_mean=false;
-    riplBool was_argument=false;
+    bool subtract_mean=false;
+    bool was_argument=false;
 
     if (argc>0) {
-        if (riplArgGet_riplBool(argv[0], &subtract_mean)) was_argument=true;
+        if (riplArgGet_bool(argv[0], &subtract_mean)) was_argument=true;
     }
     if (!RIPL_IS_POWER_OF_2(pinputGreyMap->rows)
         || !RIPL_IS_POWER_OF_2(pinputGreyMap->cols)) {

@@ -23,7 +23,7 @@ int testExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *testHelp(void);
 /* Internal entrypoint. */
-riplBool testApplyOperator(riplGreyMap *pinputGreyMap,
+bool testApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap);
 
 #endif

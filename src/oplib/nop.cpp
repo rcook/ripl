@@ -9,7 +9,7 @@
 #include <string.h>
 
 // Internal entrypoint
-riplBool nopApplyOperator(
+bool nopApplyOperator(
     riplGreyMap const *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     riplGrey threshold)

@@ -19,7 +19,7 @@
 #include "riplgrey.h"
 
 riplGreyMap *riplLoadImage(const char *pfileName);
-riplBool riplSaveImage(const char *pfileName,
+bool riplSaveImage(const char *pfileName,
     riplGraphicFormat graphicFormat,
     const riplGreyMap *pgreyMap);
 riplGraphicFormat riplReadGraphicFormat(const char *pfileName);

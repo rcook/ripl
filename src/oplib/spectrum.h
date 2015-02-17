@@ -25,9 +25,9 @@ int spectrumExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *spectrumHelp(void);
 /* Internal entrypoint. */
-riplBool spectrumApplyOperator(riplGreyMap *pinputGreyMap,
+bool spectrumApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
-    riplBool subtract_mean);
+    bool subtract_mean);
 
 #endif
 

@@ -23,7 +23,7 @@ int carveExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *carveHelp(void);
 /* Internal entrypoint. */
-riplBool carveApplyOperator(riplGreyMap *pinputGreyMap,
+bool carveApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned win_width,
     unsigned win_height,

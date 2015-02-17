@@ -22,10 +22,10 @@ int fftfiltExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *fftfiltHelp(void);
 /* Internal entrypoint. */
-riplBool fftfiltApplyOperator(riplGreyMap *pinputGreyMap,
+bool fftfiltApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     float *pfreqResp,
-    riplBool is_complex);
+    bool is_complex);
 
 #endif
 

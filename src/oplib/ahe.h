@@ -34,15 +34,15 @@ typedef enum tagaheAddbackType {
 typedef struct tagaheConfig {
     unsigned num_terms;
     unsigned win_w, win_h;
-    riplBool hamming_window;
-    riplBool prescale_mode;
+    bool hamming_window;
+    bool prescale_mode;
     float prescale_val;
     aheHEType he_type;
     float he_fraction;
     aheAddbackType addback_mode;
     float addback_fraction;
-    riplBool addback_cum;
-    riplBool gauss_mode;
+    bool addback_cum;
+    bool gauss_mode;
     float gauss_width;
     float inoffset;
 } aheConfig;
@@ -54,7 +54,7 @@ int aheExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *aheHelp(void);
 /* Internal entrypoint. */
-riplBool aheApplyOperator(riplGreyMap *pinputGreyMap,
+bool aheApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     const aheConfig *pconfig);
 void aheInitializeConfig(aheConfig *pconfig);

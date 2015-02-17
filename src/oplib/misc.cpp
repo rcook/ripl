@@ -48,7 +48,7 @@ void miscSetImage(const riplGreyMap *pgreyMap,
  *	Generate a 1D Gaussian kernel of the specified variance.
  *	The size of the kernel is pointed to by pkernelSize.
  */
-riplBool miscGenerateGaussian(double var,
+bool miscGenerateGaussian(double var,
     unsigned *pkernelSize,
     double **pkernel) {
 
@@ -88,7 +88,7 @@ riplBool miscGenerateGaussian(double var,
  *
  *		Produces output sequence of the same length of input (takes central part of result only).
  */
-riplBool miscConvolve1DFP(const riplGrey *pinputData,
+bool miscConvolve1DFP(const riplGrey *pinputData,
     riplGrey *poutputData,
     unsigned sequence_length,
     unsigned step,
@@ -134,7 +134,7 @@ riplBool miscConvolve1DFP(const riplGrey *pinputData,
  *		store_abs			TRUE: forces convolution sum to absolute value,
  *								FALSE: stores negative sums as zeroes.
  */
-riplBool miscConvolve2DInt(const riplGrey *pinputData,
+bool miscConvolve2DInt(const riplGrey *pinputData,
     riplGrey *poutputData,
     unsigned image_cols,
     unsigned image_rows,
@@ -142,7 +142,7 @@ riplBool miscConvolve2DInt(const riplGrey *pinputData,
     unsigned kernel_cols,
     unsigned kernel_rows,
     unsigned scale,
-    riplBool store_abs) {
+    bool store_abs) {
 
     unsigned col_offset=kernel_cols/2,
         row_offset=kernel_rows/2,
@@ -190,7 +190,7 @@ riplBool miscConvolve2DInt(const riplGrey *pinputData,
 /*
  *		As miscConvolve2DInt but with 'const double *' kernel.
  */
-riplBool miscConvolve2DFP(const riplGrey *pinputData,
+bool miscConvolve2DFP(const riplGrey *pinputData,
     riplGrey *poutputData,
     unsigned image_cols,
     unsigned image_rows,
@@ -198,7 +198,7 @@ riplBool miscConvolve2DFP(const riplGrey *pinputData,
     unsigned kernel_cols,
     unsigned kernel_rows,
     unsigned scale,
-    riplBool store_abs) {
+    bool store_abs) {
 
     unsigned col_offset=kernel_cols/2,
         row_offset=kernel_rows/2,
@@ -442,7 +442,7 @@ void miscApplyWindowD(miscWindowFunction win_func,
  * pinputData and poutputData can point to the same array (equalization
  * can be performed in-place).
  */
-riplBool miscHistogramEQ(const riplGrey *pinputData,
+bool miscHistogramEQ(const riplGrey *pinputData,
     riplGrey *poutputData,
     unsigned pixels) {
 
@@ -493,12 +493,12 @@ riplBool miscHistogramEQ(const riplGrey *pinputData,
     return true;
 }
 
-riplBool *miscGenerateMorphStruct(miscPredefinedStruct predef,
+bool *miscGenerateMorphStruct(miscPredefinedStruct predef,
     unsigned struct_el_cols,
     unsigned struct_el_rows) {
 
     unsigned size=struct_el_cols*struct_el_rows;
-    riplBool *element=(riplBool *)riplCalloc(size, sizeof(riplBool));
+    bool *element=(bool *)riplCalloc(size, sizeof(bool));
 
     RIPL_VALIDATE(predef!=psInvalid)
     RIPL_VALIDATE(element)
@@ -566,7 +566,7 @@ struct tagwindow {
  * Carves up an image based on mean grey level.
  * See 4th-year logbook.
  */
-riplBool miscCarve(riplGreyMap *pgreymap,
+bool miscCarve(riplGreyMap *pgreymap,
     riplGrey conf,
     unsigned nclasses,
     const riplGrey *boundary,
@@ -871,7 +871,7 @@ void miscRescaleBG(riplBigGrey *in_vector,
  *
  * Processing function expects float buffer.
  */
-riplBool miscSubimageF(const riplGrey *pinput,
+bool miscSubimageF(const riplGrey *pinput,
     riplGrey *poutput,
     unsigned rows,				/* originally unsigned long */
     unsigned cols,				/* originally unsigned long */
@@ -894,7 +894,7 @@ riplBool miscSubimageF(const riplGrey *pinput,
     unsigned row, col,
         start_r, end_r,
         start_c, end_c;		/* originally unsigned long */
-    riplBool i1, i2,
+    bool i1, i2,
         j1, j2;
     riplGrey *ptr;
     const riplGrey *cptr;
@@ -1088,7 +1088,7 @@ riplBool miscSubimageF(const riplGrey *pinput,
  *
  * Processing function expects riplGrey buffer.
  */
-riplBool miscSubimageG(const riplGrey *pinput,
+bool miscSubimageG(const riplGrey *pinput,
     riplGrey *poutput,
     unsigned rows,				/* originally unsigned long */
     unsigned cols,				/* originally unsigned long */
@@ -1111,7 +1111,7 @@ riplBool miscSubimageG(const riplGrey *pinput,
     unsigned row, col,
         start_r, end_r,
         start_c, end_c;		/* originally unsigned long */
-    riplBool i1, i2,
+    bool i1, i2,
         j1, j2;
     riplGrey *ptr;
     const riplGrey *cptr;

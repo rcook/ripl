@@ -27,11 +27,11 @@ int sobelExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *sobelHelp(void);
 /* Internal entrypoint. */
-riplBool sobelApplyOperator(riplGreyMap *pinputGreyMap,
+bool sobelApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned neighbourhood,
     riplGrey threshold,
-    riplBool overlay);
+    bool overlay);
 
 #endif
 

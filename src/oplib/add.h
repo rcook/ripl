@@ -23,7 +23,7 @@ int addExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *addHelp(void);
 /* Internal entrypoint. */
-riplBool addApplyOperator(riplGreyMap *pinputGreyMap,
+bool addApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     float weight,
     const char *pfileName);

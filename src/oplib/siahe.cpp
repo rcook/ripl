@@ -17,7 +17,7 @@
 #include "siahe.h"
 
 /* Internal entrypoint. */
-riplBool siaheApplyOperator(riplGreyMap *pinputGreyMap,
+bool siaheApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     miscWindowFunction win_func,
     unsigned window_size) {

@@ -23,7 +23,7 @@ int thresholdExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *thresholdHelp(void);
 /* Internal entrypoint. */
-riplBool thresholdApplyOperator(riplGreyMap *pinputGreyMap,
+bool thresholdApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     riplGrey threshold);
 

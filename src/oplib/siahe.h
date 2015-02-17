@@ -24,7 +24,7 @@ int siaheExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *siaheHelp(void);
 /* Internal entrypoint. */
-riplBool siaheApplyOperator(riplGreyMap *pinputGreyMap,
+bool siaheApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     miscWindowFunction win_func,
     unsigned window_size);

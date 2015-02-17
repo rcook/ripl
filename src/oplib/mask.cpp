@@ -14,7 +14,7 @@
 #include "mask.h"
 
 /* Internal entrypoint. */
-riplBool maskApplyOperator(riplGreyMap *pinputGreyMap,
+bool maskApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     riplGrey mask) {
     const riplGrey *inP=pinputGreyMap->data;

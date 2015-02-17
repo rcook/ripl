@@ -20,7 +20,7 @@
 
 riplGreyMap *riplPBMLoadFile(const char *pfileName,
     riplGraphicFormat graphicFormat);
-riplBool riplPBMSaveFile(const char *pfileName,
+bool riplPBMSaveFile(const char *pfileName,
     riplGraphicFormat graphicFormat,
     const riplGreyMap *pgreyMap);
 

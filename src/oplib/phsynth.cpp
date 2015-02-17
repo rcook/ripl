@@ -16,7 +16,7 @@
 #include "misc.h"
 
 /* Internal entrypoint. */
-riplBool phasesynthApplyOperator(riplGreyMap *pinputGreyMap,
+bool phasesynthApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap) {
 
     float *data, *nyquist, *ptr;

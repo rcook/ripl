@@ -14,7 +14,7 @@
 #include "test.h"
 
 /* Internal entrypoint. */
-riplBool testApplyOperator(riplGreyMap *pinputGreyMap,
+bool testApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap) {
 
     unsigned i;

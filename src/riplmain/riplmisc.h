@@ -31,11 +31,6 @@ typedef unsigned long riplBigGrey;
 typedef signed short riplMidGreyS;
 typedef signed long riplBigGreyS;
 
-typedef enum tagriplBool {
-    false=0,
-    true=1
-} riplBool;
-
 #define RIPL_MAX_COLS			4096
 #define RIPL_MAX_ROWS			4096
 #define RIPL_RED_WEIGHT			0.3
@@ -65,7 +60,7 @@ typedef enum tagriplGraphicFormat {
 
 char **riplParseResponseFile(const char *pfileName,
     unsigned *pargc);
-riplBool riplFileExists(const char *pfileName);
+bool riplFileExists(const char *pfileName);
 int riplRound(double val);
 
 /* Non-ANSI string functions. */

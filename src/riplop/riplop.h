@@ -56,7 +56,7 @@ extern const riplOperator riplOperators[];
 extern const unsigned riplNumOperators;
 
 const char *riplGetOperatorSummary(void);
-riplBool riplOperatorHelp(const char *op);
+bool riplOperatorHelp(const char *op);
 unsigned riplOperatorExecute(unsigned argc,
     const char **argv,
     riplGreyMap *pinputGreyMap,

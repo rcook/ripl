@@ -17,38 +17,38 @@
 #define BINMORPH_THRESHOLD			(RIPL_GREY_LEVELS/2)
 
 /* Prototypes of static functions. */
-static riplBool erosion(riplGreyMap *pinputGreyMap,
+static bool erosion(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el);
-static riplBool dilation(riplGreyMap *pinputGreyMap,
+    bool *struct_el);
+static bool dilation(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el);
-static riplBool opening(riplGreyMap *pinputGreyMap,
+    bool *struct_el);
+static bool opening(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el);
-static riplBool closing(riplGreyMap *pinputGreyMap,
+    bool *struct_el);
+static bool closing(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el);
+    bool *struct_el);
 
 /* Internal entrypoint. */
-riplBool binmorphApplyOperator(riplGreyMap *pinputGreyMap,
+bool binmorphApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     miscOperatorType operator_type,
     miscPredefinedStruct predefined_struct,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el) {
+    bool *struct_el) {
 
     riplGrey *temp;
-    riplBool result;
+    bool result;
 
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
     RIPL_VALIDATE(struct_el_cols>0 && struct_el_rows>0)
@@ -93,18 +93,18 @@ riplBool binmorphApplyOperator(riplGreyMap *pinputGreyMap,
 }
 
 /* Perform binary erosion. */
-static riplBool erosion(riplGreyMap *pinputGreyMap,
+static bool erosion(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el) {
+    bool *struct_el) {
 
     riplGrey *outP=poutputGreyMap->data;
     unsigned row, col, i1, j1, i2, j2,
         hnk1=struct_el_cols/2, hnk2=struct_el_cols-hnk1-1,
         hmk1=struct_el_rows/2, hmk2=struct_el_rows-hmk1-1,
         tk, lk, ta, la, ba, ra;
-    riplBool set;
+    bool set;
 
     for (ta=0, ba=hmk2, tk=hmk1, row=0;
         row<pinputGreyMap->rows; row++) {
@@ -131,17 +131,17 @@ static riplBool erosion(riplGreyMap *pinputGreyMap,
 }
 
 /* Perform binary dilation. */
-static riplBool dilation(riplGreyMap *pinputGreyMap,
+static bool dilation(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el) {
+    bool *struct_el) {
     riplGrey *outP=poutputGreyMap->data;
     unsigned row, col, i1, j1, i2, j2,
         hnk1=struct_el_cols/2, hnk2=struct_el_cols-hnk1-1,
         hmk1=struct_el_rows/2, hmk2=struct_el_rows-hmk1-1,
         tk, lk, ta, la, ba, ra;
-    riplBool set;
+    bool set;
     for (ta=0, ba=hmk2, tk=hmk1, row=0;
         row<pinputGreyMap->rows; row++) {
         for (la=0, ra=hnk2, lk=hnk1, col=0;
@@ -167,11 +167,11 @@ static riplBool dilation(riplGreyMap *pinputGreyMap,
 }
 
 /* Perform binary opening---erosion followed by dilation. */
-static riplBool opening(riplGreyMap *pinputGreyMap,
+static bool opening(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el) {
+    bool *struct_el) {
     riplGrey *temp;
     if (!erosion(pinputGreyMap, poutputGreyMap,
         struct_el_cols, struct_el_rows, struct_el)) return false;
@@ -183,11 +183,11 @@ static riplBool opening(riplGreyMap *pinputGreyMap,
 }
 
 /* Perform binary closing---dilation followed by erosion. */
-static riplBool closing(riplGreyMap *pinputGreyMap,
+static bool closing(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el) {
+    bool *struct_el) {
     riplGrey *temp;
     if (!dilation(pinputGreyMap, poutputGreyMap,
         struct_el_cols, struct_el_rows, struct_el)) return false;
@@ -204,8 +204,8 @@ int binmorphExecute(unsigned argc, const char **argv,
     unsigned struct_el_cols, struct_el_rows, struct_el_no, i;
     miscOperatorType operator_type=otInvalid;
     miscPredefinedStruct predefined_struct=psInvalid;
-    riplBool *struct_el, *ptr;
-    riplBool result;
+    bool *struct_el, *ptr;
+    bool result;
     if (argc<4) {
         riplMessage(itError, "Syntax error!\n"
             "Usage: " RIPL_EXENAME " " RIPL_CMDLINE
@@ -299,9 +299,9 @@ int binmorphExecute(unsigned argc, const char **argv,
             " binmorph <op> <predef-el> <ncols> <nrows>\n");
         return RIPL_PARAMERROR;
     }
-    ptr=struct_el=(riplBool *)riplCalloc(struct_el_no, sizeof(riplBool));
+    ptr=struct_el=(bool *)riplCalloc(struct_el_no, sizeof(bool));
     for (i=0; i<struct_el_no; i++, ptr++) {
-        if (!riplArgGet_riplBool(argv[3+i], ptr)) {
+        if (!riplArgGet_bool(argv[3+i], ptr)) {
             riplFree(struct_el);
             riplMessage(itError, "binmorph: <el> values should be boolean.\n");
             return RIPL_PARAMERROR;

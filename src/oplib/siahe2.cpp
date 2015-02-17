@@ -21,7 +21,7 @@ static void do_histogram_eq(riplGrey *pinput,
     void *arg);
 
 /* Internal entrypoint. */
-riplBool siahe2ApplyOperator(riplGreyMap *pinputgrey,
+bool siahe2ApplyOperator(riplGreyMap *pinputgrey,
     riplGreyMap *poutputgrey,
     unsigned w_r,
     unsigned w_c,

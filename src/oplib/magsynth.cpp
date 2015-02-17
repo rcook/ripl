@@ -16,7 +16,7 @@
 #include "misc.h"
 
 /* Internal entrypoint. */
-riplBool magsynthApplyOperator(riplGreyMap *pinputGreyMap,
+bool magsynthApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap) {
 
     float *data, *nyquist, *ptr;

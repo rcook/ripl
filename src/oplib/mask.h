@@ -23,7 +23,7 @@ int maskExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *maskHelp(void);
 /* Internal entrypoint. */
-riplBool maskApplyOperator(riplGreyMap *pinputGreyMap,
+bool maskApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     riplGrey mask);
 

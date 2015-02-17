@@ -30,7 +30,7 @@ int convExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *convHelp(void);
 /* Internal entrypoint. */
-riplBool convApplyOperator(riplGreyMap *pinputGreyMap,
+bool convApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned kernel_columns,
     unsigned kernel_rows,

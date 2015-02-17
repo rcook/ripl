@@ -31,10 +31,10 @@ int dllconvExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *dllconvHelp(void);
 /* Internal entrypoint. */
-riplBool dllconvApplyOperator(riplGreyMap *pinputGreyMap,
+bool dllconvApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned scale,
-    riplBool store_abs,
+    bool store_abs,
     unsigned kernel_columns,
     unsigned kernel_rows,
     dllconvKernelType kernel_type,

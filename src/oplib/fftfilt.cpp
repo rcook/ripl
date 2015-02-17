@@ -27,10 +27,10 @@
 #ifdef __BORLANDC__
 #	pragma argsused
 #endif
-riplBool fftfiltApplyOperator(riplGreyMap *pinputGreyMap,
+bool fftfiltApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     float *pfreqResp,
-    riplBool is_complex) {
+    bool is_complex) {
 
     float *data, *nyquist, *ptr1, *ptr2, *ptr3, *ptr4;
     unsigned long i, j;
@@ -132,7 +132,7 @@ int fftfiltExecute(unsigned argc,
 
     float *freq_resp;
     unsigned long i, len;
-    riplBool is_complex, result;
+    bool is_complex, result;
     FILE *pfile;
     int scan_result;
 
@@ -149,7 +149,7 @@ int fftfiltExecute(unsigned argc,
             argv[0]);
         return RIPL_USERERROR;
     }
-    if (!riplArgGet_riplBool(argv[1], &is_complex)) {
+    if (!riplArgGet_bool(argv[1], &is_complex)) {
         riplMessage(itError, "fftfilt: <is-complex> should be boolean.\n");
         return RIPL_PARAMERROR;
     }

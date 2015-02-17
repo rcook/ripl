@@ -20,37 +20,37 @@
 #include "thresh.h"
 
 /* Prototypes of static functions. */
-static riplBool	erosion(riplGreyMap *pinputGreyMap,
+static bool	erosion(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el);
-static riplBool dilation(riplGreyMap *pinputGreyMap,
+    bool *struct_el);
+static bool dilation(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el);
-static riplBool opening(riplGreyMap *pinputGreyMap,
+    bool *struct_el);
+static bool opening(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el);
-static riplBool closing(riplGreyMap *pinputGreyMap,
+    bool *struct_el);
+static bool closing(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el);
+    bool *struct_el);
 
 /* Internal entrypoint. */
-riplBool glmorphApplyOperator(riplGreyMap *pinputGreyMap,
+bool glmorphApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     miscOperatorType operator_type,
     miscPredefinedStruct predefined_struct,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el) {
+    bool *struct_el) {
 
-    riplBool result;
+    bool result;
 
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
     RIPL_VALIDATE(struct_el_cols>0 && struct_el_rows>0)
@@ -88,11 +88,11 @@ riplBool glmorphApplyOperator(riplGreyMap *pinputGreyMap,
 }
 
 /* Perform grey-level erosion. */
-static riplBool	erosion(riplGreyMap *pinputGreyMap,
+static bool	erosion(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el) {
+    bool *struct_el) {
 
     riplGrey *outP=poutputGreyMap->data;
 
@@ -126,11 +126,11 @@ static riplBool	erosion(riplGreyMap *pinputGreyMap,
 }
 
 /* Perform grey-level dilation. */
-static riplBool dilation(riplGreyMap *pinputGreyMap,
+static bool dilation(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el) {
+    bool *struct_el) {
 
     riplGrey *outP=poutputGreyMap->data;
     
@@ -164,11 +164,11 @@ static riplBool dilation(riplGreyMap *pinputGreyMap,
 }
 
 /* Perform grey-level opening---erosion followed by dilation. */
-static riplBool opening(riplGreyMap *pinputGreyMap,
+static bool opening(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el) {
+    bool *struct_el) {
 
     riplGrey *temp;
 
@@ -182,11 +182,11 @@ static riplBool opening(riplGreyMap *pinputGreyMap,
 }
 
 /* Perform grey-level closing---dilation followed by erosion. */
-static riplBool closing(riplGreyMap *pinputGreyMap,
+static bool closing(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    riplBool *struct_el) {
+    bool *struct_el) {
 
     riplGrey *temp;
 
@@ -205,8 +205,8 @@ int glmorphExecute(unsigned argc, const char **argv,
     unsigned struct_el_cols, struct_el_rows, struct_el_no, i;
     miscOperatorType operator_type=otInvalid;
     miscPredefinedStruct predefined_struct=psInvalid;
-    riplBool *struct_el, *ptr;
-    riplBool result;
+    bool *struct_el, *ptr;
+    bool result;
     if (argc<4) {
         riplMessage(itError, "Syntax error!\n"
             "Usage: " RIPL_EXENAME " " RIPL_CMDLINE
@@ -300,9 +300,9 @@ int glmorphExecute(unsigned argc, const char **argv,
             " glmorph <op> <predef-el> <ncols> <nrows>\n");
         return RIPL_PARAMERROR;
     }
-    ptr=struct_el=(riplBool *)riplCalloc(struct_el_no, sizeof(riplBool));
+    ptr=struct_el=(bool *)riplCalloc(struct_el_no, sizeof(bool));
     for (i=0; i<struct_el_no; i++, ptr++) {
-        if (!riplArgGet_riplBool(argv[3+i], ptr)) {
+        if (!riplArgGet_bool(argv[3+i], ptr)) {
             riplFree(struct_el);
             riplMessage(itError, "glmorph: <el> values should be boolean.\n");
             return RIPL_PARAMERROR;

@@ -27,13 +27,13 @@ struct tagequalize_data {
 };
 
 /* Prototypes of static functions. */
-static riplBool equalize(riplGreyMap *pgreymap,
+static bool equalize(riplGreyMap *pgreymap,
     unsigned col, unsigned row,
     unsigned width, unsigned height,
     unsigned classno, void *arg);
 
 /* Internal entrypoint. */
-riplBool carveApplyOperator(riplGreyMap *pinputGreyMap,
+bool carveApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned win_width, unsigned win_height,
     unsigned min_width, unsigned min_height,
@@ -42,7 +42,7 @@ riplBool carveApplyOperator(riplGreyMap *pinputGreyMap,
     riplGrey *boundary;
     unsigned i;
     struct tagequalize_data equalize_data;
-    riplBool result;
+    bool result;
 
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
     RIPL_VALIDATE(nclasses>=MIN_CLASSES && nclasses<=MAX_CLASSES)
@@ -72,7 +72,7 @@ riplBool carveApplyOperator(riplGreyMap *pinputGreyMap,
 #ifdef __BORLANDC__
 #	pragma argsused
 #endif
-static riplBool equalize(riplGreyMap *pgreymap,
+static bool equalize(riplGreyMap *pgreymap,
     unsigned col,
     unsigned row,
     unsigned width,

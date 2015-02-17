@@ -22,11 +22,11 @@
 #include "ripldbug.h"
 
 /*
- * Get a value of type 'riplBool' from command line.
+ * Get a value of type 'bool' from command line.
  * Text must be either 0/1 or TRUE/FALSE (case insensitive).
  */
-riplBool riplArgGet_riplBool(const char *text,
-    riplBool *value) {
+bool riplArgGet_bool(const char *text,
+    bool *value) {
 
     static char buffer[6];
 
@@ -49,7 +49,7 @@ riplBool riplArgGet_riplBool(const char *text,
  * Get a value of type 'riplGrey' from command line.
  * Must have a value in range 0 to RIPL_MAX_GREY.
  */
-riplBool riplArgGet_riplGrey(const char *text,
+bool riplArgGet_riplGrey(const char *text,
     riplGrey *value) {
 
     char *endptr;
@@ -68,7 +68,7 @@ riplBool riplArgGet_riplGrey(const char *text,
  * Get a value of type 'unsigned' from command line.
  * Must have a value in range 0 to UINT_MAX.
  */
-riplBool riplArgGet_unsigned(const char *text,
+bool riplArgGet_unsigned(const char *text,
     unsigned *value) {
 
     char *endptr;
@@ -89,7 +89,7 @@ riplBool riplArgGet_unsigned(const char *text,
  * Get a value of type 'int' from command line.
  * Must have a value in range INT_MIN to INT_MAX.
  */
-riplBool riplArgGet_int(const char *text,
+bool riplArgGet_int(const char *text,
     int *value) {
 
     char *endptr;
@@ -110,7 +110,7 @@ riplBool riplArgGet_int(const char *text,
  * Get a value of type 'long' from command line.
  * Must not under- or overflow 32-bit integer data type.
  */
-riplBool riplArgGet_long(const char *text,
+bool riplArgGet_long(const char *text,
     long *value) {
 
     char *endptr;
@@ -128,7 +128,7 @@ riplBool riplArgGet_long(const char *text,
  * Get a value of type 'float' from command line.
  * Must be within standard float range.
  */
-riplBool riplArgGet_float(const char *text,
+bool riplArgGet_float(const char *text,
     float *value) {
     
     char *endptr;
@@ -146,7 +146,7 @@ riplBool riplArgGet_float(const char *text,
  * Get a value of type 'double' from command line.
  * Must be within standard double range.
  */
-riplBool riplArgGet_double(const char *text,
+bool riplArgGet_double(const char *text,
     double *value) {
     
     char *endptr;
@@ -161,7 +161,7 @@ riplBool riplArgGet_double(const char *text,
 }
 
 /* Match a string against another up to specified number of characters. */
-riplBool riplMatch(const char *input,
+bool riplMatch(const char *input,
     const char *ref,
     unsigned match_chars) {
 

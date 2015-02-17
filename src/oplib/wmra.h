@@ -22,7 +22,7 @@ int wmraExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *wmraHelp(void);
 /* Internal entrypoint. */
-riplBool wmraApplyOperator(riplGreyMap *pinputGreyMap,
+bool wmraApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     riplwtFilterType filter_type,
     float threshold);

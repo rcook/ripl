@@ -23,7 +23,7 @@ int planeExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *planeHelp(void);
 /* Internal entrypoint. */
-riplBool planeApplyOperator(riplGreyMap *pinputGreyMap,
+bool planeApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     riplGrey bitplane);
 

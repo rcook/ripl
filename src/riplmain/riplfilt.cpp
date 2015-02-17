@@ -45,7 +45,7 @@ riplGreyMap *riplLoadImage(const char *pfileName) {
 }
 
 /* Save specified image under specified filename in format given. */
-riplBool riplSaveImage(const char *pfileName,
+bool riplSaveImage(const char *pfileName,
     riplGraphicFormat graphicFormat,
     const riplGreyMap *pgreyMap) {
 

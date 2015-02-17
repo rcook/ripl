@@ -23,7 +23,7 @@ int marrhildExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *marrhildHelp(void);
 /* Internal entrypoint. */
-riplBool marrhildApplyOperator(riplGreyMap *pinputGreyMap,
+bool marrhildApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     double variance);
 

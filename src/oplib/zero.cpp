@@ -14,7 +14,7 @@
 #include "zero.h"
 
 /* Internal entrypoint. */
-riplBool zeroApplyOperator(riplGreyMap *pinputGreyMap,
+bool zeroApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     riplGrey threshold) {
 

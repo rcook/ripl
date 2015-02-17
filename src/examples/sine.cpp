@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
     float rfreq, cfreq;
     riplGreyMap grey_map;
     riplGrey *pgrey;
-    riplBool result;
+    bool result;
 
     /* Read in and check command-line arguments. */
     if (argc!=6) {

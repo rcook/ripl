@@ -15,7 +15,7 @@
 #include "misc.h"
 
 /* Internal entrypoint. */
-riplBool convApplyOperator(riplGreyMap *pinputGreyMap,
+bool convApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned kernel_columns,
     unsigned kernel_rows,
@@ -52,7 +52,7 @@ int convExecute(unsigned argc, const char **argv,
     unsigned kernel_columns, kernel_rows, kernel_elements, i;
     convKernelType kernel_type=ktInvalid;
     void *kernel;
-    riplBool result;
+    bool result;
     if (argc<4) {
         riplMessage(itError, "Incorrect number of parameters!\n"
             "Usage: " RIPL_EXENAME " " RIPL_CMDLINE

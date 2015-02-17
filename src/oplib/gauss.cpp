@@ -15,7 +15,7 @@
 #include "misc.h"
 
 /* Internal entrypoint. */
-riplBool gaussApplyOperator(riplGreyMap *pinputGreyMap,
+bool gaussApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     double variance) {
 

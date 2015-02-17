@@ -81,7 +81,7 @@ static struct {
 } data;
 
 /* Internal entrypoint. */
-riplBool aheApplyOperator(riplGreyMap *pinputGreyMap,
+bool aheApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     const aheConfig *pconfig) {
 
@@ -587,7 +587,7 @@ static int parse_arguments(aheConfig *pconfig,
     const char **argv) {
 
     unsigned argn=0;
-    riplBool finished=false;
+    bool finished=false;
 
     if (argc<1) {
         riplMessage(itInfo, aheHelp());

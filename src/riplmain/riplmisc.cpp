@@ -74,7 +74,7 @@ char **riplParseResponseFile(const char *pfileName,
 }
 
 /* Return 'true' if specified file exists. */
-riplBool riplFileExists(const char *pfileName) {
+bool riplFileExists(const char *pfileName) {
 
     FILE *pfile;
 

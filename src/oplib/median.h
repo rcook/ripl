@@ -23,7 +23,7 @@ int medianExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *medianHelp(void);
 /* Internal entrypoint. */
-riplBool medianApplyOperator(riplGreyMap *pinputGreyMap,
+bool medianApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned window_size);
 

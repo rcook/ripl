@@ -15,7 +15,7 @@
 #include "misc.h"
 
 /* Internal entrypoint. */
-riplBool wavethreshApplyOperator(riplGreyMap *pinputGreyMap,
+bool wavethreshApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     riplwtFilterType filter_type,
     float threshold) {

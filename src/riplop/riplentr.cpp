@@ -22,10 +22,10 @@
 #include "riplop.h"
 
 /* Prototypes of static functions. */
-static riplBool execute_arguments(unsigned argc, char **argv,
+static bool execute_arguments(unsigned argc, char **argv,
     riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap);
-static riplBool help_arguments(unsigned argc, char **argv);
+static bool help_arguments(unsigned argc, char **argv);
 static void general_help(void);
 
 /*
@@ -39,7 +39,7 @@ static void general_help(void);
 int riplMain1(unsigned argc, char **argv) {
     
     riplGreyMap *pinput_greymap, *poutput_greymap;
-    riplBool result, resp_file=false;
+    bool result, resp_file=false;
     char **resp_argv;
 
     if (argc>0 && **argv=='@') {
@@ -145,7 +145,7 @@ int riplMain1(unsigned argc, char **argv) {
 int riplMain2(unsigned argc, char **argv,
     riplGreyMap *pinputGreyMap, riplGreyMap *poutputGreyMap) {
 
-    riplBool resp_file=false;
+    bool resp_file=false;
     char **resp_argv;
 
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
@@ -215,7 +215,7 @@ int riplMain2(unsigned argc, char **argv,
  *		as the input to the input of the next, allowing several
  *		transforms to be applied to a single image.
  */
-static riplBool execute_arguments(unsigned argc,
+static bool execute_arguments(unsigned argc,
     char **argv,
     riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap) {
@@ -239,7 +239,7 @@ static riplBool execute_arguments(unsigned argc,
 }
 
 /* Displays help screens of operators specified on command line. */
-static riplBool help_arguments(unsigned argc, char **argv) {
+static bool help_arguments(unsigned argc, char **argv) {
     unsigned i;
     for (i=0; i<argc; i++) {
         if (!riplOperatorHelp(argv[i])) return false;

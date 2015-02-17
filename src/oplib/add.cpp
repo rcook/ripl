@@ -14,7 +14,7 @@
 #include "add.h"
 
 /* Internal entrypoint. */
-riplBool addApplyOperator(riplGreyMap *pinputGreyMap,
+bool addApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     float weight,
     const char *pfileName) {

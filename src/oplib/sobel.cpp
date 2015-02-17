@@ -20,11 +20,11 @@
 #include "misc.h"
 
 /* Internal entrypoint. */
-riplBool sobelApplyOperator(riplGreyMap *pinputGreyMap,
+bool sobelApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned neighbourhood,
     riplGrey threshold,
-    riplBool overlay) {
+    bool overlay) {
 
     unsigned window_side=neighbourhood*2+1,
         buf_size=window_side*window_side,
@@ -122,7 +122,7 @@ int sobelExecute(unsigned argc,
 
     unsigned neighbourhood;
     riplGrey threshold;
-    riplBool overlay;
+    bool overlay;
 
     if (argc<3) {
         riplMessage(itError, "Incorrect number of parameters!\n"
@@ -138,7 +138,7 @@ int sobelExecute(unsigned argc,
         riplMessage(itError, "sobel: <thresh> should be a byte.\n");
         return RIPL_PARAMERROR;
     }
-    if (!riplArgGet_riplBool(argv[2], &overlay)) {
+    if (!riplArgGet_bool(argv[2], &overlay)) {
         riplMessage(itError, "sobel: <over> should be a boolean.\n");
         return RIPL_PARAMERROR;
     }

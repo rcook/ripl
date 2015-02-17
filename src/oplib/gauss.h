@@ -23,7 +23,7 @@ int gaussExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *gaussHelp(void);
 /* Internal entrypoint. */
-riplBool gaussApplyOperator(riplGreyMap *pinputGreyMap,
+bool gaussApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     double variance);
 

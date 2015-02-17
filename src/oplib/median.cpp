@@ -19,7 +19,7 @@
 static int riplGrey_compare(const void *value1, const void *value2);
 
 /* Internal entrypoint. */
-riplBool medianApplyOperator(riplGreyMap *pinputGreyMap,
+bool medianApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned window_size) {
 

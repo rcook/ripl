@@ -54,7 +54,7 @@ const char *riplGetOperatorSummary(void) {
 }
 
 /* Display help for a specific operator. */
-riplBool riplOperatorHelp(const char *op) {
+bool riplOperatorHelp(const char *op) {
 
     const riplOperator *ptr;
     const char *help_message;

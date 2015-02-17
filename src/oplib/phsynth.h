@@ -21,7 +21,7 @@ int phasesynthExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *phasesynthHelp(void);
 /* Internal entrypoint. */
-riplBool phasesynthApplyOperator(riplGreyMap *pinputGreyMap,
+bool phasesynthApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap);
 
 #endif

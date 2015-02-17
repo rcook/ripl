@@ -15,7 +15,7 @@
 #include "misc.h"
 
 /* Internal entrypoint. */
-riplBool marrhildApplyOperator(riplGreyMap *pinputGreyMap,
+bool marrhildApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     double variance) {
     unsigned kernel_size;

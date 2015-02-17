@@ -14,7 +14,7 @@
 #include "misc.h"
 
 /* Internal entrypoint. */
-riplBool wmraApplyOperator(riplGreyMap *pinputGreyMap,
+bool wmraApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     riplwtFilterType filter_type,
     float threshold) {

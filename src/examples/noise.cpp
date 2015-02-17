@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
     riplGreyMap *pgreymap;
     unsigned long n, i, index;
     long seed;
-    riplBool result;
+    bool result;
 
     if (argc!=4) {
         riplMessage(itError, "Usage: noise <in-file> <out-file> <n-pts>\n");

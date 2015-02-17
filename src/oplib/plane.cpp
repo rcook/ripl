@@ -14,7 +14,7 @@
 #include "plane.h"
 
 /* Internal entrypoint. */
-riplBool planeApplyOperator(riplGreyMap *pinputGreyMap,
+bool planeApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     riplGrey bitplane) {
 

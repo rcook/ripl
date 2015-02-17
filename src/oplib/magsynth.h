@@ -21,7 +21,7 @@ int magsynthExecute(unsigned argc,
     riplGreyMap *poutputGreyMap);
 const char *magsynthHelp(void);
 /* Internal entrypoint. */
-riplBool magsynthApplyOperator(riplGreyMap *pinputGreyMap,
+bool magsynthApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap);
 
 #endif
