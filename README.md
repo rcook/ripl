@@ -20,9 +20,10 @@ a Unix-style Makefile and build it, for example:
 $ ./build Debug
 ```
 
-The original build scripts for Borland C++ 4.x and whatever version of HP-UX was
-current in 1998 are provided in the `src` subdirectory. Fortunately, the project
-compiles almost completely cleanly using a modern toolchain.
+The original build scripts for Borland C++ 4.x, some version of Watcom C++ and
+whatever version of HP-UX was current in 1998 are provided in the `src`
+subdirectory. Fortunately, the project compiles almost completely cleanly using
+a modern toolchain.
 
 ## Licence
 
