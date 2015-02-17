@@ -1,3 +1,5 @@
+include(CheckFunctionExists)
+
 cmake_minimum_required(VERSION 2.8)
 project(Ripl)
 
@@ -5,7 +7,14 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -stdlib=libc++")
 
 set(SOURCEDIR src)
 
+check_function_exists(strdup HAVE_STRDUP)
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/config.h
+)
+
 include_directories(
+  ${CMAKE_CURRENT_BINARY_DIR}
   ${SOURCEDIR}/oplib
   ${SOURCEDIR}/riplmain
   ${SOURCEDIR}/ripltool

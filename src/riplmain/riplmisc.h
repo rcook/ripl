@@ -22,6 +22,7 @@
 #define _RIPLMISC_H_INCLUDED
 
 #include "ripldefs.h"
+#include "config.h"
 
 typedef unsigned char riplGrey;
 typedef unsigned char riplByte;
@@ -70,6 +71,9 @@ int riplRound(double val);
 /* Non-ANSI string functions. */
 char *strlwr(char *s);
 char *strupr(char *s);
+#ifndef HAVE_STRDUP
 char *strdup(const char *s);
+#endif
 
 #endif
+

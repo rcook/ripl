@@ -1,0 +1,11 @@
+//
+// config.h
+// Results of CMake compiler probes
+//
+// Copyright (C) 2015, Richard A. Cook
+//
+
+#pragma once
+
+#cmakedefine HAVE_STRDUP
+

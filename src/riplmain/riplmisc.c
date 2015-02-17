@@ -121,6 +121,7 @@ char *strupr(char *s) {
     return s;
 }
 
+#ifndef HAVE_STRDUP
 /* Duplicate specified string. */
 char *strdup(const char *s) {
 
@@ -128,4 +129,5 @@ char *strdup(const char *s) {
     
     return new_s ? strcpy(new_s, s):NULL;
 }
+#endif
 
