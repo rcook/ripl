@@ -97,6 +97,7 @@ int riplRound(double val) {
     return ival;
 }
 
+#ifndef HAVE_STRLWR
 /* Convert specified zero-terminated string to lower-case. */
 char *strlwr(char *s) {
 
@@ -108,7 +109,9 @@ char *strlwr(char *s) {
     }
     return s;
 }
+#endif
 
+#ifndef HAVE_STRUPR
 /* Convert specified zero-terminated string to upper-case. */
 char *strupr(char *s) {
 
@@ -120,6 +123,7 @@ char *strupr(char *s) {
     }
     return s;
 }
+#endif
 
 #ifndef HAVE_STRDUP
 /* Duplicate specified string. */

@@ -69,8 +69,12 @@ riplBool riplFileExists(const char *pfileName);
 int riplRound(double val);
 
 /* Non-ANSI string functions. */
+#ifndef HAVE_STRLWR
 char *strlwr(char *s);
+#endif
+#ifndef HAVE_STRUPR
 char *strupr(char *s);
+#endif
 #ifndef HAVE_STRDUP
 char *strdup(const char *s);
 #endif

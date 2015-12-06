@@ -8,4 +8,5 @@
 #pragma once
 
 #cmakedefine HAVE_STRDUP
-
+#cmakedefine HAVE_STRLWR
+#cmakedefine HAVE_STRUPR

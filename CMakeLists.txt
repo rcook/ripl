@@ -3,15 +3,22 @@ include(CheckFunctionExists)
 cmake_minimum_required(VERSION 2.8)
 project(Ripl)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -stdlib=libc++")
-
-set(SOURCEDIR src)
+# BEGIN: Compiler configuration
 
 check_function_exists(strdup HAVE_STRDUP)
+check_function_exists(strlwr HAVE_STRLWR)
+check_function_exists(strupr HAVE_STRUPR)
+
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
   ${CMAKE_CURRENT_BINARY_DIR}/config.h
 )
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -stdlib=libc++")
+
+# END: Compiler configuration
+
+set(SOURCEDIR src)
 
 include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
