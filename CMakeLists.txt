@@ -1,3 +1,4 @@
+include(CheckCXXCompilerFlag)
 include(CheckCXXSourceCompiles)
 include(CheckFunctionExists)
 
@@ -19,7 +20,26 @@ configure_file(
   ${CMAKE_CURRENT_BINARY_DIR}/config.h
 )
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v -stdlib=libc++")
+if(MSVC)
+  set(WARNING_FLAGS "")
+  set(WARNING_FLAGS "${WARNING_FLAGS} -wd4018") # "signed/unsigned mismatch"
+  set(WARNING_FLAGS "${WARNING_FLAGS} -wd4244") # "conversion from 'double' to 'int', possible loss of data"
+  set(WARNING_FLAGS "${WARNING_FLAGS} -wd4305") # "truncation from 'double' to 'float'"
+  set(WARNING_FLAGS "${WARNING_FLAGS} -wd4838") # "conversion from 'double' to 'float' requires a narrowing conversion"
+  set(WARNING_FLAGS "${WARNING_FLAGS} -wd4996") # "This function or variable may be unsafe"
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${WARNING_FLAGS}")
+else()
+  # Detect C++11 support and warn if (possibly) absent
+  check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)
+  check_cxx_compiler_flag("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+  if(COMPILER_SUPPORTS_CXX11)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+  elseif(COMPILER_SUPPORTS_CXX0X)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+  else()
+    message(FATAL_ERROR "Failed to detect C++11 mode for compiler ${CMAKE_CXX_COMPILER}")
+  endif()
+endif(MSVC)
 
 # END: Compiler configuration
 
@@ -89,12 +109,20 @@ add_library(
   ${SOURCEDIR}/oplib/zero.cpp
   ${SOURCEDIR}/oplib/zero.h
 )
-target_link_libraries(
-  oplib
-  riplmain
-  ripltool
-  m
-)
+if(MSVC)
+  target_link_libraries(
+    oplib
+    riplmain
+    ripltool
+  )
+else()
+  target_link_libraries(
+    oplib
+    riplmain
+    ripltool
+    m
+  )
+endif()
 
 add_library(
   riplmain
