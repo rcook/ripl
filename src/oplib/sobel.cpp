@@ -64,7 +64,7 @@ bool sobelApplyOperator(riplGreyMap *pinputGreyMap,
                 i++, ptr+=window_side) {
                 for (j=0; j<i; j++) ave_below+=ptr[j];
             }
-            max_diff=abs(ave_above-ave_below);
+            max_diff = abs(static_cast<long>(ave_above - ave_below));
             /* Line BEH (vertical). */
             for (ave_above=0, i=0, ptr=buf; i<window_side;
                 i++, ptr+=window_side) {
@@ -74,7 +74,7 @@ bool sobelApplyOperator(riplGreyMap *pinputGreyMap,
                 i++, ptr+=window_side) {
                 for (j=0; j<neighbourhood; j++) ave_below+=ptr[j];
             }
-            diff=abs(ave_above-ave_below);
+            diff = abs(static_cast<long>(ave_above - ave_below));
             if (diff>max_diff) max_diff=diff;
             /* Line CEG (-135deg diagonal). */
             for (ave_above=0, i=1, ptr=buf+window_side; i<window_side;
@@ -85,7 +85,7 @@ bool sobelApplyOperator(riplGreyMap *pinputGreyMap,
                 i++, ptr+=window_side) {
                 for (j=0; j<window_side-1-i; j++) ave_below+=ptr[j];
             }
-            diff=abs(ave_above-ave_below);
+            diff = abs(static_cast<long>(ave_above - ave_below));
             if (diff>max_diff) max_diff=diff;
             /* Line DEF	(horizontal). */
             for (ave_above=0, i=0, ptr=buf; i<neighbourhood;
@@ -96,7 +96,7 @@ bool sobelApplyOperator(riplGreyMap *pinputGreyMap,
                 i<window_side; i++, ptr+=window_side) {
                 for (j=0; j<window_side; j++) ave_below+=ptr[j];
             }
-            diff=abs(ave_above-ave_below);
+            diff = abs(static_cast<long>(ave_above - ave_below));
             if (diff>max_diff) max_diff=diff;
             max_diff/=subneighbours;
             /*

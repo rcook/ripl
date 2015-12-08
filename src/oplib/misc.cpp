@@ -925,9 +925,9 @@ bool miscSubimageF(const riplGrey *pinput,
     nr_r=rows-(w_r+(nw_r-1)*(w_r-d_r));
     nr_c=cols-(w_c+(nw_c-1)*(w_c-d_c));
     /* No. of padding pixels at start and end of rows and columns. */
-    ns_r=ceil(nr_r/2);
+    ns_r = ceil(static_cast<float>(nr_r) / 2);
     ne_r=nr_r-ns_r;
-    ns_c=ceil(nr_c/2);
+    ns_c = ceil(static_cast<float>(nr_c) / 2);
     ne_c=nr_c-ns_c;
     /* Edge corrections. */
     wl_r_l=w_r-d_r;
@@ -1142,9 +1142,9 @@ bool miscSubimageG(const riplGrey *pinput,
     nr_r=rows-(w_r+(nw_r-1)*(w_r-d_r));
     nr_c=cols-(w_c+(nw_c-1)*(w_c-d_c));
     /* No. of padding pixels at start and end of rows and columns. */
-    ns_r=ceil(nr_r/2);
+    ns_r = ceil(static_cast<float>(nr_r) / 2);
     ne_r=nr_r-ns_r;
-    ns_c=ceil(nr_c/2);
+    ns_c = ceil(static_cast<float>(nr_c) / 2);
     ne_c=nr_c-ns_c;
     /* Edge corrections. */
     wl_r_l=w_r-d_r;

@@ -10,20 +10,19 @@
  *
  *		Copyright © 1998, Richard A. Cook.
  */
-#ifndef _RIPLTDFS_H_INCLUDED
-#define _RIPLTDFS_H_INCLUDED
+
+#pragma once
 
 #include <math.h>
 #include "ripl.h"
 
-#define RIPL_IS_POWER_OF_2(n)				((log(n)/RIPL_M_LN2)==(unsigned)(log(n)/RIPL_M_LN2))
-#define RIPL_VALIDATE_IS_POWER_OF_2(n)	RIPL_VALIDATE(RIPL_IS_POWER_OF_2(n))
+#define RIPL_IS_POWER_OF_2(n) \
+    ((log(static_cast<float>(n)) / RIPL_M_LN2) == static_cast<unsigned>(log(static_cast<float>(n)) / RIPL_M_LN2))
+#define RIPL_VALIDATE_IS_POWER_OF_2(n) \
+    RIPL_VALIDATE(RIPL_IS_POWER_OF_2(n))
 
 /* Enumerated data type defining transform direction. */
 typedef enum tagriplTransformType {
     ttForward=1,
     ttInverse=-1
 } riplTransformType;
-
-#endif
-

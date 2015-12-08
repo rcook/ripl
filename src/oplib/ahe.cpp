@@ -255,7 +255,7 @@ static void he_series_init(struct taghe_series_data *pdata,
     g=((g-0.756704078)*x+0.918206857)*x-0.897056937;
     g=((g*x+0.988205891)*x-0.577191652)*x+1;
     pdata->gammaVal=g;
-    pdata->twoPower=pow(2.0, pdata->factorX);
+    pdata->twoPower = pow(2.0f, pdata->factorX);
     cstep=pdata->factorX;
     cprod=1.0/cstep;
     csum=cprod;
