@@ -140,6 +140,11 @@ endif()
 
 add_library(
   riplmain
+  ${SOURCEDIR}/riplmain/Error.cpp
+  ${SOURCEDIR}/riplmain/Error.h
+  ${SOURCEDIR}/riplmain/Image.h
+  ${SOURCEDIR}/riplmain/Ranges.h
+  ${SOURCEDIR}/riplmain/defs.h
   ${SOURCEDIR}/riplmain/ripl.h
   ${SOURCEDIR}/riplmain/riplallc.cpp
   ${SOURCEDIR}/riplmain/riplallc.h
@@ -159,6 +164,7 @@ add_library(
   ${SOURCEDIR}/riplmain/riplpbm.h
   ${SOURCEDIR}/riplmain/riplrgb.cpp
   ${SOURCEDIR}/riplmain/riplrgb.h
+  ${SOURCEDIR}/riplmain/validate.h
 )
 
 add_library(

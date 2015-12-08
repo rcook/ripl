@@ -21,6 +21,9 @@
 
 #include "ripldefs.h"
 #include "riplmisc.h"
+#include "Image.h"
+
+using RiplGreyMap = ripl::Image<ripl::grey_t>;
 
 typedef struct tagriplGreyMap {
     unsigned cols, rows;
