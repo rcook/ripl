@@ -1,3 +1,4 @@
+include(CheckCXXSourceCompiles)
 include(CheckFunctionExists)
 
 cmake_minimum_required(VERSION 2.8)
@@ -8,6 +9,10 @@ project(Ripl)
 check_function_exists(strdup HAVE_STRDUP)
 check_function_exists(strlwr HAVE_STRLWR)
 check_function_exists(strupr HAVE_STRUPR)
+
+# Determine if std::make_unique is supported
+set(CMAKE_REQUIRED_FLAGS ${CMAKE_CXX_FLAGS})
+check_cxx_source_compiles("#include <memory>\nclass C { };\nint main() { std::make_unique<C>(); }" HAVE_MAKE_UNIQUE)
 
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
