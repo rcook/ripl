@@ -20,16 +20,62 @@ include_directories(
   ${SOURCEDIR}/ripltool
 )
 
-file(
-  GLOB
-  OPLIBSOURCES
-  ${SOURCEDIR}/oplib/*.c
-  ${SOURCEDIR}/oplib/*.cpp
-  ${SOURCEDIR}/oplib/*.h
-)
 add_library(
   oplib
-  ${OPLIBSOURCES}
+  ${SOURCEDIR}/oplib/add.cpp
+  ${SOURCEDIR}/oplib/add.h
+  ${SOURCEDIR}/oplib/ahe.cpp
+  ${SOURCEDIR}/oplib/ahe.h
+  ${SOURCEDIR}/oplib/binmorph.cpp
+  ${SOURCEDIR}/oplib/binmorph.h
+  ${SOURCEDIR}/oplib/carve.cpp
+  ${SOURCEDIR}/oplib/carve.h
+  ${SOURCEDIR}/oplib/conv.cpp
+  ${SOURCEDIR}/oplib/conv.h
+  ${SOURCEDIR}/oplib/dllconv.cpp
+  ${SOURCEDIR}/oplib/dllconv.h
+  ${SOURCEDIR}/oplib/fftfilt.cpp
+  ${SOURCEDIR}/oplib/fftfilt.h
+  ${SOURCEDIR}/oplib/gauss.cpp
+  ${SOURCEDIR}/oplib/gauss.h
+  ${SOURCEDIR}/oplib/glmorph.cpp
+  ${SOURCEDIR}/oplib/glmorph.h
+  ${SOURCEDIR}/oplib/globalhe.cpp
+  ${SOURCEDIR}/oplib/globalhe.h
+  ${SOURCEDIR}/oplib/magsynth.cpp
+  ${SOURCEDIR}/oplib/magsynth.h
+  ${SOURCEDIR}/oplib/marrhild.cpp
+  ${SOURCEDIR}/oplib/marrhild.h
+  ${SOURCEDIR}/oplib/mask.cpp
+  ${SOURCEDIR}/oplib/mask.h
+  ${SOURCEDIR}/oplib/median.cpp
+  ${SOURCEDIR}/oplib/median.h
+  ${SOURCEDIR}/oplib/misc.cpp
+  ${SOURCEDIR}/oplib/misc.h
+  ${SOURCEDIR}/oplib/nop.cpp
+  ${SOURCEDIR}/oplib/nop.h
+  ${SOURCEDIR}/oplib/phsynth.cpp
+  ${SOURCEDIR}/oplib/phsynth.h
+  ${SOURCEDIR}/oplib/plane.cpp
+  ${SOURCEDIR}/oplib/plane.h
+  ${SOURCEDIR}/oplib/siahe.cpp
+  ${SOURCEDIR}/oplib/siahe.h
+  ${SOURCEDIR}/oplib/siahe2.cpp
+  ${SOURCEDIR}/oplib/siahe2.h
+  ${SOURCEDIR}/oplib/sobel.cpp
+  ${SOURCEDIR}/oplib/sobel.h
+  ${SOURCEDIR}/oplib/spectrum.cpp
+  ${SOURCEDIR}/oplib/spectrum.h
+  ${SOURCEDIR}/oplib/test.cpp
+  ${SOURCEDIR}/oplib/test.h
+  ${SOURCEDIR}/oplib/thresh.cpp
+  ${SOURCEDIR}/oplib/thresh.h
+  ${SOURCEDIR}/oplib/wmra.cpp
+  ${SOURCEDIR}/oplib/wmra.h
+  ${SOURCEDIR}/oplib/wvthrsh.cpp
+  ${SOURCEDIR}/oplib/wvthrsh.h
+  ${SOURCEDIR}/oplib/zero.cpp
+  ${SOURCEDIR}/oplib/zero.h
 )
 target_link_libraries(
   oplib
@@ -38,56 +84,55 @@ target_link_libraries(
   m
 )
 
-file(
-  GLOB
-  RIPLMAINSOURCES
-  ${SOURCEDIR}/riplmain/*.c
-  ${SOURCEDIR}/riplmain/*.cpp
-  ${SOURCEDIR}/riplmain/*.h
-)
 add_library(
   riplmain
-  ${RIPLMAINSOURCES}
+  ${SOURCEDIR}/riplmain/ripl.h
+  ${SOURCEDIR}/riplmain/riplallc.cpp
+  ${SOURCEDIR}/riplmain/riplallc.h
+  ${SOURCEDIR}/riplmain/ripldbug.h
+  ${SOURCEDIR}/riplmain/ripldefs.h
+  ${SOURCEDIR}/riplmain/riplfilt.cpp
+  ${SOURCEDIR}/riplmain/riplfilt.h
+  ${SOURCEDIR}/riplmain/riplgrey.h
+  ${SOURCEDIR}/riplmain/riplimg.h
+  ${SOURCEDIR}/riplmain/riplmisc.cpp
+  ${SOURCEDIR}/riplmain/riplmisc.h
+  ${SOURCEDIR}/riplmain/riplmsg.cpp
+  ${SOURCEDIR}/riplmain/riplmsg.h
+  ${SOURCEDIR}/riplmain/riplpars.cpp
+  ${SOURCEDIR}/riplmain/riplpars.h
+  ${SOURCEDIR}/riplmain/riplpbm.cpp
+  ${SOURCEDIR}/riplmain/riplpbm.h
+  ${SOURCEDIR}/riplmain/riplrgb.cpp
+  ${SOURCEDIR}/riplmain/riplrgb.h
 )
 
-file(
-  GLOB
-  RIPLOPSOURCES
-  ${SOURCEDIR}/riplop/*.c
-  ${SOURCEDIR}/riplop/*.cpp
-  ${SOURCEDIR}/riplop/*.h
-)
 add_library(
   riplop
-  ${RIPLOPSOURCES}
+  ${SOURCEDIR}/riplop/riplentr.cpp
+  ${SOURCEDIR}/riplop/riplop.cpp
+  ${SOURCEDIR}/riplop/riplop.h
+  ${SOURCEDIR}/riplop/riplreg.cpp
 )
 target_link_libraries(
   riplop
   oplib
 )
 
-file(
-  GLOB
-  RIPLTOOLSOURCES
-  ${SOURCEDIR}/ripltool/*.c
-  ${SOURCEDIR}/ripltool/*.cpp
-  ${SOURCEDIR}/ripltool/*.h
-)
 add_library(
   ripltool
-  ${RIPLTOOLSOURCES}
+  ${SOURCEDIR}/ripltool/riplfft.cpp
+  ${SOURCEDIR}/ripltool/riplfft.h
+  ${SOURCEDIR}/ripltool/riplrand.cpp
+  ${SOURCEDIR}/ripltool/riplrand.h
+  ${SOURCEDIR}/ripltool/ripltdfs.h
+  ${SOURCEDIR}/ripltool/riplwave.cpp
+  ${SOURCEDIR}/ripltool/riplwave.h
 )
 
-file(
-  GLOB
-  RIPLCMDSOURCES
-  ${SOURCEDIR}/riplcmd/*.c
-  ${SOURCEDIR}/riplcmd/*.cpp
-  ${SOURCEDIR}/riplcmd/*.h
-)
 add_executable(
   ripl
-  ${RIPLCMDSOURCES}
+  ${SOURCEDIR}/riplcmd/riplcmd.cpp
 )
 target_link_libraries(
   ripl
@@ -96,4 +141,3 @@ target_link_libraries(
   riplop
   ripltool
 )
-
