@@ -16,7 +16,6 @@ bool nopApplyOperator(
 {
     riplGrey const *inP = pinputGreyMap->data;
     riplGrey *outP = poutputGreyMap->data;
-    unsigned i;
 
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
 
@@ -36,7 +35,7 @@ int nopExecute(
     riplGreyMap /*const*/ *pinputGreyMap,
     riplGreyMap *poutputGreyMap)
 {
-    riplGrey threshold;
+    riplGrey threshold = 0;
 
     if (argc > 0)
     {

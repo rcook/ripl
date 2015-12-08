@@ -223,7 +223,11 @@ bool riplPBMSaveFile(const char *pfileName,
     FILE *pfile;
     if (graphicFormat!=gfPGMBinary) return sError;
     pfile=fopen(pfileName, "wb");
-    if (!pfile) return sFileErr;
+    if (!pfile)
+    {
+        return false;
+    }
+
     fprintf(pfile, "P5\n"
         "# %u-Level Portable Greymap.\n"
         "# PGM Export Filter by Richard Cook " __DATE__ "\n"
