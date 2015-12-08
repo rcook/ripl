@@ -118,23 +118,13 @@ int riplMain1(unsigned argc, char **argv)
     auto inputGreyMap = riplLoadImage(argv[0]);
 
     // Allocate another image of the same size as the input
-    riplGreyMap *poutput_greymap = static_cast<riplGreyMap*>(riplMalloc(sizeof(riplGreyMap)));
-    RIPL_VALIDATE_NEW(poutput_greymap, error::OutOfMemory);
-
-    poutput_greymap->cols = inputGreyMap.cols;
-    poutput_greymap->rows = inputGreyMap.rows;
-    poutput_greymap->size = inputGreyMap.size;
-    poutput_greymap->data = static_cast<riplGrey*>(riplCalloc(poutput_greymap->size, sizeof(riplGrey)));
-    RIPL_VALIDATE_NEW(poutput_greymap->data, error::OutOfMemory);
+    riplGreyMap outputGreyMap(inputGreyMap.width(), inputGreyMap.height());
 
     // Execute command-line arguments
-    bool result = execute_arguments(argc - 2, argv + 2, &inputGreyMap, poutput_greymap);
-    riplSaveImage(argv[1], gfPGMBinary, *poutput_greymap);
+    bool result = execute_arguments(argc - 2, argv + 2, &inputGreyMap, &outputGreyMap);
+    riplSaveImage(argv[1], gfPGMBinary, outputGreyMap);
 
     // Free images
-    riplFree(inputGreyMap.data);
-    riplFree(poutput_greymap->data);
-    riplFree(poutput_greymap);
     return result ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
@@ -239,7 +229,6 @@ static ResponseFileArgPtr parseResponseFile(
 static bool execute_arguments(unsigned argc, char** argv, riplGreyMap* pinputGreyMap, riplGreyMap* poutputGreyMap)
 {
     unsigned args_read;
-    riplGrey *temp;
 
     while (1)
     {
@@ -260,9 +249,7 @@ static bool execute_arguments(unsigned argc, char** argv, riplGreyMap* pinputGre
             return true;
         }
 
-        temp = pinputGreyMap->data;
-        pinputGreyMap->data = poutputGreyMap->data;
-        poutputGreyMap->data = temp;
+        pinputGreyMap->swap(*poutputGreyMap);
     }
 }
 

@@ -13,32 +13,34 @@
  */
 #include "add.h"
 
+using namespace ripl;
+
 void addImages(
     riplGreyMap& output,
     const riplGreyMap& input0,
     const riplGreyMap& input1,
     float weight)
 {
-    const riplGrey* p0 = input0.data;
-    const riplGrey* p1 = input1.data;
-    riplGrey* outPtr = output.data;
-    for (decltype(input0.size) i = 0; i < input0.size; i++, ++p0, ++p1, ++outPtr)
+    auto input0Iter = input0.begin();
+    auto input1Iter = input1.begin();
+    auto outputIter = output.begin();
+    for (image_size_t i = 0; i < input0.size(); i++, ++input0Iter, ++input1Iter, ++outputIter)
     {
-        auto value0 = *p0;
-        auto value1 = *p1;
+        auto value0 = *input0Iter;
+        auto value1 = *input1Iter;
         float temp = value0 + weight * (value1);
 
         if (temp < 0)
         {
-            *outPtr = 0;
+            *outputIter = 0;
         }
         else if (temp > RIPL_MAX_GREY)
         {
-            *outPtr = RIPL_MAX_GREY;
+            *outputIter = RIPL_MAX_GREY;
         }
         else
         {
-            *outPtr = static_cast<riplGrey>(temp);
+            *outputIter = static_cast<riplGrey>(temp);
         }
     }
 }
@@ -61,17 +63,15 @@ bool addApplyOperator(
 
     // Load input image
     auto addGreyMap = riplLoadImage(fileName);
-    if (addGreyMap.cols != pinputGreyMap->cols || addGreyMap.rows!=pinputGreyMap->rows)
+    if (addGreyMap.width() != pinputGreyMap->width() || addGreyMap.height()!=pinputGreyMap->height())
     {
         riplMessage(itError, "add: Images do not have the same dimensions!\n");
         return false;
     }
 
-    /* Images are valid. */
+    // Images are valid
     addImages(*poutputGreyMap, *pinputGreyMap, addGreyMap, weight);
 
-    /* Deallocate greymap and its data. */
-    riplFree(addGreyMap.data);
     return true;
 }
 

@@ -24,28 +24,28 @@ bool wmraApplyOperator(riplGreyMap *pinputGreyMap,
     unsigned long i;
 
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
-    RIPL_VALIDATE_IS_POWER_OF_2(pinputGreyMap->rows)
-    RIPL_VALIDATE_IS_POWER_OF_2(pinputGreyMap->cols)
+    RIPL_VALIDATE_IS_POWER_OF_2(pinputGreyMap->height())
+    RIPL_VALIDATE_IS_POWER_OF_2(pinputGreyMap->width())
 
     /* Copy input image grey levels into newly allocated float vector. */
-    vector=(float *)riplCalloc(pinputGreyMap->size, sizeof(float));
-    for (i=0; i<pinputGreyMap->size; i++)
-        vector[i]=(float)pinputGreyMap->data[i];
+    vector=(float *)riplCalloc(pinputGreyMap->size(), sizeof(float));
+    for (i=0; i<pinputGreyMap->size(); i++)
+        vector[i]=(float)pinputGreyMap->data()[i];
 
     /* Initialize wavelet filter coefficients. */
     riplwtSetupFilter(filter_type, &filter);
 
     /* Perform wavelet transform. */
     riplwt2DWT(vector,
-        pinputGreyMap->rows,
-        pinputGreyMap->cols,
+        pinputGreyMap->height(),
+        pinputGreyMap->width(),
         ttForward,
         NULL,
         &filter);
 
     /* Threshold wavelet coefficients. */
-    for (i=0; i<pinputGreyMap->size; i++) {
-        poutputGreyMap->data[i]=(riplGrey)(fabs(vector[i])<threshold
+    for (i=0; i<pinputGreyMap->size(); i++) {
+        poutputGreyMap->data()[i]=(riplGrey)(fabs(vector[i])<threshold
             ? 0:RIPL_MAX_GREY);
     }
 
@@ -96,8 +96,8 @@ int wmraExecute(unsigned argc,
     }
 
     /* Ensure image is of suitable dimensions. */
-    if (!RIPL_IS_POWER_OF_2(pinputGreyMap->rows)
-        || !RIPL_IS_POWER_OF_2(pinputGreyMap->cols)) {
+    if (!RIPL_IS_POWER_OF_2(pinputGreyMap->height())
+        || !RIPL_IS_POWER_OF_2(pinputGreyMap->width())) {
         riplMessage(itError, "wmra: Number of rows and columns in input\n"
             "image must be integer powers of 2.\n");
         return RIPL_USERERROR;

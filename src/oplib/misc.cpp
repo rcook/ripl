@@ -36,12 +36,11 @@
 
 
 /* Sets an entire output image to the specified grey level. */
-void miscSetImage(const riplGreyMap *pgreyMap,
-    riplGrey greyLevel) {
-
+void miscSetImage(riplGreyMap *pgreyMap, riplGrey fillValue)
+{
     RIPL_VALIDATE_GREYMAP(pgreyMap)
 
-    memset(pgreyMap->data, (int)greyLevel, pgreyMap->size);
+    memset(pgreyMap->data(), fillValue, pgreyMap->size());
 }
 
 /*
@@ -596,8 +595,8 @@ bool miscCarve(riplGreyMap *pgreymap,
 
     subimage[0].left=0;
     subimage[0].top=0;
-    subimage[0].width=pgreymap->cols;
-    subimage[0].height=pgreymap->rows;
+    subimage[0].width=pgreymap->width();
+    subimage[0].height=pgreymap->height();
     subimage[0].nearest=nclasses;
     subimage[0].level=0;
     nsubimages=1;
@@ -643,9 +642,9 @@ bool miscCarve(riplGreyMap *pgreymap,
             width=win_width;
             for (j=xwin, left=xoffset; j>0; j--, left+=win_width) {
                 if (j==1 && xedge) width=xedge;
-                inP=pgreymap->data+top*pgreymap->cols+left;
+                inP=pgreymap->data()+top*pgreymap->width()+left;
                 temp=0.0;
-                for (r=height; r>0; r--, inP+=pgreymap->cols-width) {
+                for (r=height; r>0; r--, inP+=pgreymap->width()-width) {
                     for (c=width; c>0; c--, inP++) {
                         temp+=*inP;
                     }

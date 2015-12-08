@@ -26,18 +26,18 @@ bool convApplyOperator(riplGreyMap *pinputGreyMap,
     if (!kernel) return false;
     switch (kernel_type) {
         case ktint:
-            miscConvolve2DInt(pinputGreyMap->data,
-                poutputGreyMap->data,
-                pinputGreyMap->cols,
-                pinputGreyMap->rows,
+            miscConvolve2DInt(pinputGreyMap->data(),
+                poutputGreyMap->data(),
+                pinputGreyMap->width(),
+                pinputGreyMap->height(),
                 (int *)kernel,
                 kernel_columns, kernel_rows, 1, false);
             return true;
         case ktdouble:
-            miscConvolve2DFP(pinputGreyMap->data,
-                poutputGreyMap->data,
-                pinputGreyMap->cols,
-                pinputGreyMap->rows,
+            miscConvolve2DFP(pinputGreyMap->data(),
+                poutputGreyMap->data(),
+                pinputGreyMap->width(),
+                pinputGreyMap->height(),
                 (double *)kernel,
                 kernel_columns, kernel_rows, 1, false);
             return true;

@@ -32,29 +32,27 @@ bool gaussApplyOperator(riplGreyMap *pinputGreyMap,
     RIPL_VALIDATE(kernel)
 
     /* Perform 1D convolution in x-direction: i is row number. */
-    inP=pinputGreyMap->data;
-    outP=poutputGreyMap->data;
-    for (i=0; i<pinputGreyMap->rows; i++) {
-        miscConvolve1DFP(inP, outP, pinputGreyMap->cols,
+    inP=pinputGreyMap->data();
+    outP=poutputGreyMap->data();
+    for (i=0; i<pinputGreyMap->height(); i++) {
+        miscConvolve1DFP(inP, outP, pinputGreyMap->width(),
             1, kernel, kernel_size);
-        inP+=pinputGreyMap->cols;		/* Go to next row. */
-        outP+=pinputGreyMap->cols;
+        inP+=pinputGreyMap->width();		/* Go to next row. */
+        outP+=pinputGreyMap->width();
     }
 
     /* Perform 1D convolution in y-direction: i is column number. */
-    inP=poutputGreyMap->data;
-    outP=pinputGreyMap->data;
-    for (i=0; i<pinputGreyMap->cols; i++) {
-        miscConvolve1DFP(inP, outP, pinputGreyMap->rows,
-            pinputGreyMap->cols, kernel, kernel_size);
+    inP=poutputGreyMap->data();
+    outP=pinputGreyMap->data();
+    for (i=0; i<pinputGreyMap->width(); i++) {
+        miscConvolve1DFP(inP, outP, pinputGreyMap->height(),
+            pinputGreyMap->width(), kernel, kernel_size);
         inP++;								/* Go to next column. */
         outP++;
     }
 
     /* Swap pointers round so the output's in the right place. */
-    outP=pinputGreyMap->data;
-    pinputGreyMap->data=poutputGreyMap->data;
-    poutputGreyMap->data=outP;
+    pinputGreyMap->swap(*poutputGreyMap);
 
     /* Deallocate kernel and return. */
     riplFree(kernel);

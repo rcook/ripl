@@ -46,8 +46,8 @@ bool carveApplyOperator(riplGreyMap *pinputGreyMap,
 
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
     RIPL_VALIDATE(nclasses>=MIN_CLASSES && nclasses<=MAX_CLASSES)
-    RIPL_VALIDATE(win_width>0 && win_width<=pinputGreyMap->cols)
-    RIPL_VALIDATE(win_height>0 && win_height<=pinputGreyMap->rows)
+    RIPL_VALIDATE(win_width>0 && win_width<=pinputGreyMap->width())
+    RIPL_VALIDATE(win_height>0 && win_height<=pinputGreyMap->height())
 
     boundary=(riplGrey *)riplCalloc(nclasses, sizeof(riplGrey));
     RIPL_VALIDATE(boundary)
@@ -86,7 +86,7 @@ static bool equalize(riplGreyMap *pgreymap,
     /* Copy the subimage into the buffer. */
     for (i=0; i<height; i++) {
         memcpy(pdata->buffer+i*width,
-            pgreymap->data+(row+i)*pgreymap->cols+col, width*sizeof(riplGrey));
+            pgreymap->data()+(row+i)*pgreymap->width()+col, width*sizeof(riplGrey));
     }
 
     /* Equalize the pixels. */
@@ -96,8 +96,8 @@ static bool equalize(riplGreyMap *pgreymap,
 
     /* Copy the pixels to the output greymap. */
     for (i=0; i<height; i++) {
-        memcpy(pdata->poutput_greymap->data+(row+i)
-            *pdata->poutput_greymap->cols+col,
+        memcpy(pdata->poutput_greymap->data()+(row+i)
+            *pdata->poutput_greymap->width()+col,
             pdata->buffer+i*width, width*sizeof(riplGrey));
     }
     return true;
@@ -129,7 +129,7 @@ int carveExecute(unsigned argc,
         riplMessage(itError, "carve: <winw> should be an integer > 0.");
         return RIPL_PARAMERROR;
     }
-    if (win_width>pinputGreyMap->cols) {
+    if (win_width>pinputGreyMap->width()) {
         riplMessage(itError, "carve: <winw> should be less than "
             "number of columns in image.");
         return RIPL_PARAMERROR;
@@ -142,7 +142,7 @@ int carveExecute(unsigned argc,
         riplMessage(itError, "carve: <winh> should be an integer > 0.");
         return RIPL_PARAMERROR;
     }
-    if (win_height>pinputGreyMap->rows) {
+    if (win_height>pinputGreyMap->height()) {
         riplMessage(itError, "carve: <winw> should be less than "
             "number of rows in image.");
         return RIPL_PARAMERROR;

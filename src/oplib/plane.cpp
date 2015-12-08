@@ -19,14 +19,14 @@ bool planeApplyOperator(riplGreyMap *pinputGreyMap,
     riplGrey bitplane) {
 
     riplGrey mask;
-    const riplGrey *inP=pinputGreyMap->data;
-    riplGrey *outP=poutputGreyMap->data;
+    const riplGrey *inP=pinputGreyMap->data();
+    riplGrey *outP=poutputGreyMap->data();
     unsigned i;
 
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
     RIPL_VALIDATE(bitplane<=7)
     mask=(riplGrey)(1<<bitplane);
-    for (i=0; i<pinputGreyMap->size; i++, inP++, outP++)
+    for (i=0; i<pinputGreyMap->size(); i++, inP++, outP++)
         *outP=(riplGrey)((*inP & mask) ? RIPL_MAX_GREY:0);
     return true;
 }

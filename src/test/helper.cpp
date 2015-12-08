@@ -10,12 +10,12 @@ namespace ripl { namespace test { namespace helper {
         const vector<riplGrey>& data,
         const riplGreyMap& image)
     {
-        if (width != image.cols)
+        if (width != image.width())
         {
             return false;
         }
 
-        if (height != image.rows)
+        if (height != image.height())
         {
             return false;
         }
@@ -25,19 +25,9 @@ namespace ripl { namespace test { namespace helper {
             return false;
         }
 
-        if (image.cols * image.rows != image.size)
-        {
-            return false;
-        }
-
-        if (!image.data)
-        {
-            return false;
-        }
-
         for (size_t i = 0; i < data.size(); ++i)
         {
-            if (data[i] != image.data[i])
+            if (data[i] != image[i])
             {
                 return false;
             }

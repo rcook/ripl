@@ -31,10 +31,10 @@ bool sobelApplyOperator(riplGreyMap *pinputGreyMap,
         subneighbours=window_side*(window_side-1)/2,
         row, col, index, i, j,
         ave_above, ave_below, diff, max_diff,
-        offset=neighbourhood*pinputGreyMap->cols;
+        offset=neighbourhood*pinputGreyMap->width();
     riplGrey *buf=(riplGrey *)riplCalloc(buf_size, sizeof(riplGrey)),
-        *inP=pinputGreyMap->data+offset,
-        *outP=poutputGreyMap->data+offset,
+        *inP=pinputGreyMap->data()+offset,
+        *outP=poutputGreyMap->data()+offset,
         *ptr;
 
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
@@ -45,12 +45,12 @@ bool sobelApplyOperator(riplGreyMap *pinputGreyMap,
 
     /* Do it! */
     for (row=neighbourhood;
-        row<pinputGreyMap->rows-neighbourhood;
-        row++, inP+=pinputGreyMap->cols, outP+=pinputGreyMap->cols) {
-        for (col=neighbourhood; col<pinputGreyMap->cols-neighbourhood; col++) {
+        row<pinputGreyMap->height()-neighbourhood;
+        row++, inP+=pinputGreyMap->width(), outP+=pinputGreyMap->width()) {
+        for (col=neighbourhood; col<pinputGreyMap->width()-neighbourhood; col++) {
             /* Fetch pixel values in neighbourhood around current pixel. */
             ptr=inP-offset+col-neighbourhood;
-            for (index=0, i=0; i<window_side; i++, ptr+=pinputGreyMap->cols) {
+            for (index=0, i=0; i<window_side; i++, ptr+=pinputGreyMap->width()) {
                 for (j=0; j<window_side; j++) buf[index++]=ptr[j];
             }
             /* Find the maximum absolute difference of the cross-line averages. */

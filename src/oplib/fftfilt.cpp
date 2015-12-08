@@ -40,32 +40,32 @@ bool fftfiltApplyOperator(riplGreyMap *pinputGreyMap,
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
 
     /* Allocate FFT input matrices. */
-    data=(float *)riplCalloc(pinputGreyMap->size, sizeof(float));
+    data=(float *)riplCalloc(pinputGreyMap->size(), sizeof(float));
     RIPL_VALIDATE(data)
-    nyquist=(float *)riplCalloc(pinputGreyMap->rows<<1, sizeof(float));
+    nyquist=(float *)riplCalloc(pinputGreyMap->height()<<1, sizeof(float));
     RIPL_VALIDATE(nyquist)
 
     /* Copy grey levels into FFT input matrix. */
     ptr1=data;
-    pgrey=pinputGreyMap->data;
-    for (i=pinputGreyMap->size; i; i--) *ptr1++=(float)(*pgrey++);
+    pgrey=pinputGreyMap->data();
+    for (i=pinputGreyMap->size(); i; i--) *ptr1++=(float)(*pgrey++);
 
     /* Calculate 2D FFT of grey levels. */
     riplfftReal2DFT(data,
         nyquist,
-        pinputGreyMap->rows,
-        pinputGreyMap->cols,
+        pinputGreyMap->height(),
+        pinputGreyMap->width(),
         ttForward);
 
     /* Apply filter by multiplying by frequency response. */
     ptr1=data;
-    ptr2=data+pinputGreyMap->size;
+    ptr2=data+pinputGreyMap->size();
     ptr3=pfreqResp;
     ptr4=nyquist;
     if (is_complex) {
-        for (i=0; i<=(pinputGreyMap->rows>>1); i++) {
-            for (j=0; j<pinputGreyMap->cols; j+=2) {
-                if (i==0 || i==(pinputGreyMap->rows>>1)) {
+        for (i=0; i<=(pinputGreyMap->height()>>1); i++) {
+            for (j=0; j<pinputGreyMap->width(); j+=2) {
+                if (i==0 || i==(pinputGreyMap->height()>>1)) {
                     ptr1[j]=MULTIPLY_REAL(ptr1[j], ptr1[j+1], ptr3[0], ptr3[1]);
                     ptr1[j+1]=MULTIPLY_IMAG(ptr1[j], ptr1[j+1], ptr3[0], ptr3[1]);
                 }
@@ -79,16 +79,16 @@ bool fftfiltApplyOperator(riplGreyMap *pinputGreyMap,
             }
             ptr4[0]=MULTIPLY_REAL(ptr4[0], ptr4[1], ptr3[0], ptr3[1]);
             ptr4[1]=MULTIPLY_IMAG(ptr4[0], ptr4[1], ptr3[0], ptr3[1]);
-            ptr1+=pinputGreyMap->cols;
-            ptr2-=pinputGreyMap->cols;
+            ptr1+=pinputGreyMap->width();
+            ptr2-=pinputGreyMap->width();
             ptr3+=2;
             ptr4+=2;
         }
     }
     else {
-        for (i=0; i<=(pinputGreyMap->rows>>1); i++) {
-            for (j=0; j<pinputGreyMap->cols; j+=2) {
-                if (i==0 || i==(pinputGreyMap->rows>>1)) {
+        for (i=0; i<=(pinputGreyMap->height()>>1); i++) {
+            for (j=0; j<pinputGreyMap->width(); j+=2) {
+                if (i==0 || i==(pinputGreyMap->height()>>1)) {
                     ptr1[j]*=ptr3[0];
                     ptr1[j+1]*=ptr3[0];
                 }
@@ -101,8 +101,8 @@ bool fftfiltApplyOperator(riplGreyMap *pinputGreyMap,
             }
             ptr4[0]*=ptr3[0];
             ptr4[1]*=ptr3[0];
-            ptr1+=pinputGreyMap->cols;
-            ptr2-=pinputGreyMap->cols;
+            ptr1+=pinputGreyMap->width();
+            ptr2-=pinputGreyMap->width();
             ptr3++;
             ptr4+=2;
         }
@@ -111,12 +111,12 @@ bool fftfiltApplyOperator(riplGreyMap *pinputGreyMap,
     /* Calculate inverse FFT. */
     riplfftReal2DFT(data,
         nyquist,
-        pinputGreyMap->rows,
-        pinputGreyMap->cols,
+        pinputGreyMap->height(),
+        pinputGreyMap->width(),
         ttInverse);
 
     /* Scale output to grey levels. */
-    miscRescaleF(data, poutputGreyMap->data, poutputGreyMap->size);
+    miscRescaleF(data, poutputGreyMap->data(), poutputGreyMap->size());
 
     /* Deallocate input matrices. */
     riplFree(nyquist);
@@ -155,15 +155,15 @@ int fftfiltExecute(unsigned argc,
     }
 
     /* Ensure image is of suitable dimensions. */
-    if (!RIPL_IS_POWER_OF_2(pinputGreyMap->rows)
-        || !RIPL_IS_POWER_OF_2(pinputGreyMap->cols)) {
+    if (!RIPL_IS_POWER_OF_2(pinputGreyMap->height())
+        || !RIPL_IS_POWER_OF_2(pinputGreyMap->width())) {
         riplMessage(itError, "fftfilt: Number of rows and columns in input\n"
             "image must be integer powers of 2.\n");
         return RIPL_USERERROR;
     }
 
     /* Load frequency response from file. */
-    len=((pinputGreyMap->rows>>1)+1)*((pinputGreyMap->cols>>1)+1);
+    len=((pinputGreyMap->height()>>1)+1)*((pinputGreyMap->width()>>1)+1);
     if (is_complex) len<<=1;
     freq_resp=(float *)riplCalloc(len, sizeof(float));
     RIPL_VALIDATE(freq_resp)
@@ -182,8 +182,8 @@ int fftfiltExecute(unsigned argc,
                         "Insufficient values in frequency response file %s!\n"
                         "File should contain 2*(%lu/2+1)*(%lu/2+1) = %lu values.\n",
                         argv[0],
-                        pinputGreyMap->rows,
-                        pinputGreyMap->cols,
+                        pinputGreyMap->height(),
+                        pinputGreyMap->width(),
                         len);
                 }
                 else {
@@ -191,8 +191,8 @@ int fftfiltExecute(unsigned argc,
                         "Insufficient values in frequency response file %s!\n"
                         "File should contain (%lu/2-1)*(%lu/2-1) = %lu values.\n",
                         argv[0],
-                        pinputGreyMap->rows,
-                        pinputGreyMap->cols,
+                        pinputGreyMap->height(),
+                        pinputGreyMap->width(),
                         len);
                 }
                 return RIPL_USERERROR;

@@ -32,10 +32,10 @@ bool siahe2ApplyOperator(riplGreyMap *pinputgrey,
     RIPL_VALIDATE_OP_GREYMAPS(pinputgrey, poutputgrey)
     RIPL_VALIDATE(wp==wpCosine || wp==wpTriangular)
 
-    return miscSubimageG(pinputgrey->data,
-        poutputgrey->data,
-        pinputgrey->rows,
-        pinputgrey->cols,
+    return miscSubimageG(pinputgrey->data(),
+        poutputgrey->data(),
+        pinputgrey->height(),
+        pinputgrey->width(),
         w_r, w_c, d_r, d_c, wp, do_histogram_eq, NULL);
 }
 
@@ -66,7 +66,7 @@ int siahe2Execute(unsigned argc,
         riplMessage(itError, "siahe2: <w-r> should be an integer > 1.\n");
         return RIPL_PARAMERROR;
     }
-    if (w_r>pinputgrey->rows) {
+    if (w_r>pinputgrey->height()) {
         riplMessage(itError,
             "siahe2: <w-r> should be less than rows in image.\n");
         return RIPL_PARAMERROR;
@@ -75,7 +75,7 @@ int siahe2Execute(unsigned argc,
         riplMessage(itError, "siahe2: <w-c> should be an integer > 1.\n");
         return RIPL_PARAMERROR;
     }
-    if (w_c>pinputgrey->cols) {
+    if (w_c>pinputgrey->width()) {
         riplMessage(itError,
             "siahe2: <w-c> should be less than columns in image.\n");
         return RIPL_PARAMERROR;

@@ -25,7 +25,7 @@ bool siaheApplyOperator(riplGreyMap *pinputGreyMap,
     unsigned buffer_size=window_size*window_size;
     riplGrey *buffer=(riplGrey *)riplCalloc(buffer_size, sizeof(riplGrey));
     riplMidGrey *temp_output=
-        (riplMidGrey *)riplCalloc(poutputGreyMap->size, sizeof(riplMidGrey));
+        (riplMidGrey *)riplCalloc(poutputGreyMap->size(), sizeof(riplMidGrey));
     double *window=(double *)riplCalloc(window_size, sizeof(double));
     unsigned step=window_size/2,
         xwins, ywins, x, y, im_x, im_y, b, r, index, i, j;
@@ -37,27 +37,27 @@ bool siaheApplyOperator(riplGreyMap *pinputGreyMap,
     RIPL_VALIDATE(window_size>1)
 
     /* Calculate number of windows in x- and y-directions. */
-    xwins=pinputGreyMap->cols/step;
-    ywins=pinputGreyMap->rows/step;
+    xwins=pinputGreyMap->width()/step;
+    ywins=pinputGreyMap->height()/step;
 
     /* Generate appropriate window. */
     miscGenerateWindowD(win_func, window, window_size);
 
     /* Set pixels of output image to zero first. */
-    memset(temp_output, 0, poutputGreyMap->size*sizeof(riplMidGrey));
+    memset(temp_output, 0, poutputGreyMap->size()*sizeof(riplMidGrey));
 
     /* Perform subimage histogram equalizations. */
     for (y=0, im_y=0; im_y<ywins; im_y++, y+=step) {
         b=y+window_size;
-        b=b<pinputGreyMap->rows ? b:pinputGreyMap->rows;
+        b=b<pinputGreyMap->height() ? b:pinputGreyMap->height();
         for (x=0, im_x=0; im_x<xwins; im_x++, x+=step) {
             r=x+window_size;
-            r=r<pinputGreyMap->cols ? r:pinputGreyMap->cols;
+            r=r<pinputGreyMap->width() ? r:pinputGreyMap->width();
 
             /* Copy window area into buffer. */
             for (index=0, i=y; i<b; i++) {
                 for (j=x; j<r; j++) {
-                    buffer[index++]=pinputGreyMap->data[i*pinputGreyMap->cols+j];
+                    buffer[index++]=pinputGreyMap->data()[i*pinputGreyMap->width()+j];
                 }
             }
 
@@ -67,7 +67,7 @@ bool siaheApplyOperator(riplGreyMap *pinputGreyMap,
             /* Accumulate local HEs. */
             for (index=0, i=y; i<b; i++) {
                 for (j=x; j<r; j++, index++) {
-                    *(temp_output+i*pinputGreyMap->cols+j)
+                    *(temp_output+i*pinputGreyMap->width()+j)
                         +=(riplGrey)(window[i-y]*window[j-x]*buffer[index]);
                 }
             }
@@ -79,7 +79,7 @@ bool siaheApplyOperator(riplGreyMap *pinputGreyMap,
     riplFree(window);
 
     /* Rescale image grey levels and copy to output. */
-    miscRescaleMG(temp_output, poutputGreyMap->data, poutputGreyMap->size);
+    miscRescaleMG(temp_output, poutputGreyMap->data(), poutputGreyMap->size());
 
     /* Free buffers and return. */
     riplFree(temp_output);

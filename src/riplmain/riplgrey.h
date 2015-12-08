@@ -16,19 +16,10 @@
  *
  *		Copyright © 1997/8, Richard A. Cook.
  */
-#ifndef _RIPLGREY_H_INCLUDED
-#define _RIPLGREY_H_INCLUDED
 
-#include "ripldefs.h"
+#pragma once
+
 #include "riplmisc.h"
 #include "Image.h"
 
-using RiplGreyMap = ripl::Image<ripl::grey_t>;
-
-typedef struct tagriplGreyMap {
-    unsigned cols, rows;
-    unsigned long size;
-    riplGrey *data;
-} riplGreyMap;
-
-#endif
+using riplGreyMap = ripl::Image<ripl::grey_t>;

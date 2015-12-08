@@ -18,13 +18,13 @@ bool thresholdApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     riplGrey threshold) {
 
-    const riplGrey *inP=pinputGreyMap->data;
-    riplGrey *outP=poutputGreyMap->data;
+    const riplGrey *inP=pinputGreyMap->data();
+    riplGrey *outP=poutputGreyMap->data();
     unsigned i;
 
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
     
-    for (i=0; i<pinputGreyMap->size; i++, inP++, outP++) {
+    for (i=0; i<pinputGreyMap->size(); i++, inP++, outP++) {
         if (*inP<threshold) *outP=0;
         else *outP=RIPL_MAX_GREY;
     }

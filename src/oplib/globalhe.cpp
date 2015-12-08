@@ -19,8 +19,8 @@ bool globalHEApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap) {
 
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
-    return miscHistogramEQ(pinputGreyMap->data, poutputGreyMap->data,
-        pinputGreyMap->size);
+    return miscHistogramEQ(pinputGreyMap->data(), poutputGreyMap->data(),
+        pinputGreyMap->size());
 }
 
 /* Command-line version. */

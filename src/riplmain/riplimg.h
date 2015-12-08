@@ -50,7 +50,7 @@ void miscConvertToGreyScale(riplRGBImage *pimage) {
     red_ptr=pimage->red;
     green_ptr=pimage->green;
     blue_ptr=pimage->blue;
-    for (i=0; i<pimage->size; i++) {
+    for (i=0; i<pimage->size(); i++) {
         *red_ptr=RIPL_RED_WEIGHT*(*red_ptr)
             +RIPL_GREEN_WEIGHT*(*green_ptr)
             +RIPL_BLUE_WEIGHT*(*blue_ptr);
@@ -58,7 +58,7 @@ void miscConvertToGreyScale(riplRGBImage *pimage) {
         green_ptr++;
         blue_ptr++;
     }
-    pimage->data=pimage->red;
+    pimage->data()=pimage->red;
     pimage->red=NULL;
     riplFree(pimage->green);
     riplFree(pimage->blue);
@@ -69,20 +69,20 @@ void miscCreateGreyMapFromImage(riplGreyMap *pgreymap,
     riplRGBImage *pimage,
     riplRGBPlane plane) {
 
-    RIPL_VALIDATE(pgreymap->data==NULL)
+    RIPL_VALIDATE(pgreymap->data()==NULL)
 
-    pgreymap->cols=pimage->cols;
-    pgreymap->rows=pimage->rows;
-    pgreymap->size=pimage->size;
+    pgreymap->width()=pimage->width();
+    pgreymap->height()=pimage->height();
+    pgreymap->size()=pimage->size();
     switch (plane) {
         case rgbpRed:
-            pgreymap->data=pimage->red;
+            pgreymap->data()=pimage->red;
         case rgbpGreen:
-            pgreymap->data=pimage->green;
+            pgreymap->data()=pimage->green;
         case rgbpBlue:
-            pgreymap->data=pimage->blue;
+            pgreymap->data()=pimage->blue;
         case rgbpData:
-            pgreymap->data=pimage->data;
+            pgreymap->data()=pimage->data();
     }
 }
 */

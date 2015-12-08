@@ -45,9 +45,8 @@ bool binmorphApplyOperator(riplGreyMap *pinputGreyMap,
     miscPredefinedStruct predefined_struct,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    bool *struct_el) {
-
-    riplGrey *temp;
+    bool *struct_el)
+{
     bool result;
 
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
@@ -64,9 +63,9 @@ bool binmorphApplyOperator(riplGreyMap *pinputGreyMap,
     if (!thresholdApplyOperator(pinputGreyMap,
         poutputGreyMap,
         BINMORPH_THRESHOLD)) return false;
-    temp=pinputGreyMap->data;
-    pinputGreyMap->data=poutputGreyMap->data;
-    poutputGreyMap->data=temp;
+
+    pinputGreyMap->swap(*poutputGreyMap);
+
     switch (operator_type) {
         case otErosion:
             result=erosion(pinputGreyMap, poutputGreyMap,
@@ -99,7 +98,7 @@ static bool erosion(riplGreyMap *pinputGreyMap,
     unsigned struct_el_rows,
     bool *struct_el) {
 
-    riplGrey *outP=poutputGreyMap->data;
+    riplGrey *outP=poutputGreyMap->data();
     unsigned row, col, i1, j1, i2, j2,
         hnk1=struct_el_cols/2, hnk2=struct_el_cols-hnk1-1,
         hmk1=struct_el_rows/2, hmk2=struct_el_rows-hmk1-1,
@@ -107,24 +106,24 @@ static bool erosion(riplGreyMap *pinputGreyMap,
     bool set;
 
     for (ta=0, ba=hmk2, tk=hmk1, row=0;
-        row<pinputGreyMap->rows; row++) {
+        row<pinputGreyMap->height(); row++) {
         for (la=0, ra=hnk2, lk=hnk1, col=0;
-            col<pinputGreyMap->cols; col++) {
+            col<pinputGreyMap->width(); col++) {
             for (set=true, i1=ta, i2=tk; i1<=ba && set; i1++, i2++) {
                 for (j1=la, j2=lk; j1<=ra && set; j1++, j2++) {
                     if (!struct_el[i2*struct_el_cols+j2]) continue;
                     /* Test pixel. */
-                    if (!*(pinputGreyMap->data
-                        +i1*pinputGreyMap->cols+j1)) set=false;
+                    if (!*(pinputGreyMap->data()
+                        +i1*pinputGreyMap->width()+j1)) set=false;
                 }
             }
             *outP++=(riplGrey)(set ? RIPL_MAX_GREY:0);
             if (col>=hnk1) la++;
-            if (ra<pinputGreyMap->cols-hnk2) ra++;
+            if (ra<pinputGreyMap->width()-hnk2) ra++;
             if (lk>0) lk--;
         }
         if (row>=hmk1) ta++;
-        if (ba<pinputGreyMap->rows-hmk2) ba++;
+        if (ba<pinputGreyMap->height()-hmk2) ba++;
         if (tk>0) tk--;
     }
     return true;
@@ -136,31 +135,31 @@ static bool dilation(riplGreyMap *pinputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
     bool *struct_el) {
-    riplGrey *outP=poutputGreyMap->data;
+    riplGrey *outP=poutputGreyMap->data();
     unsigned row, col, i1, j1, i2, j2,
         hnk1=struct_el_cols/2, hnk2=struct_el_cols-hnk1-1,
         hmk1=struct_el_rows/2, hmk2=struct_el_rows-hmk1-1,
         tk, lk, ta, la, ba, ra;
     bool set;
     for (ta=0, ba=hmk2, tk=hmk1, row=0;
-        row<pinputGreyMap->rows; row++) {
+        row<pinputGreyMap->height(); row++) {
         for (la=0, ra=hnk2, lk=hnk1, col=0;
-            col<pinputGreyMap->cols; col++) {
+            col<pinputGreyMap->width(); col++) {
             for (set=false, i1=ta, i2=tk; i1<=ba && !set; i1++, i2++) {
                 for (j1=la, j2=lk; j1<=ra && !set; j1++, j2++) {
                     if (!struct_el[i2*struct_el_cols+j2]) continue;
                     /* Test pixel. */
-                    if (*(pinputGreyMap->data
-                        +i1*pinputGreyMap->cols+j1)) set=true;
+                    if (*(pinputGreyMap->data()
+                        +i1*pinputGreyMap->width()+j1)) set=true;
                 }
             }
             *outP++=(riplGrey)(set ? RIPL_MAX_GREY:0);
             if (col>=hnk1) la++;
-            if (ra<pinputGreyMap->cols-hnk2) ra++;
+            if (ra<pinputGreyMap->width()-hnk2) ra++;
             if (lk>0) lk--;
         }
         if (row>=hmk1) ta++;
-        if (ba<pinputGreyMap->rows-hmk2) ba++;
+        if (ba<pinputGreyMap->height()-hmk2) ba++;
         if (tk>0) tk--;
     }
     return true;
@@ -171,15 +170,16 @@ static bool opening(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    bool *struct_el) {
-    riplGrey *temp;
-    if (!erosion(pinputGreyMap, poutputGreyMap,
-        struct_el_cols, struct_el_rows, struct_el)) return false;
-    temp=pinputGreyMap->data;
-    pinputGreyMap->data=poutputGreyMap->data;
-    poutputGreyMap->data=temp;
-    return dilation(pinputGreyMap, poutputGreyMap,
-        struct_el_cols, struct_el_rows, struct_el);
+    bool *struct_el)
+{
+    if (!erosion(pinputGreyMap, poutputGreyMap, struct_el_cols, struct_el_rows, struct_el))
+    {
+        return false;
+    }
+
+    pinputGreyMap->swap(*poutputGreyMap);
+
+    return dilation(pinputGreyMap, poutputGreyMap, struct_el_cols, struct_el_rows, struct_el);
 }
 
 /* Perform binary closing---dilation followed by erosion. */
@@ -187,15 +187,16 @@ static bool closing(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     unsigned struct_el_cols,
     unsigned struct_el_rows,
-    bool *struct_el) {
-    riplGrey *temp;
-    if (!dilation(pinputGreyMap, poutputGreyMap,
-        struct_el_cols, struct_el_rows, struct_el)) return false;
-    temp=pinputGreyMap->data;
-    pinputGreyMap->data=poutputGreyMap->data;
-    poutputGreyMap->data=temp;
-    return erosion(pinputGreyMap, poutputGreyMap,
-        struct_el_cols, struct_el_rows, struct_el);
+    bool *struct_el)
+{
+    if (!dilation(pinputGreyMap, poutputGreyMap, struct_el_cols, struct_el_rows, struct_el))
+    {
+        return false;
+    }
+
+    pinputGreyMap->swap(*poutputGreyMap);
+
+    return erosion(pinputGreyMap, poutputGreyMap, struct_el_cols, struct_el_rows, struct_el);
 }
 
 /* Command-line version. */

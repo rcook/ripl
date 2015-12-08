@@ -17,11 +17,11 @@
 bool maskApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     riplGrey mask) {
-    const riplGrey *inP=pinputGreyMap->data;
-    riplGrey *outP=poutputGreyMap->data;
+    const riplGrey *inP=pinputGreyMap->data();
+    riplGrey *outP=poutputGreyMap->data();
     unsigned i;
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
-    for (i=0; i<pinputGreyMap->size; i++, inP++, outP++) *outP=*inP & mask;
+    for (i=0; i<pinputGreyMap->size(); i++, inP++, outP++) *outP=*inP & mask;
     return true;
 }
 

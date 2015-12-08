@@ -46,10 +46,9 @@
 #	define RIPL_VALIDATE(expr)		RIPL_ASSERT(expr);
     /* Verifies that the specified greymap object is valid. */
 #	define RIPL_VALIDATE_GREYMAP(greymap) \
-        RIPL_ASSERT((greymap) && (greymap)->data); \
-        RIPL_ASSERT((greymap)->cols>0 && (greymap)->rows>0); \
-        RIPL_ASSERT((greymap)->size== \
-            (unsigned long)(greymap)->cols*(greymap)->rows);
+        RIPL_ASSERT((greymap) && (greymap)->data()); \
+        RIPL_ASSERT((greymap)->width()>0 && (greymap)->height()>0); \
+        RIPL_ASSERT((greymap)->size() == (unsigned long)(greymap)->width() * (greymap)->height());
     /* Verifies that the specified RGBMap object is valid. */
 #	define RIPL_VALIDATE_RGBMAP(rgbmap) \
         RIPL_ASSERT((rgbmap)); \
@@ -57,17 +56,13 @@
             && (rgbmap)->blue && !(rgbmap)->mono) \
             || (!(rgbmap)->red && !(rgbmap)->green \
             && ! (rgbmap)->blue && (rgbmap)->mono)); \
-        RIPL_ASSERT((rgbmap)->cols>0 && (rgbmap)->rows>0); \
-        RIPL_ASSERT((rgbmap)->size==(unsigned long)(rgbmap)->cols*(rgbmap)->rows);
+        RIPL_ASSERT((rgbmap)->width()>0 && (rgbmap)->height()>0); \
+        RIPL_ASSERT((rgbmap)->size() == (unsigned long)(rgbmap)->width()*(rgbmap)->height());
     /* Validate greymaps passed to operator-handling functions. */
 #	define RIPL_VALIDATE_OP_GREYMAPS(greymap1, greymap2) \
         RIPL_ASSERT((greymap1) && (greymap2)); \
-        RIPL_ASSERT((greymap1)->data && (greymap2)->data); \
-        RIPL_ASSERT((greymap1)->cols>0 && (greymap1)->rows>0); \
-        RIPL_ASSERT((greymap1)->size==(unsigned long)(greymap1)->cols*(greymap1)->rows); \
-        RIPL_ASSERT((greymap1)->cols==(greymap2)->cols); \
-        RIPL_ASSERT((greymap1)->rows==(greymap2)->rows); \
-        RIPL_ASSERT((greymap1)->size==(greymap2)->size);
+        RIPL_ASSERT((greymap1)->width() == (greymap2)->width()); \
+        RIPL_ASSERT((greymap1)->height() == (greymap2)->height());
     /* Validate RGBMap objects passed to operator-handling functions. */
 #	define RIPL_VALIDATE_OP_RGBMAPS(rgbmap1, rgbmap2) \
         RIPL_ASSERT((rgbmap1) && (rgbmap2)); \
@@ -81,11 +76,11 @@
             && ! (rgbmap2)->blue && (rgbmap2)->mono)); \
         RIPL_ASSERT(((rgbmap1)->mono && (rgbmap2)->mono) \
             || (!(rgbmap1)->mono && !(rgbmap2)->mono)); \
-        RIPL_ASSERT((rgbmap1)->cols>0 && (rgbmap1)->rows>0); \
-        RIPL_ASSERT((rgbmap1)->size==(unsigned long)(rgbmap1)->cols*(rgbmap1)->rows); \
-        RIPL_ASSERT((rgbmap1)->cols==(rgbmap2)->cols); \
-        RIPL_ASSERT((rgbmap1)->rows==(rgbmap2)->rows); \
-        RIPL_ASSERT((rgbmap1)->size==(rgbmap2)->size);
+        RIPL_ASSERT((rgbmap1)->width()>0 && (rgbmap1)->height()>0); \
+        RIPL_ASSERT((rgbmap1)->size()==(unsigned long)(rgbmap1)->width()*(rgbmap1)->height()); \
+        RIPL_ASSERT((rgbmap1)->width()==(rgbmap2)->width()); \
+        RIPL_ASSERT((rgbmap1)->height()==(rgbmap2)->height()); \
+        RIPL_ASSERT((rgbmap1)->size()==(rgbmap2)->size());
     /* General-purpose debugging---compiles 'text' only if debugging enabled. */
 #	define RIPL_DEBUG_STATEMENT(text)	text
 #else

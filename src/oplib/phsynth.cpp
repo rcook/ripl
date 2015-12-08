@@ -25,32 +25,32 @@ bool phasesynthApplyOperator(riplGreyMap *pinputGreyMap,
     float val;
 
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
-    RIPL_VALIDATE_IS_POWER_OF_2(pinputGreyMap->rows)
-    RIPL_VALIDATE_IS_POWER_OF_2(pinputGreyMap->cols)
+    RIPL_VALIDATE_IS_POWER_OF_2(pinputGreyMap->height())
+    RIPL_VALIDATE_IS_POWER_OF_2(pinputGreyMap->width())
 
     /* Allocate FFT input matrices. */
-    data=(float *)riplCalloc(pinputGreyMap->size, sizeof(float));
+    data=(float *)riplCalloc(pinputGreyMap->size(), sizeof(float));
     RIPL_VALIDATE(data)
-    nyquist=(float *)riplCalloc(pinputGreyMap->rows<<1, sizeof(float));
+    nyquist=(float *)riplCalloc(pinputGreyMap->height()<<1, sizeof(float));
     RIPL_VALIDATE(nyquist)
 
     /* Copy grey levels into FFT input matrix. */
     ptr=data;
-    pgrey=pinputGreyMap->data;
-    for (i=pinputGreyMap->size; i; i--, ptr++, pgrey++) {
+    pgrey=pinputGreyMap->data();
+    for (i=pinputGreyMap->size(); i; i--, ptr++, pgrey++) {
         ptr[0]=(float)pgrey[0];
     }
 
     /* Calculate 2D FFT of grey levels. */
     riplfftReal2DFT(data,
         nyquist,
-        pinputGreyMap->rows,
-        pinputGreyMap->cols,
+        pinputGreyMap->height(),
+        pinputGreyMap->width(),
         ttForward);
 
     /* Set coefficient magnitudes to unity. */
     ptr=data;
-    for (i=pinputGreyMap->size; i; i-=2, ptr+=2) {
+    for (i=pinputGreyMap->size(); i; i-=2, ptr+=2) {
         val=sqrt(ptr[0]*ptr[0]+ptr[1]*ptr[1]);
         if (val!=0.0) {
             ptr[0]/=val;
@@ -62,23 +62,23 @@ bool phasesynthApplyOperator(riplGreyMap *pinputGreyMap,
         }
     }
     ptr=nyquist;
-    for (i=pinputGreyMap->rows<<1; i; i--, ptr++) {
+    for (i=pinputGreyMap->height()<<1; i; i--, ptr++) {
         if (ptr[0]!=0.0) ptr[0]=1.0;
     }
 
     /* Calculate inverse FFT. */
     riplfftReal2DFT(data,
         nyquist,
-        pinputGreyMap->rows,
-        pinputGreyMap->cols,
+        pinputGreyMap->height(),
+        pinputGreyMap->width(),
         ttInverse);
 
     /* Set values to absolute levels. */
     ptr=data;
-    for (i=pinputGreyMap->size; i; i--, ptr++) ptr[0]=fabs(ptr[0]);
+    for (i=pinputGreyMap->size(); i; i--, ptr++) ptr[0]=fabs(ptr[0]);
 
     /* Scale output to grey levels. */
-    miscRescaleF(data, poutputGreyMap->data, poutputGreyMap->size);
+    miscRescaleF(data, poutputGreyMap->data(), poutputGreyMap->size());
 
     /* Deallocate input matrices. */
     riplFree(nyquist);
@@ -98,8 +98,8 @@ int phasesynthExecute(unsigned argc,
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
 
     /* Ensure image is of suitable dimensions. */
-    if (!RIPL_IS_POWER_OF_2(pinputGreyMap->rows)
-        || !RIPL_IS_POWER_OF_2(pinputGreyMap->cols)) {
+    if (!RIPL_IS_POWER_OF_2(pinputGreyMap->height())
+        || !RIPL_IS_POWER_OF_2(pinputGreyMap->width())) {
         riplMessage(itError, "phasesynth: Number of rows and columns in input\n"
             "image must be integer powers of 2.\n");
         return RIPL_USERERROR;

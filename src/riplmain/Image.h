@@ -18,10 +18,10 @@ namespace ripl
 
     public:
         Image() = delete;
-        Image(const Image& ) = delete;
         Image& operator=(const Image&) = delete;
 
     public:
+        Image(const Image&) = default;
         ~Image() = default;
 
         Image(image_dimension_t width, image_dimension_t height)
@@ -76,6 +76,9 @@ namespace ripl
         image_dimension_t width() const { return m_width; }
         image_dimension_t height() const { return m_height; }
         image_size_t size() const { return m_data.size(); }
+
+        const T* data() const { return m_data.data(); }
+        T* data() { return m_data.data(); }
 
         const_iterator begin() const { return m_data.begin(); }
         const_iterator end() const { return m_data.end(); }

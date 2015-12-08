@@ -37,28 +37,28 @@ bool medianApplyOperator(riplGreyMap *pinputGreyMap,
     RIPL_VALIDATE(buffer)
 
     /* Set image to white to frame it. */
-    outP=poutputGreyMap->data;
-    memset(poutputGreyMap->data, RIPL_MAX_GREY, poutputGreyMap->size);
+    outP=poutputGreyMap->data();
+    memset(poutputGreyMap->data(), RIPL_MAX_GREY, poutputGreyMap->size());
 
     /* Perform median filtering. */
-    inP=pinputGreyMap->data;
-    outP=poutputGreyMap->data+neigh1*pinputGreyMap->cols;
-    for (r=neigh1; r<=pinputGreyMap->rows-neigh2; r++) {
-        for (c=neigh1; c<=pinputGreyMap->cols-neigh2; c++) {
+    inP=pinputGreyMap->data();
+    outP=poutputGreyMap->data()+neigh1*pinputGreyMap->width();
+    for (r=neigh1; r<=pinputGreyMap->height()-neigh2; r++) {
+        for (c=neigh1; c<=pinputGreyMap->width()-neigh2; c++) {
             index=0;
             base=0;
             for (i=r-neigh1; i<r+neigh2; i++) {
                 for (j=c-neigh1; j<c+neigh2; j++) {
                     buffer[index++]=*(inP+base+j);
                 }
-                base+=pinputGreyMap->cols;
+                base+=pinputGreyMap->width();
             }
             qsort((void *)buffer, buffer_length,
                 sizeof(riplGrey), riplGrey_compare);
             *(outP+c)=buffer[median];
         }
-        inP+=pinputGreyMap->cols;
-        outP+=pinputGreyMap->cols;
+        inP+=pinputGreyMap->width();
+        outP+=pinputGreyMap->width();
     }
     riplFree(buffer);
     return true;

@@ -91,9 +91,9 @@ bool aheApplyOperator(riplGreyMap *pinputGreyMap,
     riplGrey *outP;
     unsigned r, c;
 
-    RIPL_VALIDATE(pinputGreyMap->rows>=6 && pinputGreyMap->cols>=6)
-    RIPL_VALIDATE(pconfig->win_w<=pinputGreyMap->cols)
-    RIPL_VALIDATE(pconfig->win_h<=pinputGreyMap->rows)
+    RIPL_VALIDATE(pinputGreyMap->height()>=6 && pinputGreyMap->width()>=6)
+    RIPL_VALIDATE(pconfig->win_w<=pinputGreyMap->width())
+    RIPL_VALIDATE(pconfig->win_h<=pinputGreyMap->height())
 
     data.pinput_greymap=pinputGreyMap;
     data.poutput_greymap=poutputGreyMap;
@@ -109,13 +109,13 @@ bool aheApplyOperator(riplGreyMap *pinputGreyMap,
     RIPL_VALIDATE(data.filt)
     data.not_filt=(long *)riplCalloc(RIPL_GREY_LEVELS , sizeof(long));
     RIPL_VALIDATE(data.not_filt)
-    data.pbig_image=(riplBigGreyS *)riplCalloc((data.pinput_greymap->cols+1)
-        *(data.pinput_greymap->rows+1), sizeof(riplBigGreyS));
+    data.pbig_image=(riplBigGreyS *)riplCalloc((data.pinput_greymap->width()+1)
+        *(data.pinput_greymap->height()+1), sizeof(riplBigGreyS));
     RIPL_VALIDATE(data.pbig_image)
-    data.pmid_image=(riplMidGreyS *)riplCalloc(data.pinput_greymap->size,
+    data.pmid_image=(riplMidGreyS *)riplCalloc(data.pinput_greymap->size(),
         sizeof(riplMidGreyS));
     RIPL_VALIDATE(data.pmid_image)
-    memset(data.pmid_image, 0, data.pinput_greymap->size*sizeof(riplMidGreyS));
+    memset(data.pmid_image, 0, data.pinput_greymap->size()*sizeof(riplMidGreyS));
 
     /* Initialize series. */
     initialize_series(pconfig);
@@ -124,21 +124,21 @@ bool aheApplyOperator(riplGreyMap *pinputGreyMap,
     for (i=0; i<pconfig->num_terms; i++) {
         set_tables(pconfig, i, ttCos);
         if (data.accShift<MAX_BIT_SHIFT) {
-            filter(data.pinput_greymap->data,
+            filter(data.pinput_greymap->data(),
                 data.pbig_image,
                 data.filt,
-                data.pinput_greymap->cols,
-                data.pinput_greymap->rows,
+                data.pinput_greymap->width(),
+                data.pinput_greymap->height(),
                 pconfig->win_w/2, pconfig->win_h/2);
             accumulate();
         }
         set_tables(pconfig, i, ttSin);
         if (data.accShift<MAX_BIT_SHIFT) {
-            filter(data.pinput_greymap->data,
+            filter(data.pinput_greymap->data(),
                 data.pbig_image,
                 data.filt,
-                data.pinput_greymap->cols,
-                data.pinput_greymap->rows,
+                data.pinput_greymap->width(),
+                data.pinput_greymap->height(),
                 pconfig->win_w/2, pconfig->win_h/2);
             accumulate();
         }
@@ -146,9 +146,9 @@ bool aheApplyOperator(riplGreyMap *pinputGreyMap,
     offset=(riplMidGreyS)ldexp(255-((double)255.0-2*pconfig->inoffset)
         *pconfig->addback_fraction+1, ACC_BITS-OUT_BITS);
     accP=data.pmid_image;
-    outP=data.poutput_greymap->data;
-    for (r=0; r<data.poutput_greymap->rows; r++) {
-        for (c=0; c<data.poutput_greymap->cols; c++, accP++) {
+    outP=data.poutput_greymap->data();
+    for (r=0; r<data.poutput_greymap->height(); r++) {
+        for (c=0; c<data.poutput_greymap->width(); c++, accP++) {
             temp=(riplMidGreyS)((*accP+offset)>>(ACC_BITS-OUT_BITS+1));
             if (temp>255) temp=255;
             else if (temp<0) temp=0;
@@ -385,8 +385,8 @@ static void accumulate(void) {
 
     bgP=data.pbig_image;
     agP=data.pmid_image;
-    igP=data.pinput_greymap->data;
-    for (i=0; i<data.pinput_greymap->size; i++) {
+    igP=data.pinput_greymap->data();
+    for (i=0; i<data.pinput_greymap->size(); i++) {
         temp=data.not_filt[*igP]*(*bgP>>BSHIFT)+offset;
         *agP+=(riplMidGreyS)(temp>>shift);
         bgP++;
@@ -533,7 +533,7 @@ int aheExecute(unsigned argc,
     int parse_result;
     aheConfig config;
 
-    RIPL_VALIDATE(pinputGreyMap->rows>=6 && pinputGreyMap->cols>=6)
+    RIPL_VALIDATE(pinputGreyMap->height()>=6 && pinputGreyMap->width()>=6)
 
     if (argc<1) {
         riplMessage(itError, "Syntax error!\n"

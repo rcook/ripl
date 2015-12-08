@@ -31,18 +31,18 @@ bool dllconvApplyOperator(riplGreyMap *pinputGreyMap,
     if (!kernel) return false;
     switch (kernel_type) {
         case dllktint:
-            miscConvolve2DInt(pinputGreyMap->data,
-                poutputGreyMap->data,
-                pinputGreyMap->cols,
-                pinputGreyMap->rows,
+            miscConvolve2DInt(pinputGreyMap->data(),
+                poutputGreyMap->data(),
+                pinputGreyMap->width(),
+                pinputGreyMap->height(),
                 (int *)kernel,
                 kernel_columns, kernel_rows, scale, store_abs);
             return true;
         case dllktdouble:
-            miscConvolve2DFP(pinputGreyMap->data,
-                poutputGreyMap->data,
-                pinputGreyMap->cols,
-                pinputGreyMap->rows,
+            miscConvolve2DFP(pinputGreyMap->data(),
+                poutputGreyMap->data(),
+                pinputGreyMap->width(),
+                pinputGreyMap->height(),
                 (double *)kernel,
                 kernel_columns, kernel_rows, scale, store_abs);
             return true;

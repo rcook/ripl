@@ -68,8 +68,8 @@ public:
 // Reads ASCII-encoded portable bitmap
 static void readPbmAscii(PbmFileInfo& pbmFile, riplGreyMap& greyMap)
 {
-    auto p = greyMap.data;
-    for (decltype(greyMap.size) i = 0; i < greyMap.size; ++i)
+    auto p = greyMap.data();
+    for (decltype(greyMap.size()) i = 0; i < greyMap.size(); ++i)
     {
         *p++ = (1 - atof(pbmFile.getToken())) * RIPL_MAX_GREY;
     }
@@ -81,16 +81,16 @@ static void readPgmAscii(PbmFileInfo& pbmFile, riplGreyMap& greyMap)
     unsigned maxIntensity = atoi(pbmFile.getToken());
     if (maxIntensity == RIPL_MAX_GREY)
     {
-        auto p = greyMap.data;
-        for (decltype(greyMap.size) i = 0; i < greyMap.size; ++i)
+        auto p = greyMap.data();
+        for (decltype(greyMap.size()) i = 0; i < greyMap.size(); ++i)
         {
             *p++ = static_cast<riplGrey>(atoi(pbmFile.getToken()));
         }
     }
     else
     {
-        auto p = greyMap.data;
-        for (decltype(greyMap.size) i = 0; i < greyMap.size; ++i)
+        auto p = greyMap.data();
+        for (decltype(greyMap.size()) i = 0; i < greyMap.size(); ++i)
         {
             *p++ = static_cast<riplGrey>((atof(pbmFile.getToken()) / maxIntensity * RIPL_MAX_GREY));
         }
@@ -103,8 +103,8 @@ static void readPpmAscii(PbmFileInfo& pbmFile, riplGreyMap& greyMap)
     unsigned maxIntensity = atoi(pbmFile.getToken());
     if (maxIntensity == RIPL_MAX_GREY)
     {
-        auto p = greyMap.data;
-        for (decltype(greyMap.size) i = 0; i < greyMap.size; ++i)
+        auto p = greyMap.data();
+        for (decltype(greyMap.size()) i = 0; i < greyMap.size(); ++i)
         {
             *p++ = static_cast<riplGrey>(riplRound(
                 RIPL_RED_WEIGHT * atoi(pbmFile.getToken())
@@ -114,8 +114,8 @@ static void readPpmAscii(PbmFileInfo& pbmFile, riplGreyMap& greyMap)
     }
     else
     {
-        auto p = greyMap.data;
-        for (decltype(greyMap.size) i = 0; i < greyMap.size; ++i)
+        auto p = greyMap.data();
+        for (decltype(greyMap.size()) i = 0; i < greyMap.size(); ++i)
         {
             *p++ = static_cast<riplGrey>(riplRound((
                 RIPL_RED_WEIGHT * atof(pbmFile.getToken())
@@ -132,20 +132,20 @@ static void readPbmBinary(PbmFileInfo& pbmFile, riplGreyMap& greyMap)
     pbmFile.skipChars(1);
     pbmFile.flushFile();
 
-    unsigned dataSize = greyMap.cols >> 3;
+    unsigned dataSize = greyMap.width() >> 3;
     if ((dataSize % 8) != 0)
     {
         ++dataSize;
     }
 
     unique_ptr<riplGrey[]> buffer(new riplGrey[dataSize]);
-    auto p = greyMap.data;
-    for (decltype(greyMap.rows) row = 0; row < greyMap.rows; ++row)
+    auto p = greyMap.data();
+    for (decltype(greyMap.height()) row = 0; row < greyMap.height(); ++row)
     {
         pbmFile.read(buffer.get(), sizeof(riplGrey), dataSize);
         auto bufferPtr = buffer.get();
         riplGrey value;
-        for (decltype(greyMap.cols) col = 0; col < greyMap.cols; ++col, value <<= 1)
+        for (decltype(greyMap.width()) col = 0; col < greyMap.width(); ++col, value <<= 1)
         {
             if (col % 8 == 0)
             {
@@ -164,7 +164,7 @@ static void readPgmBinary(PbmFileInfo& pbmFile, riplGreyMap& greyMap)
     RIPL_VALIDATE_NEW(maxIntensity == RIPL_MAX_GREY, error::InvalidOperation);
     pbmFile.skipChars(1);
     pbmFile.flushFile();
-    pbmFile.read(greyMap.data, sizeof(riplGrey), greyMap.size);
+    pbmFile.read(greyMap.data(), sizeof(riplGrey), greyMap.size());
 }
 
 // Reads binary-encoded portable pixel map
@@ -175,15 +175,15 @@ static void readPpmBinary(PbmFileInfo& pbmFile, riplGreyMap& greyMap)
     pbmFile.skipChars(1);
     pbmFile.flushFile();
     
-    unsigned dataSize = greyMap.cols * 3;
+    unsigned dataSize = greyMap.width() * 3;
 
     unique_ptr<riplGrey[]> buffer(new riplGrey[dataSize]);
-    auto p = greyMap.data;
-    for (decltype(greyMap.rows) row = 0; row < greyMap.rows; ++row)
+    auto p = greyMap.data();
+    for (decltype(greyMap.height()) row = 0; row < greyMap.height(); ++row)
     {
         pbmFile.read(buffer.get(), sizeof(riplGrey), dataSize);
         auto bufferPtr = buffer.get();
-        for (decltype(greyMap.cols) col = 0; col < greyMap.cols; ++col, bufferPtr += 3)
+        for (decltype(greyMap.width()) col = 0; col < greyMap.width(); ++col, bufferPtr += 3)
         {
             *p++ = static_cast<riplGrey>(riplRound(
                 RIPL_RED_WEIGHT * bufferPtr[0]
@@ -198,23 +198,21 @@ riplGreyMap riplPBMLoadFile(const char* fileName, riplGraphicFormat graphicForma
 {
     RIPL_VALIDATE_ARG_NAME(fileName, "fileName");
 
-    riplGreyMap greyMap;
-
     // Read in and discard the P token
     PbmFileInfo pbmFile(fileName);
     pbmFile.readToken();
 
     // Read in the number of columns and rows
-    greyMap.cols = atoi(pbmFile.getToken());
-    greyMap.rows = atoi(pbmFile.getToken());
+    auto width = atoi(pbmFile.getToken());
+    auto height = atoi(pbmFile.getToken());
     RIPL_VALIDATE_NEW(
-        greyMap.cols <= RIPL_MAX_COLS && greyMap.rows <= RIPL_MAX_ROWS,
+        width <= RIPL_MAX_COLS && height <= RIPL_MAX_ROWS,
         error::ImageTooBig);
 
-    greyMap.size = greyMap.cols * greyMap.rows;
-    greyMap.data = reinterpret_cast<riplGrey*>(riplCalloc(greyMap.size, sizeof(riplGrey)));
-    RIPL_VALIDATE_NEW(greyMap.data, error::OutOfMemory);
+    // Create empty grey map
+    riplGreyMap greyMap(width, height);
 
+    // Read it in
     switch (graphicFormat)
     {
     case gfPBMASCII: readPbmAscii(pbmFile, greyMap); break;
@@ -246,9 +244,9 @@ void riplPBMSaveFile(const char* fileName, riplGraphicFormat graphicFormat, cons
         "# PGM Export Filter by Richard Cook " __DATE__ "\n"
         "%u %u\n%u\n",
         RIPL_GREY_LEVELS,
-        greyMap.cols, greyMap.rows,
+        greyMap.width(), greyMap.height(),
         RIPL_MAX_GREY);
-    fwrite(greyMap.data, sizeof(riplGrey), greyMap.size, file.get());
+    fwrite(greyMap.data(), sizeof(riplGrey), greyMap.size(), file.get());
 }
 
 PbmFileInfo::PbmFileInfo(const char* fileName)

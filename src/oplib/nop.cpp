@@ -14,16 +14,16 @@ bool nopApplyOperator(
     riplGreyMap *poutputGreyMap,
     riplGrey threshold)
 {
-    riplGrey const *inP = pinputGreyMap->data;
-    riplGrey *outP = poutputGreyMap->data;
+    riplGrey const *inP = pinputGreyMap->data();
+    riplGrey *outP = poutputGreyMap->data();
 
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
 
     // Just copy straight from input to output
     memcpy(
-      poutputGreyMap->data,
-      pinputGreyMap->data,
-      pinputGreyMap->size * sizeof(riplGrey));
+      poutputGreyMap->data(),
+      pinputGreyMap->data(),
+      pinputGreyMap->size() * sizeof(riplGrey));
 
     return true;
 }

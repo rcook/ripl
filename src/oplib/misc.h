@@ -79,8 +79,7 @@ typedef bool (*miscSubimageFunc)(riplGreyMap *pgreymap,
     unsigned classno,
     void *arg);
 
-void miscSetImage(const riplGreyMap *pgreyMap,
-    riplGrey grey_level);
+void miscSetImage(riplGreyMap *pgreyMap, riplGrey fillValue);
 bool miscGenerateGaussian(double var,
     unsigned *pkernelSize,
     double **pkernel);
