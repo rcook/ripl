@@ -44,39 +44,34 @@ void addImages(
 }
 
 /* Internal entrypoint. */
-bool addApplyOperator(riplGreyMap *pinputGreyMap,
+bool addApplyOperator(
+    riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     float weight,
-    const char *pfileName) {
+    const char* fileName)
+{
+    RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap);
+    RIPL_VALIDATE_ARG_NAME(fileName, "fileName");
 
-    RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
-    RIPL_VALIDATE(pfileName)
-
-    if (!riplFileExists(pfileName)) {
+    if (!riplFileExists(fileName))
+    {
         riplMessage(itError, "add: Input file %s does not exist!\n");
         return false;
     }
-    /* Load input image. */
-    auto add_greymap = riplLoadImage(pfileName);
-    if (!add_greymap) {
-        riplMessage(itError, "add: Unable to load image file %s!\n"
-            "[File error or invalid format]\n", pfileName);
-        return false;
-    }
-    RIPL_VALIDATE_GREYMAP(add_greymap)
-    if (add_greymap->cols!=pinputGreyMap->cols ||
-        add_greymap->rows!=pinputGreyMap->rows) {
+
+    // Load input image
+    auto addGreyMap = riplLoadImage(fileName);
+    if (addGreyMap.cols != pinputGreyMap->cols || addGreyMap.rows!=pinputGreyMap->rows)
+    {
         riplMessage(itError, "add: Images do not have the same dimensions!\n");
         return false;
     }
 
     /* Images are valid. */
-    addImages(*poutputGreyMap, *pinputGreyMap, *add_greymap, weight);
+    addImages(*poutputGreyMap, *pinputGreyMap, addGreyMap, weight);
 
     /* Deallocate greymap and its data. */
-    riplFree(add_greymap->data);
-    riplFree(add_greymap);
-
+    riplFree(addGreyMap.data);
     return true;
 }
 

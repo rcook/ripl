@@ -13,93 +13,90 @@
  *
  *		Copyright © 1997/8, Richard A. Cook.
  */
-#include <stdlib.h>
-#include <stdio.h>
+
 #include "riplfilt.h"
+
 #include "ripldbug.h"
 #include "riplpbm.h"
+#include "validate.h"
+#include "Error.h"
+#include <cstdio>
+#include <cstdlib>
+#include <functional>
+#include <memory>
 
-/* Load specified image converting it to greyscale if required. */
-riplGreyMap *riplLoadImage(const char *pfileName) {
+using namespace std;
+using namespace ripl;
 
-    riplGraphicFormat graphic_format;
+// Loads specified image converting it to greyscale if required
+riplGreyMap riplLoadImage(const char* fileName)
+{
+    RIPL_VALIDATE_ARG_NAME(fileName, "fileName");
 
-    RIPL_VALIDATE(pfileName)
+    // Read format of image file
+    auto graphicFormat = riplReadGraphicFormat(fileName);
 
-    /* Read format of image file. */
-    graphic_format=riplReadGraphicFormat(pfileName);
-    if (graphic_format==gfInvalid) return NULL;
-
-    /* Load file using appropriate filter---return pointer to it. */
-    switch (graphic_format) {
-        case gfPBMASCII:
-        case gfPGMASCII:
-        case gfPPMASCII:
-        case gfPBMBinary:
-        case gfPGMBinary:
-        case gfPPMBinary:
-            return riplPBMLoadFile(pfileName, graphic_format);
-        default:
-            return NULL;
+    // Load file using appropriate filter and return pointer to it
+    switch (graphicFormat)
+    {
+    case gfPBMASCII:
+    case gfPGMASCII:
+    case gfPPMASCII:
+    case gfPBMBinary:
+    case gfPGMBinary:
+    case gfPPMBinary:
+        return riplPBMLoadFile(fileName, graphicFormat);
+    default:
+        RIPL_VALIDATE_FAIL(error::InvalidOperation);
     }
 }
 
-/* Save specified image under specified filename in format given. */
-bool riplSaveImage(const char *pfileName,
+// Saves specified image under specified file name in specified format
+void riplSaveImage(
+    const char* fileName,
     riplGraphicFormat graphicFormat,
-    const riplGreyMap *pgreyMap) {
+    const riplGreyMap& greyMap)
+{
+    RIPL_VALIDATE_ARG_NAME(fileName, "fileName");
 
-    RIPL_VALIDATE(pfileName)
-    RIPL_VALIDATE(graphicFormat!=gfInvalid)
-    RIPL_VALIDATE_GREYMAP(pgreyMap)
-
-    /* Save file using appropriate filter. */
-    switch (graphicFormat) {
-        case gfPBMASCII:
-        case gfPGMASCII:
-        case gfPPMASCII:
-        case gfPBMBinary:
-        case gfPGMBinary:
-        case gfPPMBinary:
-            return riplPBMSaveFile(pfileName, graphicFormat, pgreyMap);
-        default:
-            return false;
+    // Save file using appropriate filter
+    switch (graphicFormat)
+    {
+    case gfPBMASCII:
+    case gfPGMASCII:
+    case gfPPMASCII:
+    case gfPBMBinary:
+    case gfPGMBinary:
+    case gfPPMBinary:
+        riplPBMSaveFile(fileName, graphicFormat, greyMap);
+        break;
+    default:
+        RIPL_VALIDATE_ARG_NAME_FAIL("graphicFormat");
     }
 }
 
 /* Determine the graphic-file format of the specified file. */
-riplGraphicFormat riplReadGraphicFormat(const char *pfileName) {
-    FILE *pfile;
-    char id;
+riplGraphicFormat riplReadGraphicFormat(const char* fileName)
+{
+    RIPL_VALIDATE_ARG_NAME(fileName, "fileName");
 
-    RIPL_VALIDATE(pfileName)
+    unique_ptr<FILE, function<int(FILE*)>> file(fopen(fileName, "rb"), fclose);
+    RIPL_VALIDATE_NEW(file, error::IOError);
 
-    /* Open file and test first byte. */
-    pfile=fopen(pfileName, "rb");
-    RIPL_VALIDATE(pfile)
-    id=(char)fgetc(pfile);
-    if (id!='P') {
-        fclose(pfile);
+    if (static_cast<char>(fgetc(file.get())) != 'P')
+    {
         return gfInvalid;
     }
-    id=(char)fgetc(pfile);
-    fclose(pfile);
-    /* It's a P, therefore it's likely to be PBM/PGM/PPM. */
-    switch (id) {
-        case '1':
-            return gfPBMASCII;
-        case '2':
-            return gfPGMASCII;
-        case '3':
-            return gfPPMASCII;
-        case '4':
-            return gfPBMBinary;
-        case '5':
-            return gfPGMBinary;
-        case '6':
-            return gfPPMBinary;
-        default:
-            return gfInvalid;
+
+    // It's a P, therefore it's likely to be PBM/PGM/PPM
+    switch (static_cast<char>(fgetc(file.get())))
+    {
+    case '1': return gfPBMASCII;
+    case '2': return gfPGMASCII;
+    case '3': return gfPPMASCII;
+    case '4': return gfPBMBinary;
+    case '5': return gfPGMBinary;
+    case '6': return gfPPMBinary;
+    default: return gfInvalid;
     }
 }
-

@@ -18,15 +18,26 @@
  *
  *		Copyright © 1997/8, Richard A. Cook.
  */
-#include <string.h>
+
 #include "riplop.h"
+#include "Error.h"
+#include <cstring>
+#include <functional>
+#include <memory>
+
+using namespace std;
+using namespace ripl;
 
 /* Prototypes of static functions. */
-static bool execute_arguments(unsigned argc, char **argv,
-    riplGreyMap *pinputGreyMap,
-    riplGreyMap *poutputGreyMap);
+using ResponseFileArgPtr = unique_ptr<char*, function<void(char**)>>;
+
+static ResponseFileArgPtr parseResponseFile(const char* fileName, unsigned* argCount);
+
+static bool execute_arguments(unsigned argc, char **argv, riplGreyMap *pinputGreyMap, riplGreyMap *poutputGreyMap);
+
 static bool help_arguments(unsigned argc, char **argv);
-static void general_help(void);
+
+static void general_help();
 
 /*
  *		riplMain1
@@ -36,101 +47,95 @@ static void general_help(void);
  *		output image files. DO NOT PASS EXECUTABLE NAME AS
  *		FIRST ARGUMENT!
  */
-int riplMain1(unsigned argc, char **argv) {
-    
-    riplGreyMap *pinput_greymap, *poutput_greymap;
-    bool result, resp_file=false;
-    char **resp_argv;
-
-    if (argc>0 && **argv=='@') {
-        /* Take command line from a response file. */
-        if (argc>1) {
+int riplMain1(unsigned argc, char **argv)
+{
+    ResponseFileArgPtr respArgv;
+    if (argc > 0 && **argv == '@')
+    {
+        // Take command line from a response file
+        if (argc > 1)
+        {
             general_help();
             return EXIT_FAILURE;
         }
-        if (!riplFileExists(*argv+1)) {
-            riplMessage(itError, "Response file %s does not exist!\n", *argv+1);
+
+        if (!riplFileExists(*argv + 1))
+        {
+            riplMessage(itError, "Response file %s does not exist!\n", *argv + 1);
             return EXIT_FAILURE;
         }
-        resp_argv=riplParseResponseFile(*argv+1, &argc);
-        if (!resp_argv) {
+
+        respArgv = parseResponseFile(*argv + 1, &argc);
+        if (!respArgv)
+        {
             riplMessage(itError,
                 "Error reading response file %s!\n"
-                "[File error, line too long or file too long]\n", *argv+1);
+                "[File error, line too long or file too long]\n", *argv + 1);
             return EXIT_FAILURE;
         }
-        argv=resp_argv;
-        resp_file=true;
+
+        argv = respArgv.get();
     }
-    if (argc==0) {
-        /* No arguments supplied. */
+
+    if (argc == 0)
+    {
+        // No arguments supplied
         general_help();
-        if (resp_file) riplFree(resp_argv);
         return EXIT_FAILURE;
     }
-    if (!strcmp(argv[0], "?")) {
-        /* User is requesting some help. */
-        if (argc<2) {
+
+    if (strcmp(argv[0], "?") == 0)
+    {
+        // User is requesting some help
+        if (argc < 2)
+        {
             general_help();
-            if (resp_file) riplFree(resp_argv);
             return EXIT_FAILURE;
         }
-        else {
-            if (!help_arguments(argc-1, argv+1)) {
-                if (resp_file) riplFree(resp_argv);
+        else
+        {
+            if (!help_arguments(argc - 1, argv + 1))
+            {
                 return EXIT_FAILURE;
             }
         }
-        if (resp_file) riplFree(resp_argv);
         return EXIT_SUCCESS;
     }
-    if (argc<3) {
+
+    if (argc < 3)
+    {
         general_help();
-        if (resp_file) riplFree(resp_argv);
         return EXIT_FAILURE;
     }
-    if (!riplFileExists(argv[0])) {
+
+    if (!riplFileExists(argv[0]))
+    {
         riplMessage(itError, "Image file %s does not exist!\n", argv[0]);
-        if (resp_file) riplFree(resp_argv);
         return EXIT_FAILURE;
     }
 
-    /* Load input image. */
-    pinput_greymap=riplLoadImage(argv[0]);
-    if (!pinput_greymap) {
-        riplMessage(itError, "Unable to load image file %s!\n"
-            "[File error or invalid/unsupported format]\n",
-            argv[0]);
-        if (resp_file) riplFree(resp_argv);
-        return EXIT_FAILURE;
-    }
-    RIPL_VALIDATE_GREYMAP(pinput_greymap)
+    // Load input image
+    auto inputGreyMap = riplLoadImage(argv[0]);
 
-    /* Allocate another image of the same size as the input. */
-    poutput_greymap=(riplGreyMap *)riplMalloc(sizeof(riplGreyMap));
-    RIPL_VALIDATE(poutput_greymap)
-    poutput_greymap->cols=pinput_greymap->cols;
-    poutput_greymap->rows=pinput_greymap->rows;
-    poutput_greymap->size=pinput_greymap->size;
-    poutput_greymap->data=
-        (riplGrey *)riplCalloc(poutput_greymap->size, sizeof(riplGrey));
-    RIPL_VALIDATE(poutput_greymap->data)
+    // Allocate another image of the same size as the input
+    riplGreyMap *poutput_greymap = static_cast<riplGreyMap*>(riplMalloc(sizeof(riplGreyMap)));
+    RIPL_VALIDATE_NEW(poutput_greymap, error::OutOfMemory);
 
-    /* Execute command-line arguments. */
-    result=execute_arguments(argc-2, argv+2, pinput_greymap, poutput_greymap);
-    if (result) {
-        result=riplSaveImage(argv[1], gfPGMBinary, poutput_greymap);
-        if (!result) riplMessage(itError,
-            "Error writing image file %s!\n", argv[1]);
-    }
+    poutput_greymap->cols = inputGreyMap.cols;
+    poutput_greymap->rows = inputGreyMap.rows;
+    poutput_greymap->size = inputGreyMap.size;
+    poutput_greymap->data = static_cast<riplGrey*>(riplCalloc(poutput_greymap->size, sizeof(riplGrey)));
+    RIPL_VALIDATE_NEW(poutput_greymap->data, error::OutOfMemory);
 
-    /* Deallocate images. */
-    riplFree(pinput_greymap->data);
+    // Execute command-line arguments
+    bool result = execute_arguments(argc - 2, argv + 2, &inputGreyMap, poutput_greymap);
+    riplSaveImage(argv[1], gfPGMBinary, *poutput_greymap);
+
+    // Free images
+    riplFree(inputGreyMap.data);
     riplFree(poutput_greymap->data);
-    riplFree(pinput_greymap);
     riplFree(poutput_greymap);
-    if (resp_file) riplFree(resp_argv);
-    return result ? EXIT_SUCCESS:EXIT_FAILURE;
+    return result ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
 /*
@@ -142,68 +147,84 @@ int riplMain1(unsigned argc, char **argv) {
  *		as additional arguments. DO NOT PASS EXECUTABLE NAME AS
  *		FIRST ARGUMENT!
  */
-int riplMain2(unsigned argc, char **argv,
-    riplGreyMap *pinputGreyMap, riplGreyMap *poutputGreyMap) {
-
-    bool resp_file=false;
-    char **resp_argv;
-
-    RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
+int riplMain2(unsigned argc, char** argv, riplGreyMap* pinputGreyMap, riplGreyMap* poutputGreyMap)
+{
+    RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap);
     
-    if (argc>0 && **argv=='@') {
-        /* Take command line from a response file. */
-        if (argc>1) {
+    ResponseFileArgPtr respArgv;
+    if (argc > 0 && **argv == '@')
+    {
+        // Take command line from a response file
+        if (argc > 1)
+        {
             general_help();
             return EXIT_FAILURE;
         }
-        if (!riplFileExists(*argv+1)) {
-            riplMessage(itError, "Response file %s does not exist!\n", *argv+1);
+
+        if (!riplFileExists(*argv + 1))
+        {
+            riplMessage(itError, "Response file %s does not exist!\n", *argv + 1);
             return EXIT_FAILURE;
         }
-        resp_argv=argv=riplParseResponseFile(*argv+1, &argc);
-        if (!argv) {
+
+        respArgv = parseResponseFile(*argv + 1, &argc);
+        if (!respArgv)
+        {
             riplMessage(itError,
                 "Error reading response file %s!\n"
-                "[File error, line too long or file too long]\n", *argv+1);
+                "[File error, line too long or file too long]\n", *argv + 1);
             return EXIT_FAILURE;
         }
-        resp_file=true;
+
+        argv = respArgv.get();
     }
 
-    if (argc==0) {
-        /* No arguments supplied. */
+    if (argc == 0)
+    {
+        // No arguments supplied
         general_help();
-        if (resp_file) riplFree(resp_argv);
         return EXIT_FAILURE;
     }
-    if (!strcmp(argv[0], "?")) {
-        /* User is requesting some help. */
-        if (argc<2) {
+
+    if (strcmp(argv[0], "?") == 0)
+    {
+        // User is requesting some help
+        if (argc < 2)
+        {
             general_help();
-            if (resp_file) riplFree(resp_argv);
             return EXIT_FAILURE;
         }
-        else {
-            riplMessage(itInfo,
+        else
+        {
+            riplMessage(
+                itInfo,
                 RIPL_APPNAME " Version " RIPL_VERSION ", built " RIPL_DATE "\n"
                 RIPL_DESCRIPTION "\n"
                 "Written by " RIPL_AUTHOR "\n\n");
-            if (!help_arguments(argc-1, argv+1)) {
-                if (resp_file) riplFree(resp_argv);
+            if (!help_arguments(argc - 1, argv + 1))
+            {
                 return EXIT_FAILURE;
             }
         }
-        if (resp_file) riplFree(resp_argv);
         return EXIT_SUCCESS;
     }
 
-    /* Execute command-line arguments. */
-    if (!execute_arguments(argc, argv, pinputGreyMap, poutputGreyMap)) {
-        if (resp_file) riplFree(resp_argv);
+    // Execute command-line arguments
+    if (!execute_arguments(argc, argv, pinputGreyMap, poutputGreyMap))
+    {
         return EXIT_FAILURE;
     }
-    if (resp_file) riplFree(resp_argv);
+
     return EXIT_SUCCESS;
+}
+
+static ResponseFileArgPtr parseResponseFile(
+    const char* fileName,
+    unsigned* argCount)
+{
+    return ResponseFileArgPtr(
+        riplParseResponseFile(fileName, argCount),
+        [](char** p) { riplFree(p); });
 }
 
 /*
@@ -215,41 +236,55 @@ int riplMain2(unsigned argc, char **argv,
  *		as the input to the input of the next, allowing several
  *		transforms to be applied to a single image.
  */
-static bool execute_arguments(unsigned argc,
-    char **argv,
-    riplGreyMap *pinputGreyMap,
-    riplGreyMap *poutputGreyMap) {
-
+static bool execute_arguments(unsigned argc, char** argv, riplGreyMap* pinputGreyMap, riplGreyMap* poutputGreyMap)
+{
     unsigned args_read;
     riplGrey *temp;
 
-    while (1) {
-        args_read=riplOperatorExecute(argc,
-            (const char **)argv,
+    while (1)
+    {
+        args_read = riplOperatorExecute(
+            argc,
+            const_cast<const char**>(argv),
             pinputGreyMap,
             poutputGreyMap);
-        if (args_read<1) return false;
-        argv+=args_read;
-        argc-=args_read;
-        if (argc<1) return true;
-        temp=pinputGreyMap->data;
-        pinputGreyMap->data=poutputGreyMap->data;
-        poutputGreyMap->data=temp;
+        if (args_read < 1)
+        {
+            return false;
+        }
+
+        argv += args_read;
+        argc -= args_read;
+        if (argc < 1)
+        {
+            return true;
+        }
+
+        temp = pinputGreyMap->data;
+        pinputGreyMap->data = poutputGreyMap->data;
+        poutputGreyMap->data = temp;
     }
 }
 
 /* Displays help screens of operators specified on command line. */
-static bool help_arguments(unsigned argc, char **argv) {
-    unsigned i;
-    for (i=0; i<argc; i++) {
-        if (!riplOperatorHelp(argv[i])) return false;
+static bool help_arguments(unsigned argc, char** argv)
+{
+    for (unsigned i = 0; i < argc; ++i)
+    {
+        if (!riplOperatorHelp(argv[i]))
+        {
+            return false;
+        }
     }
+
     return true;
 }
 
 /* Displays general help information. */
-static void general_help(void) {
-    riplMessage(itInfo,
+static void general_help()
+{
+    riplMessage(
+        itInfo,
         RIPL_APPNAME " Version " RIPL_VERSION ", built " RIPL_DATE "\n"
         RIPL_DESCRIPTION "\n"
         "Written by " RIPL_AUTHOR "\n"
@@ -263,4 +298,3 @@ static void general_help(void) {
         "For help on a specific operation:\n\n"
         "Usage: " RIPL_EXENAME " ? <op>\n", riplGetOperatorSummary());
 }
-

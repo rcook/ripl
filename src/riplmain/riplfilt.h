@@ -12,16 +12,17 @@
  *			27/11/97:	first version.
  *		Copyright © 1997/8, Richard A. Cook.
  */
-#ifndef _RIPLFILT_H_INCLUDED
-#define _RIPLFILT_H_INCLUDED
+
+#pragma once
 
 #include "ripldefs.h"
 #include "riplgrey.h"
 
-riplGreyMap *riplLoadImage(const char *pfileName);
-bool riplSaveImage(const char *pfileName,
-    riplGraphicFormat graphicFormat,
-    const riplGreyMap *pgreyMap);
-riplGraphicFormat riplReadGraphicFormat(const char *pfileName);
+riplGreyMap riplLoadImage(const char* fileName);
 
-#endif
+void riplSaveImage(
+    const char* fileName,
+    riplGraphicFormat graphicFormat,
+    const riplGreyMap& greyMap);
+
+riplGraphicFormat riplReadGraphicFormat(const char* fileName);

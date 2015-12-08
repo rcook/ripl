@@ -19,7 +19,7 @@ using namespace ripl::test::data;
 
 namespace ripl { namespace test { namespace data
 {
-    const riplGreyMap Image(*riplLoadImage(BASE_DIR "test/lena.pgm"));
+    const riplGreyMap Image(riplLoadImage(BASE_DIR "test/lena.pgm"));
     //const vector<char> ImageData(readBinaryFile("../test/lena.pgm"));
 }}} // namespace ripl::test::data
 
