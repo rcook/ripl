@@ -40,9 +40,9 @@ typedef const char *(* riplHelpDisp)(void);
 
 /* Struct defines all the operators available to the user. */
 typedef struct tagriplOperator {
-    char *name;
+    const char* name;
     unsigned match_chars;
-    char *comment;
+    const char* comment;
     riplExecute execute;
     riplHelpDisp help;
 } riplOperator;
