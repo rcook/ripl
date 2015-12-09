@@ -5,6 +5,18 @@ include(CheckFunctionExists)
 cmake_minimum_required(VERSION 2.8)
 project(Ripl)
 
+# https://code.google.com/p/rstm/source/browse/trunk/cmake/modules/AddTargetDefinitions.cmake?r=58
+function(add_target_definitions target)
+  get_target_property(defines ${target} COMPILE_DEFINITIONS)
+  if(defines MATCHES "NOTFOUND")
+    set(defines "")
+  endif()
+  foreach(define ${defines} ${ARGN})
+    list(APPEND new_defines ${define})
+  endforeach()
+  set_target_properties(${target} PROPERTIES COMPILE_DEFINITIONS "${new_defines}")
+endfunction()
+
 # BEGIN: Compiler configuration
 
 check_function_exists(strdup HAVE_STRDUP)
@@ -44,12 +56,14 @@ endif(MSVC)
 # END: Compiler configuration
 
 set(SOURCEDIR src)
+get_filename_component(TESTSOURCEDIR ${SOURCEDIR}/test ABSOLUTE)
 
 include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
   ${SOURCEDIR}/oplib
   ${SOURCEDIR}/riplmain
   ${SOURCEDIR}/ripltool
+  third-party/catch/single_include
 )
 
 add_library(
@@ -176,6 +190,24 @@ add_executable(
 )
 target_link_libraries(
   ripl
+  oplib
+  riplmain
+  riplop
+  ripltool
+)
+
+add_executable(
+  ripltest
+  ${TESTSOURCEDIR}/ImageTest.cpp
+  ${TESTSOURCEDIR}/data.cpp
+  ${TESTSOURCEDIR}/data.h
+  ${TESTSOURCEDIR}/main.cpp
+)
+if(NOT NO_USE_CATCH_MAIN)
+  add_target_definitions(ripltest USE_CATCH_MAIN)
+endif()
+target_link_libraries(
+  ripltest
   oplib
   riplmain
   riplop

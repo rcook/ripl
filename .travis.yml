@@ -6,4 +6,4 @@ before_install:
   - sudo apt-get install -qq libyajl-dev libxml2-dev libxqilla-dev g++-4.9
   - export CXX="g++-4.9" CC="gcc-4.9"
 
-script: ./build Debug
+script: ./build Debug && cmake/Debug/ripltest
