@@ -18,34 +18,38 @@
  *
  *		Copyright © 1997/8, Richard A. Cook.
  */
-#ifndef _RIPLOP_H_INCLUDED
-#define _RIPLOP_H_INCLUDED
+
+#pragma once
+
+#include <functional>
 
 #include "ripl.h"
 
-/*
- * Operator execute function. This function is passed any remaining
- * command-line arguments and pointers to the input and output greymaps.
- * This function should return the number of arguments removed from
- * the command line or:
- *			RIPL_PARAMERROR			if a parse error occurs
- *			RIPL_EXECUTEERROR			if an execution error occurs
- *			RIPL_USERERROR				if the user supplies illogical values etc.
- */
-typedef int (* riplExecute)(unsigned ARGC, const char **ARGV,
-    riplGreyMap *PINPUTGREYMAP, riplGreyMap *POUTPUTGREYMAP);
+/** Describes an operator */
+struct riplOperator
+{
+private:
+    /*
+     * Operator execute function. This function is passed any remaining
+     * command-line arguments and pointers to the input and output greymaps.
+     * This function should return the number of arguments removed from
+     * the command line or:
+     *			RIPL_PARAMERROR			if a parse error occurs
+     *			RIPL_EXECUTEERROR			if an execution error occurs
+     *			RIPL_USERERROR				if the user supplies illogical values etc.
+     */
+    using ExecuteFunc = std::function<int(unsigned, const char**, riplGreyMap*, riplGreyMap*)>;
 
-/* This function should just display a suitable help message to the user. */
-typedef const char *(* riplHelpDisp)(void);
+    // Provides helper string to be displayed to user
+    using HelpFunc = std::function<const char*()>;
 
-/* Struct defines all the operators available to the user. */
-typedef struct tagriplOperator {
+public:
     const char* name;
     unsigned match_chars;
     const char* comment;
-    riplExecute execute;
-    riplHelpDisp help;
-} riplOperator;
+    ExecuteFunc execute;
+    HelpFunc help;
+};
 
 /*
  * This list of all available operators should be defined elsewhere
@@ -61,5 +65,3 @@ unsigned riplOperatorExecute(unsigned argc,
     const char **argv,
     riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap);
-
-#endif

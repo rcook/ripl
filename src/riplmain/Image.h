@@ -77,6 +77,8 @@ namespace ripl
         image_dimension_t height() const { return m_height; }
         image_size_t size() const { return m_data.size(); }
 
+        bool hasSameDimensionsAs(const Image& other) const { return m_width == other.m_width && m_height == other.m_height; }
+
         const T* data() const { return m_data.data(); }
         T* data() { return m_data.data(); }
 

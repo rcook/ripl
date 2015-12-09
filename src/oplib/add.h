@@ -11,28 +11,21 @@
  *
  *		Copyright © 1997/8, Richard A. Cook.
  */
-#ifndef _ADD_H_INCLUDED
-#define _ADD_H_INCLUDED
+
+#pragma once
 
 #include "ripl.h"
+#include <vector>
 
-void addImages(
-    riplGreyMap& output,
-    const riplGreyMap& input0,
-    const riplGreyMap& input1,
-    float weight);
+namespace ripl { namespace oplib {
 
-/* Command-line version. */
-int addExecute(unsigned argc,
-    const char **argv,
-    riplGreyMap *pinputGreyMap,
-    riplGreyMap *poutputGreyMap);
-const char *addHelp(void);
-/* Internal entrypoint. */
-bool addApplyOperator(riplGreyMap *pinputGreyMap,
-    riplGreyMap *poutputGreyMap,
-    float weight,
-    const char *pfileName);
+    /** Adds two images together with specified weight applied to second image */
+    void add(riplGreyMap& output, const riplGreyMap& input0, const riplGreyMap& input1, float weight);
 
-#endif
+    /** Command-line entry point **/
+    int addExecute(riplGreyMap& output, const std::vector<std::string>& args, const riplGreyMap& input);
 
+    /** Provide help for operator */
+    const char* addHelp();
+
+}} // namespace ripl::oplib

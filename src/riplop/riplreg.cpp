@@ -48,9 +48,17 @@
 #include "wvthrsh.h"
 #include "zero.h"
 
-const riplOperator riplOperators[]={
-    {"add", 1, "add images together pixel by pixel",
-        addExecute, addHelp},
+using namespace ripl::oplib;
+
+template<int(*executeFunc)(riplGreyMap&, const std::vector<std::string>&, const riplGreyMap&)>
+int convertNewOperator(unsigned argc, const char** argv, riplGreyMap* input, riplGreyMap* output)
+{
+    return executeFunc(*output, std::vector<std::string>(argv, argv + argc), *input);
+}
+
+const riplOperator riplOperators[] =
+{
+    { "add", 1, "add images together pixel by pixel", convertNewOperator<addExecute>, addHelp },
     {"ahe", 2, "perform adaptive histogram equalization",
         aheExecute, aheHelp},
     {"binmorph", 3, "apply binary morphological operators",
@@ -103,6 +111,4 @@ const riplOperator riplOperators[]={
         zeroExecute, zeroHelp}
 };
 
-const unsigned
-    riplNumOperators=sizeof(riplOperators)/sizeof(*riplOperators);
-
+const unsigned riplNumOperators = sizeof(riplOperators) / sizeof(riplOperators[0]);

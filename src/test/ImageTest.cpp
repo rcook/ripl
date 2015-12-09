@@ -15,4 +15,13 @@ TEST_CASE("Image", "[Image]")
         riplGreyMap image { 4, 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } };
         REQUIRE(compareImageData(4, 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 }, image));
     }
+
+    SECTION("hasSameDimensionsAs")
+    {
+        riplGreyMap image0 { 4, 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } };
+        riplGreyMap image1 { 4, 3, { 10, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } };
+        riplGreyMap image2 { 4, 4, { 10, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 } };
+        REQUIRE(image0.hasSameDimensionsAs(image1));
+        REQUIRE(!image0.hasSameDimensionsAs(image2));
+    }
 }
