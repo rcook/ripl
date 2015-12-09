@@ -16,6 +16,12 @@
 
 #include "ripl.h"
 
+void addImages(
+    riplGreyMap& output,
+    const riplGreyMap& input0,
+    const riplGreyMap& input1,
+    float weight);
+
 /* Command-line version. */
 int addExecute(unsigned argc,
     const char **argv,

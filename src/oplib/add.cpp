@@ -13,17 +13,41 @@
  */
 #include "add.h"
 
+void addImages(
+    riplGreyMap& output,
+    const riplGreyMap& input0,
+    const riplGreyMap& input1,
+    float weight)
+{
+    const riplGrey* p0 = input0.data;
+    const riplGrey* p1 = input1.data;
+    riplGrey* outPtr = output.data;
+    for (decltype(input0.size) i = 0; i < input0.size; i++, ++p0, ++p1, ++outPtr)
+    {
+        auto value0 = *p0;
+        auto value1 = *p1;
+        float temp = value0 + weight * (value1);
+
+        if (temp < 0)
+        {
+            *outPtr = 0;
+        }
+        else if (temp > RIPL_MAX_GREY)
+        {
+            *outPtr = RIPL_MAX_GREY;
+        }
+        else
+        {
+            *outPtr = static_cast<riplGrey>(temp);
+        }
+    }
+}
+
 /* Internal entrypoint. */
 bool addApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     float weight,
     const char *pfileName) {
-
-    riplGreyMap *add_greymap;
-    const riplGrey *inP=pinputGreyMap->data, *addP;
-    riplGrey *outP=poutputGreyMap->data;
-    unsigned i;
-    float temp;
 
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
     RIPL_VALIDATE(pfileName)
@@ -33,7 +57,7 @@ bool addApplyOperator(riplGreyMap *pinputGreyMap,
         return false;
     }
     /* Load input image. */
-    add_greymap=riplLoadImage(pfileName);
+    auto add_greymap = riplLoadImage(pfileName);
     if (!add_greymap) {
         riplMessage(itError, "add: Unable to load image file %s!\n"
             "[File error or invalid format]\n", pfileName);
@@ -47,13 +71,7 @@ bool addApplyOperator(riplGreyMap *pinputGreyMap,
     }
 
     /* Images are valid. */
-    addP=add_greymap->data;
-    for (i=0; i<pinputGreyMap->size; i++, inP++, addP++, outP++) {
-        temp=*inP+weight*(*addP);
-        if (temp<0) temp=0;
-        if (temp>RIPL_MAX_GREY) temp=RIPL_MAX_GREY;
-        *outP=(riplGrey)temp;
-    }
+    addImages(*poutputGreyMap, *pinputGreyMap, *add_greymap, weight);
 
     /* Deallocate greymap and its data. */
     riplFree(add_greymap->data);

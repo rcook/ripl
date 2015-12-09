@@ -198,9 +198,12 @@ target_link_libraries(
 
 add_executable(
   ripltest
+  ${TESTSOURCEDIR}/AddTest.cpp
   ${TESTSOURCEDIR}/ImageTest.cpp
   ${TESTSOURCEDIR}/data.cpp
   ${TESTSOURCEDIR}/data.h
+  ${TESTSOURCEDIR}/helper.cpp
+  ${TESTSOURCEDIR}/helper.h
   ${TESTSOURCEDIR}/main.cpp
 )
 if(NOT NO_USE_CATCH_MAIN)
