@@ -52,7 +52,7 @@ else()
     message(FATAL_ERROR "Failed to detect C++11 mode for compiler ${CMAKE_CXX_COMPILER}")
   endif()
 
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -g")
 endif(MSVC)
 
 # END: Compiler configuration
