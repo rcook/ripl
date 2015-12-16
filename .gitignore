@@ -30,3 +30,6 @@
 # CMake artifacts
 cmake/
 
+# Temporary files
+*.swp
+
