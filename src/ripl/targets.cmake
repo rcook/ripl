@@ -13,3 +13,7 @@ target_link_libraries(ripl
   ripltool
 )
 
+set_target_properties(
+  ripl
+  PROPERTIES FOLDER ripl
+)

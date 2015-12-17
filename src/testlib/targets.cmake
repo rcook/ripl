@@ -17,6 +17,6 @@ add_library(testlib STATIC
 
 set_target_properties(
   testlib-objs
+  testlib
   PROPERTIES FOLDER testlib
 )
-

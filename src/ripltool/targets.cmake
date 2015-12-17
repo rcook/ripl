@@ -13,3 +13,7 @@ target_include_directories(ripltool PRIVATE
   ${SRC}/riplmain
 )
 
+set_target_properties(
+  ripltool
+  PROPERTIES FOLDER ripltool
+)

@@ -46,4 +46,3 @@ set_target_properties(
   riplmain
   PROPERTIES FOLDER riplmain
 )
-

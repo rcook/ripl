@@ -87,6 +87,5 @@ target_include_directories(oplib-test-objs PRIVATE
 set_target_properties(
   oplib-test-objs
   oplib
-  PROPERTIES FOLDER riplmain
+  PROPERTIES FOLDER oplib
 )
-

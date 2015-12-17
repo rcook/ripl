@@ -15,3 +15,7 @@ target_link_libraries(riplop
   oplib
 )
 
+set_target_properties(
+  riplop
+  PROPERTIES FOLDER riplop
+)
