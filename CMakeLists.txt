@@ -57,7 +57,6 @@ include(src/riplcmd/targets.cmake)
 include(src/riplmain/targets.cmake)
 include(src/riplop/targets.cmake)
 include(src/ripltool/targets.cmake)
-include(src/test/targets.cmake)
 include(src/testlib/targets.cmake)
 
 include(src/app/targets.cmake)
