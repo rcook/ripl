@@ -1,4 +1,0 @@
-Ripl Version 1.1, last modified 21/1/98
----------------------------------------
-
-Ripl main library files.

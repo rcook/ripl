@@ -1,5 +1,0 @@
-Ripl Version 1.1, last modified 20/1/98
----------------------------------------
-
-Things specific to command-line operators
-and registration of operators.

@@ -1,7 +1,0 @@
-Ripl Version 1.1, last modified 25/1/98
----------------------------------------
-
-Miscellaneous support utility programmes:
-        SINE           generates 'sinusoidal' image
-                       in order to test FFT functions.
-        WAVELETx       wavelet experiments.
