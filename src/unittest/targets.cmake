@@ -1,4 +1,5 @@
 add_executable(unittest
+  $<TARGET_OBJECTS:oplib-test-objs>
   $<TARGET_OBJECTS:riplmain-test-objs>
 
   $<TARGET_OBJECTS:app-objs>
@@ -24,6 +25,7 @@ target_include_directories(unittest PRIVATE
 )
 target_link_libraries(unittest
   ${CMAKE_DL_LIBS}
+  oplib
   riplmain
   testlib
 )

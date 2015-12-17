@@ -1,4 +1,5 @@
 set(OPLIBMAIN ${SRC}/oplib)
+set(OPLIBTEST ${SRC}/oplib/test)
 
 add_library(oplib STATIC
   ${OPLIBMAIN}/add.cpp
@@ -72,4 +73,20 @@ else()
     m
   )
 endif()
+
+add_library(oplib-test-objs OBJECT
+  ${CMAKE_CURRENT_BINARY_DIR}/config.h
+  ${OPLIBTEST}/AddTest.cpp
+)
+target_include_directories(oplib-test-objs PRIVATE
+  ${OPLIBMAIN}
+  ${SRC}/riplmain
+  ${SRC}/testlib/public
+)
+
+set_target_properties(
+  oplib-test-objs
+  oplib
+  PROPERTIES FOLDER riplmain
+)
 
