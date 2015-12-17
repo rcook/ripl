@@ -1,0 +1,16 @@
+#!/bin/bash
+if [[ "$OSTYPE" =~ ^darwin ]]; then
+  READLINK=greadlink
+else
+  READLINK=readlink
+fi
+SCRIPTPATH=$($READLINK -f $0)
+SCRIPTDIR=$(dirname $SCRIPTPATH)
+REPODIR=$(dirname $SCRIPTDIR)
+CMAKEDIR=$REPODIR/cmake
+
+$SCRIPTDIR/run-cmake && \
+  $SCRIPTDIR/run-make && \
+  $SCRIPTDIR/run-unittest && \
+  $SCRIPTDIR/run-app
+

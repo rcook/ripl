@@ -14,5 +14,5 @@ addons:
 install:
   - export CXX="g++-4.9" CC="gcc-4.9"
 
-script: script/run-cmake Debug && script/run-make && script/run-unittest && script/run-app
+script: script/run-check
 
