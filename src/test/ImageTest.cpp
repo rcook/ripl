@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include "data.h"
-#include "helper.h"
 #include "riplgrey.h"
+#include "testlib/helper.h"
 #include <array>
 
 using namespace std;

@@ -1,4 +1,4 @@
-#include "helper.h"
+#include "testlib/helper.h"
 
 using namespace std;
 using namespace ripl::test::helper;
