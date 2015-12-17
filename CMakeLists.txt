@@ -52,6 +52,13 @@ include_directories(
   third-party/catch/single_include
 )
 
+include(src/oplib/targets.cmake)
+include(src/riplcmd/targets.cmake)
+include(src/riplmain/targets.cmake)
+include(src/riplop/targets.cmake)
+include(src/ripltool/targets.cmake)
+include(src/test/targets.cmake)
+
 include(src/app/targets.cmake)
 include(src/interfacelib/targets.cmake)
 include(src/plugin/targets.cmake)
@@ -71,7 +78,4 @@ install(TARGETS
 
 enable_testing()
 add_test(NAME unittest COMMAND unittest)
-
-# Include old Ripl targets
-include(CMakeLists_old.txt)
 
