@@ -1,6 +1,8 @@
 set(RIPLMAINMAIN ${SRC}/riplmain)
+set(RIPLMAINTEST ${SRC}/riplmain/test)
 
 add_library(riplmain STATIC
+  ${CMAKE_CURRENT_BINARY_DIR}/config.h
   ${RIPLMAINMAIN}/Error.cpp
   ${RIPLMAINMAIN}/Error.h
   ${RIPLMAINMAIN}/Image.h
@@ -26,5 +28,22 @@ add_library(riplmain STATIC
   ${RIPLMAINMAIN}/riplrgb.cpp
   ${RIPLMAINMAIN}/riplrgb.h
   ${RIPLMAINMAIN}/validate.h
+)
+
+add_library(riplmain-test-objs OBJECT
+  ${CMAKE_CURRENT_BINARY_DIR}/config.h
+  ${RIPLMAINTEST}/ImageTest.cpp
+  ${RIPLMAINTEST}/data.cpp
+  ${RIPLMAINTEST}/data.h
+)
+target_include_directories(riplmain-test-objs PRIVATE
+  ${RIPLMAINMAIN}
+  ${SRC}/testlib/public
+)
+
+set_target_properties(
+  riplmain-test-objs
+  riplmain
+  PROPERTIES FOLDER riplmain
 )
 

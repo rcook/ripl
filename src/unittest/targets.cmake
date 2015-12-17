@@ -1,4 +1,6 @@
 add_executable(unittest
+  $<TARGET_OBJECTS:riplmain-test-objs>
+
   $<TARGET_OBJECTS:app-objs>
   $<TARGET_OBJECTS:app-test-objs>
   $<TARGET_OBJECTS:interfacelib-objs>
@@ -22,6 +24,8 @@ target_include_directories(unittest PRIVATE
 )
 target_link_libraries(unittest
   ${CMAKE_DL_LIBS}
+  riplmain
+  testlib
 )
 
 set_target_properties(

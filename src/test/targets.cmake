@@ -2,9 +2,6 @@ set(TESTMAIN ${SRC}/test)
 
 add_executable(ripltest
   ${TESTMAIN}/AddTest.cpp
-  ${TESTMAIN}/ImageTest.cpp
-  ${TESTMAIN}/data.cpp
-  ${TESTMAIN}/data.h
   ${TESTMAIN}/main.cpp
 )
 if(NOT NO_USE_CATCH_MAIN)
