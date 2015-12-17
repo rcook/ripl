@@ -1,2 +1,0 @@
-system nt_dll initinstance terminstance
-export _Ripldll_Init

@@ -1,4 +1,0 @@
-Ripl Version 1.1, last modified 21/1/98
----------------------------------------
-
-Files for the Tcl/Tk DLL version of Ripl.
