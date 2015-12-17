@@ -1,7 +1,7 @@
-set(RIPLCMDMAIN ${SRC}/riplcmd)
+set(RIPLMAIN ${SRC}/ripl)
 
 add_executable(ripl
-  ${RIPLCMDMAIN}/riplcmd.cpp
+  ${RIPLMAIN}/riplcmd.cpp
 )
 target_include_directories(ripl PRIVATE
   ${SRC}/riplmain
