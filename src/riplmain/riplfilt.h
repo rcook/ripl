@@ -1,28 +1,21 @@
-/*
- *		RIPL---Richard's Image-Processing Library.
- *		Written by Richard Cook.
- *
- *		riplfilt.h
- *		Header file for graphic import/export filters and support functions.
- *
- *		Version 1.1, last update: 20 January 1998.
- *
- *		History:
- *			20/1/98:		version 1.1.
- *			27/11/97:	first version.
- *		Copyright © 1997/8, Richard A. Cook.
- */
-
 #pragma once
 
-#include "ripldefs.h"
 #include "riplgrey.h"
 
+/** Loads specified image from the specified stream converting it to greyscale if required */
+riplGreyMap riplLoadImage(std::istream& stream);
+
+/** Loads specified image from the specified file converting it to greyscale if required */
 riplGreyMap riplLoadImage(const char* fileName);
 
+/** Saves specified image under specified file name in specified format */
 void riplSaveImage(
     const char* fileName,
-    riplGraphicFormat graphicFormat,
-    const riplGreyMap& greyMap);
+    riplGraphicFormat format,
+    const riplGreyMap& image);
 
+/** Determines the graphic format from the specified stream */
+riplGraphicFormat riplReadGraphicFormat(std::istream& stream);
+
+/** Determines the graphic format of the specified file */
 riplGraphicFormat riplReadGraphicFormat(const char* fileName);

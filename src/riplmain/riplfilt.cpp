@@ -1,95 +1,57 @@
-/*
- *		RIPL---Richard's Image-Processing Library.
- *		Written by Richard Cook.
- *
- *		riplfilt.c
- *		Source file for graphic import/export filters and support functions.
- *
- *		Version 1.1, last update: 20 January 1998.
- *
- *		History:
- *			20/1/98:		version 1.1.
- *			27/11/97:	first implemented.
- *
- *		Copyright © 1997/8, Richard A. Cook.
- */
-
 #include "riplfilt.h"
 
-#include "ripldbug.h"
 #include "riplpbm.h"
-#include "validate.h"
-#include "Error.h"
-#include <cstdio>
-#include <cstdlib>
-#include <functional>
-#include <memory>
+#include <fstream>
 
 using namespace std;
 using namespace ripl;
 
-// Loads specified image converting it to greyscale if required
-riplGreyMap riplLoadImage(const char* fileName)
+riplGreyMap riplLoadImage(istream& stream)
 {
-    RIPL_VALIDATE_ARG_NAME(fileName, "fileName");
-
     // Read format of image file
-    auto graphicFormat = riplReadGraphicFormat(fileName);
+    auto format = riplReadGraphicFormat(stream);
 
     // Load file using appropriate filter and return pointer to it
-    switch (graphicFormat)
+    switch (format)
     {
-    case gfPBMASCII:
     case gfPGMASCII:
-    case gfPPMASCII:
-    case gfPBMBinary:
     case gfPGMBinary:
-    case gfPPMBinary:
-        return riplPBMLoadFile(fileName, graphicFormat);
+        return netpbmLoad(stream, format);
     default:
         RIPL_VALIDATE_FAIL(error::InvalidOperation);
     }
 }
 
-// Saves specified image under specified file name in specified format
+riplGreyMap riplLoadImage(const char* fileName)
+{
+    RIPL_VALIDATE_ARG_NAME(fileName, "fileName");
+
+    ifstream stream(fileName, ios::in | ios::binary);
+    RIPL_VALIDATE_NEW(stream, error::IOError);
+
+    return riplLoadImage(stream);
+}
+
 void riplSaveImage(
     const char* fileName,
-    riplGraphicFormat graphicFormat,
+    riplGraphicFormat format,
     const riplGreyMap& greyMap)
 {
     RIPL_VALIDATE_ARG_NAME(fileName, "fileName");
+    RIPL_VALIDATE_ARG_NAME(format == gfPGMASCII || format == gfPGMBinary, "format");
 
-    // Save file using appropriate filter
-    switch (graphicFormat)
-    {
-    case gfPBMASCII:
-    case gfPGMASCII:
-    case gfPPMASCII:
-    case gfPBMBinary:
-    case gfPGMBinary:
-    case gfPPMBinary:
-        riplPBMSaveFile(fileName, graphicFormat, greyMap);
-        break;
-    default:
-        RIPL_VALIDATE_ARG_NAME_FAIL("graphicFormat");
-    }
+    netpbmSave(fileName, format, greyMap);
 }
 
-/* Determine the graphic-file format of the specified file. */
-riplGraphicFormat riplReadGraphicFormat(const char* fileName)
+riplGraphicFormat riplReadGraphicFormat(istream& stream)
 {
-    RIPL_VALIDATE_ARG_NAME(fileName, "fileName");
-
-    unique_ptr<FILE, function<int(FILE*)>> file(fopen(fileName, "rb"), fclose);
-    RIPL_VALIDATE_NEW(file, error::IOError);
-
-    if (static_cast<char>(fgetc(file.get())) != 'P')
+    if (static_cast<char>(stream.get()) != 'P')
     {
         return gfInvalid;
     }
 
     // It's a P, therefore it's likely to be PBM/PGM/PPM
-    switch (static_cast<char>(fgetc(file.get())))
+    switch (static_cast<char>(stream.get()))
     {
     case '1': return gfPBMASCII;
     case '2': return gfPGMASCII;
@@ -99,4 +61,14 @@ riplGraphicFormat riplReadGraphicFormat(const char* fileName)
     case '6': return gfPPMBinary;
     default: return gfInvalid;
     }
+}
+
+riplGraphicFormat riplReadGraphicFormat(const char* fileName)
+{
+    RIPL_VALIDATE_ARG_NAME(fileName, "fileName");
+
+    ifstream stream(fileName, ios::in | ios::binary);
+    RIPL_VALIDATE_NEW(stream, error::IOError);
+
+    return riplReadGraphicFormat(stream);
 }

@@ -31,4 +31,5 @@ namespace ripl { namespace error
     extern Error InvalidWidth;
     extern Error InvalidHeight;
     extern Error InvalidSize;
+    extern Error InvalidFileFormat;
 }} // namespace ripl::error

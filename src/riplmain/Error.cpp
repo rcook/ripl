@@ -22,3 +22,4 @@ Error ripl::error::ImageTooBig("Image too big");
 Error ripl::error::InvalidWidth("Invalid width");
 Error ripl::error::InvalidHeight("Invalid height");
 Error ripl::error::InvalidSize("Invalid size");
+Error ripl::error::InvalidFileFormat("Invalid file format");

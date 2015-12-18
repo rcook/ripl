@@ -12,7 +12,12 @@ add_executable(importresources
 add_custom_command(
   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/resources.cpp ${CMAKE_CURRENT_BINARY_DIR}/resources.h
   COMMAND importresources ${RESOURCES} ${CMAKE_CURRENT_BINARY_DIR}
-  DEPENDS ${RESOURCES}/lena.pgm ${IMPORTRESOURCESSRC}
+  DEPENDS
+    ${RESOURCES}/casablanca.ascii.pgm
+    ${RESOURCES}/casablanca.dat
+    ${RESOURCES}/lena.dat
+    ${RESOURCES}/lena.pgm
+    ${IMPORTRESOURCESSRC}
 )
 
 set_target_properties(

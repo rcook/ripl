@@ -1,22 +1,21 @@
 #include "data.h"
 
+#include "resources.h"
 #include "riplfilt.h"
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <vector>
+#include "testlib/MemoryBuffer.h"
 
 using namespace std;
+using namespace resources;
 using namespace ripl::test::data;
 
-#ifdef _MSC_VER
-#define BASE_DIR "../"
-#else
-#define BASE_DIR ""
-#endif
+static riplGreyMap loadImageResource(const char* begin, const char* end)
+{
+    MemoryBuffer buffer(begin, end);
+    istream stream(&buffer);
+    return riplLoadImage(stream);
+}
 
 namespace ripl { namespace test { namespace data
 {
-    const riplGreyMap Image(riplLoadImage(BASE_DIR "scratch/lena.pgm"));
+    const riplGreyMap Image(loadImageResource(lena_pgm.data(), lena_pgm.data() + lena_pgm.size()));
 }}} // namespace ripl::test::data
-

@@ -32,11 +32,15 @@ add_library(riplmain STATIC
 
 add_library(riplmain-test-objs OBJECT
   ${CMAKE_CURRENT_BINARY_DIR}/config.h
+  ${CMAKE_CURRENT_BINARY_DIR}/resources.cpp
+  ${CMAKE_CURRENT_BINARY_DIR}/resources.h
   ${RIPLMAINTEST}/ImageTest.cpp
+  ${RIPLMAINTEST}/NetpbmTest.cpp
   ${RIPLMAINTEST}/data.cpp
   ${RIPLMAINTEST}/data.h
 )
 target_include_directories(riplmain-test-objs PRIVATE
+  ${CMAKE_CURRENT_BINARY_DIR}
   ${RIPLMAINMAIN}
   ${SRC}/testlib/public
 )

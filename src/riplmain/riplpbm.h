@@ -1,28 +1,15 @@
-/*
- *		RIPL---Richard's Image-Processing Library.
- *		Written by Richard Cook.
- *
- *		riplpbm.h
- *		Header file for Portable Bitmap (pbm/PGM/PPM) import filter functions.
- *
- *		Version 1.1, last update: 20 January 1998.
- *
- *		History:
- *			20/1/98:			version 1.1.
- *			27/11/97:		first version.
- *		Copyright © 1997/8, Richard A. Cook.
- */
-
 #pragma once
 
-#include "ripldefs.h"
 #include "riplgrey.h"
 
-riplGreyMap riplPBMLoadFile(
-    const char* fileName,
-    riplGraphicFormat graphicFormat);
+/** Loads a Netpbm-format image from specified stream */
+riplGreyMap netpbmLoad(std::istream& stream, riplGraphicFormat format);
 
-void riplPBMSaveFile(
+/** Loads a Netpbm-format image from specified file */
+riplGreyMap netpbmLoad(const char* fileName, riplGraphicFormat format);
+
+/** Saves specified image to specified file in specified Netpbm format */
+void netpbmSave(
     const char* fileName,
-    riplGraphicFormat graphicFormat,
-    const riplGreyMap& greyMap);
+    riplGraphicFormat format,
+    const riplGreyMap& image);

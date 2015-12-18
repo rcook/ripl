@@ -3,7 +3,9 @@ set(TESTLIBPUBLIC ${SRC}/testlib/public)
 
 add_library(testlib-objs OBJECT
   ${CMAKE_CURRENT_BINARY_DIR}/config.h
+  ${TESTLIBMAIN}/MemoryBuffer.cpp
   ${TESTLIBMAIN}/helper.cpp
+  ${TESTLIBPUBLIC}/testlib/MemoryBuffer.h
   ${TESTLIBPUBLIC}/testlib/helper.h
 )
 target_include_directories(testlib-objs PRIVATE
