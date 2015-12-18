@@ -38,6 +38,8 @@ add_library(oplib STATIC
   ${OPLIBMAIN}/phsynth.h
   ${OPLIBMAIN}/plane.cpp
   ${OPLIBMAIN}/plane.h
+  ${OPLIBMAIN}/register.cpp
+  ${OPLIBMAIN}/register.h
   ${OPLIBMAIN}/siahe.cpp
   ${OPLIBMAIN}/siahe.h
   ${OPLIBMAIN}/siahe2.cpp

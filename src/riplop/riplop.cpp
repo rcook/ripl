@@ -18,52 +18,73 @@
  *
  *		Copyright © 1997/8, Richard A. Cook.
  */
-#include <string.h>
-#include <stdio.h>
+
+#include "ripldbug.h"
 #include "riplop.h"
+#include "riplmsg.h"
+#include "riplpars.h"
+#include <cstdio>
+#include <cstring>
+
+using namespace std;
 
 /* Constants for local use only. */
 #define BUFFER_LEN		2048
 
 /* Return list of all operators and one-line help. */
-const char *riplGetOperatorSummary(void) {
-
+const char* riplGetOperatorSummary(const vector<riplOperator>& ops)
+{
     static char buffer[BUFFER_LEN];
     static const char spaces[]="                                        ";
-    unsigned i, max_len, len;
-    const riplOperator *ptr;
+    unsigned max_len;
     char *buf_ptr;
 
     max_len=0;
-    for (ptr=riplOperators, i=0; i<riplNumOperators; i++, ptr++) {
-        if (strlen(ptr->name)>max_len) max_len=strlen(ptr->name);
+    for (const auto& op : ops)
+    {
+        if (strlen(op.name) > max_len)
+        {
+            max_len = strlen(op.name);
+        }
     }
+
     buf_ptr=buffer;
-    for (ptr=riplOperators, i=0; i<riplNumOperators; i++, ptr++) {
-        len=strlen(ptr->name);
-        if (ptr->match_chars) {
-            buf_ptr+=sprintf(buf_ptr, "   %.*s(%s)",
-                ptr->match_chars, ptr->name, ptr->name+ptr->match_chars);
+    for (const auto& op: ops)
+    {
+        unsigned len = strlen(op.name);
+
+        int prefixLength = 0; // $TODO: Figure this out using trie
+        if (prefixLength > 0)
+        {
+            buf_ptr += sprintf(
+                buf_ptr,
+                "   %.*s(%s)",
+                prefixLength,
+                op.name,
+                op.name + prefixLength);
             len+=2;
         }
-        else buf_ptr+=sprintf(buf_ptr, "   %s", ptr->name);
-        buf_ptr+=sprintf(buf_ptr, "%.*s%s\n",
-            max_len+4-len, spaces, ptr->comment);
+        else
+        {
+            buf_ptr += sprintf(buf_ptr, "   %s", op.name);
+        }
+
+        buf_ptr += sprintf(buf_ptr, "%.*s%s\n", max_len + 4 - len, spaces, op.comment);
     }
+
     return buffer;
 }
 
 /* Display help for a specific operator. */
-bool riplOperatorHelp(const char *op) {
-
-    const riplOperator *ptr;
-    const char *help_message;
-    unsigned i;
-
-    for (ptr=riplOperators, i=0; i<riplNumOperators; i++, ptr++) {
-        if (riplMatch(op, ptr->name, ptr->match_chars)) {
-            if (ptr->help) {
-                help_message=ptr->help();
+bool riplOperatorHelp(const vector<riplOperator>& ops, const char *name)
+{
+    for (const auto& op : ops)
+    {
+        if (riplMatch(name, op.name, 0/*prefixLength*/))
+        {
+            if (op.help)
+            {
+                const char* help_message = op.help();
                 if (help_message) {
                     riplMessage(itInfo,
                         RIPL_APPNAME " Version " RIPL_VERSION ", built " RIPL_DATE "\n"
@@ -71,42 +92,46 @@ bool riplOperatorHelp(const char *op) {
                         "Written by " RIPL_AUTHOR "\n\n"
                         "Help for '%s':\n"
                         "Usage: " RIPL_EXENAME " " RIPL_CMDLINE " %s",
-                        op, help_message);
+                        name,
+                        help_message);
                     return true;
                 }
             }
-            riplMessage(itInfo, "No help available for operator '%s'.\n", op);
+            riplMessage(itInfo, "No help available for operator '%s'.\n", name);
             return true;
         }
     }
-    riplMessage(itError, "Unrecognized operator '%s'!\n", op);
+    riplMessage(itError, "Unrecognized operator '%s'!\n", name);
     return false;
 }
 
 /* Execute the next part of the command line. */
-unsigned riplOperatorExecute(unsigned argc,
-    const char **argv,
-    riplGreyMap *pinputGreyMap,
-    riplGreyMap *poutputGreyMap) {
-
-    const riplOperator *ptr;
+unsigned riplOperatorExecute(
+    const vector<riplOperator>& ops,
+    unsigned argc,
+    const char** argv,
+    riplGreyMap* input,
+    riplGreyMap* output)
+{
     int args_read;
-    unsigned i;
 
-    RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
+    RIPL_VALIDATE_OP_GREYMAPS(input, output)
     RIPL_VALIDATE(argv)
 
-    for (ptr=riplOperators, i=0; i<riplNumOperators; i++, ptr++) {
-        if (riplMatch(argv[0], ptr->name, ptr->match_chars)) {
-            if (ptr->execute) {
-                args_read=ptr->execute(argc-1, argv+1,
-                    pinputGreyMap, poutputGreyMap);
-                if (args_read<=RIPL_FIRSTERRORCODE) {
+    for (const auto& op : ops)
+    {
+        if (riplMatch(argv[0], op.name, 0/*prefixLength*/))
+        {
+            if (op.execute)
+            {
+                args_read = op.execute(argc - 1, argv + 1, input, output);
+                if (args_read <= RIPL_FIRSTERRORCODE)
+                {
                     switch (args_read) {
                     case RIPL_EXECUTEERROR:
                         riplMessage(itError,
                             "An error occurred executing operator '%s'!\n",
-                            ptr->name);
+                            op.name);
                         break;
                     case RIPL_USERERROR:
                     case RIPL_PARAMERROR:

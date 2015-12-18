@@ -19,6 +19,7 @@
  *		Copyright © 1997/8, Richard A. Cook.
  */
 
+#include "ripl.h"
 #include "riplop.h"
 #include "Error.h"
 #include <cstring>
@@ -33,11 +34,50 @@ using ResponseFileArgPtr = unique_ptr<char*, function<void(char**)>>;
 
 static ResponseFileArgPtr parseResponseFile(const char* fileName, unsigned* argCount);
 
-static bool execute_arguments(unsigned argc, char **argv, riplGreyMap *pinputGreyMap, riplGreyMap *poutputGreyMap);
+static bool execute_arguments(
+    const vector<riplOperator>& ops,
+    unsigned argc,
+    char **argv,
+    riplGreyMap* input,
+    riplGreyMap *output);
 
-static bool help_arguments(unsigned argc, char **argv);
+static bool help_arguments(
+    const vector<riplOperator>& ops,
+    unsigned argc,
+    char **argv);
 
-static void general_help();
+static void general_help(const vector<riplOperator>& ops);
+
+class RegistrarImpl : public Registrar
+{
+public:
+    RegistrarImpl(const RegistrarImpl&) = delete;
+    RegistrarImpl& operator=(const RegistrarImpl&) = delete;
+
+public:
+    RegistrarImpl() = default;
+    ~RegistrarImpl() = default;
+
+    void registerOp(
+        const char* name,
+        const char* description,
+        ExecuteFunc executeFunc,
+        HelpFunc helpFunc) override;
+
+    const vector<riplOperator>& ops() const { return m_ops; }
+
+private:
+    vector<riplOperator> m_ops;
+};
+
+void RegistrarImpl::registerOp(
+    const char* name,
+    const char* description,
+    ExecuteFunc executeFunc,
+    HelpFunc helpFunc)
+{
+    m_ops.emplace_back(name, description, executeFunc, helpFunc);
+}
 
 /*
  *		riplMain1
@@ -49,13 +89,16 @@ static void general_help();
  */
 int riplMain1(unsigned argc, char **argv)
 {
+    RegistrarImpl registrar;
+    oplib_registerOps(registrar);
+
     ResponseFileArgPtr respArgv;
     if (argc > 0 && **argv == '@')
     {
         // Take command line from a response file
         if (argc > 1)
         {
-            general_help();
+            general_help(registrar.ops());
             return EXIT_FAILURE;
         }
 
@@ -80,7 +123,7 @@ int riplMain1(unsigned argc, char **argv)
     if (argc == 0)
     {
         // No arguments supplied
-        general_help();
+        general_help(registrar.ops());
         return EXIT_FAILURE;
     }
 
@@ -89,12 +132,12 @@ int riplMain1(unsigned argc, char **argv)
         // User is requesting some help
         if (argc < 2)
         {
-            general_help();
+            general_help(registrar.ops());
             return EXIT_FAILURE;
         }
         else
         {
-            if (!help_arguments(argc - 1, argv + 1))
+            if (!help_arguments(registrar.ops(), argc - 1, argv + 1))
             {
                 return EXIT_FAILURE;
             }
@@ -104,7 +147,7 @@ int riplMain1(unsigned argc, char **argv)
 
     if (argc < 3)
     {
-        general_help();
+        general_help(registrar.ops());
         return EXIT_FAILURE;
     }
 
@@ -121,7 +164,12 @@ int riplMain1(unsigned argc, char **argv)
     riplGreyMap outputGreyMap(inputGreyMap.width(), inputGreyMap.height());
 
     // Execute command-line arguments
-    bool result = execute_arguments(argc - 2, argv + 2, &inputGreyMap, &outputGreyMap);
+    bool result = execute_arguments(
+        registrar.ops(),
+        argc - 2,
+        argv + 2,
+        &inputGreyMap,
+        &outputGreyMap);
     riplSaveImage(argv[1], gfPGMBinary, outputGreyMap);
 
     // Free images
@@ -141,13 +189,16 @@ int riplMain2(unsigned argc, char** argv, riplGreyMap* pinputGreyMap, riplGreyMa
 {
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap);
     
+    RegistrarImpl registrar;
+    oplib_registerOps(registrar);
+
     ResponseFileArgPtr respArgv;
     if (argc > 0 && **argv == '@')
     {
         // Take command line from a response file
         if (argc > 1)
         {
-            general_help();
+            general_help(registrar.ops());
             return EXIT_FAILURE;
         }
 
@@ -172,7 +223,7 @@ int riplMain2(unsigned argc, char** argv, riplGreyMap* pinputGreyMap, riplGreyMa
     if (argc == 0)
     {
         // No arguments supplied
-        general_help();
+        general_help(registrar.ops());
         return EXIT_FAILURE;
     }
 
@@ -181,7 +232,7 @@ int riplMain2(unsigned argc, char** argv, riplGreyMap* pinputGreyMap, riplGreyMa
         // User is requesting some help
         if (argc < 2)
         {
-            general_help();
+            general_help(registrar.ops());
             return EXIT_FAILURE;
         }
         else
@@ -191,7 +242,7 @@ int riplMain2(unsigned argc, char** argv, riplGreyMap* pinputGreyMap, riplGreyMa
                 RIPL_APPNAME " Version " RIPL_VERSION ", built " RIPL_DATE "\n"
                 RIPL_DESCRIPTION "\n"
                 "Written by " RIPL_AUTHOR "\n\n");
-            if (!help_arguments(argc - 1, argv + 1))
+            if (!help_arguments(registrar.ops(), argc - 1, argv + 1))
             {
                 return EXIT_FAILURE;
             }
@@ -200,7 +251,7 @@ int riplMain2(unsigned argc, char** argv, riplGreyMap* pinputGreyMap, riplGreyMa
     }
 
     // Execute command-line arguments
-    if (!execute_arguments(argc, argv, pinputGreyMap, poutputGreyMap))
+    if (!execute_arguments(registrar.ops(), argc, argv, pinputGreyMap, poutputGreyMap))
     {
         return EXIT_FAILURE;
     }
@@ -226,17 +277,23 @@ static ResponseFileArgPtr parseResponseFile(
  *		as the input to the input of the next, allowing several
  *		transforms to be applied to a single image.
  */
-static bool execute_arguments(unsigned argc, char** argv, riplGreyMap* pinputGreyMap, riplGreyMap* poutputGreyMap)
+static bool execute_arguments(
+    const vector<riplOperator>& ops,
+    unsigned argc,
+    char** argv,
+    riplGreyMap *input,
+    riplGreyMap *output)
 {
     unsigned args_read;
 
-    while (1)
+    for (; ;)
     {
         args_read = riplOperatorExecute(
+            ops,
             argc,
             const_cast<const char**>(argv),
-            pinputGreyMap,
-            poutputGreyMap);
+            input,
+            output);
         if (args_read < 1)
         {
             return false;
@@ -249,16 +306,19 @@ static bool execute_arguments(unsigned argc, char** argv, riplGreyMap* pinputGre
             return true;
         }
 
-        pinputGreyMap->swap(*poutputGreyMap);
+        input->swap(*output);
     }
 }
 
 /* Displays help screens of operators specified on command line. */
-static bool help_arguments(unsigned argc, char** argv)
+static bool help_arguments(
+    const vector<riplOperator>& ops,
+    unsigned argc,
+    char** argv)
 {
     for (unsigned i = 0; i < argc; ++i)
     {
-        if (!riplOperatorHelp(argv[i]))
+        if (!riplOperatorHelp(ops, argv[i]))
         {
             return false;
         }
@@ -268,7 +328,7 @@ static bool help_arguments(unsigned argc, char** argv)
 }
 
 /* Displays general help information. */
-static void general_help()
+static void general_help(const vector<riplOperator>& ops)
 {
     riplMessage(
         itInfo,
@@ -283,5 +343,5 @@ static void general_help()
         "Where <op> is one of the following:\n"
         "%s\n"
         "For help on a specific operation:\n\n"
-        "Usage: " RIPL_EXENAME " ? <op>\n", riplGetOperatorSummary());
+        "Usage: " RIPL_EXENAME " ? <op>\n", riplGetOperatorSummary(ops));
 }
