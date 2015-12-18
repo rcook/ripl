@@ -18,7 +18,7 @@ riplGreyMap riplLoadImage(istream& stream)
     case gfPGMBinary:
         return netpbmLoad(stream, format);
     default:
-        RIPL_VALIDATE_FAIL(error::InvalidOperation);
+        RIPL_REQUIRE_FAIL(error::InvalidOperation);
     }
 }
 
@@ -27,7 +27,7 @@ riplGreyMap riplLoadImage(const char* fileName)
     RIPL_VALIDATE_ARG_NAME(fileName, "fileName");
 
     ifstream stream(fileName, ios::in | ios::binary);
-    RIPL_VALIDATE_NEW(stream, error::IOError);
+    RIPL_REQUIRE(stream, error::IOError);
 
     return riplLoadImage(stream);
 }
@@ -68,7 +68,7 @@ riplGraphicFormat riplReadGraphicFormat(const char* fileName)
     RIPL_VALIDATE_ARG_NAME(fileName, "fileName");
 
     ifstream stream(fileName, ios::in | ios::binary);
-    RIPL_VALIDATE_NEW(stream, error::IOError);
+    RIPL_REQUIRE(stream, error::IOError);
 
     return riplReadGraphicFormat(stream);
 }

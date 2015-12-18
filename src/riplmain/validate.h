@@ -3,7 +3,7 @@
 #include "Error.h"
 #include <stdexcept>
 
-#define RIPL_VALIDATE_NEW(expr, errorObj) \
+#define RIPL_REQUIRE(expr, errorObj) \
     do \
     { \
         if (!(expr)) \
@@ -13,7 +13,7 @@
     } \
     while (false)
 
-#define RIPL_VALIDATE_FAIL(errorObj) \
+#define RIPL_REQUIRE_FAIL(errorObj) \
     throw std::runtime_error(errorObj.message())
 
 #define RIPL_VALIDATE_ARG(expr, errorObj) \

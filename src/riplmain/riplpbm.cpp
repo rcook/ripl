@@ -25,18 +25,18 @@ static Header readHeader(istream& stream)
 {
     image_dimension_t width;
     stream >> width;
-    RIPL_VALIDATE_NEW(width > 0 && width < RIPL_MAX_COLS, error::ImageTooBig);
+    RIPL_REQUIRE(width > 0 && width < RIPL_MAX_COLS, error::ImageTooBig);
 
     image_dimension_t height;
     stream >> height;
-    RIPL_VALIDATE_NEW(height > 0 && height < RIPL_MAX_ROWS, error::ImageTooBig);
+    RIPL_REQUIRE(height > 0 && height < RIPL_MAX_ROWS, error::ImageTooBig);
 
     int maximumLevel;
     stream >> maximumLevel;
-    RIPL_VALIDATE_NEW(maximumLevel == RIPL_MAX_GREY, error::InvalidFileFormat);
+    RIPL_REQUIRE(maximumLevel == RIPL_MAX_GREY, error::InvalidFileFormat);
 
     int c = stream.get();
-    RIPL_VALIDATE_NEW(c == '\n' || c == '\r' && stream.get() == '\n', error::InvalidFileFormat);
+    RIPL_REQUIRE(c == '\n' || c == '\r' && stream.get() == '\n', error::InvalidFileFormat);
 
     return Header(width, height, maximumLevel);
 }
@@ -79,7 +79,7 @@ riplGreyMap netpbmLoad(istream& stream, riplGraphicFormat format)
         RIPL_VALIDATE_ARG_NAME_FAIL("format");
     }
 
-    RIPL_VALIDATE_NEW(!stream.eof(), error::InvalidFileFormat);
+    RIPL_REQUIRE(!stream.eof(), error::InvalidFileFormat);
 
     return riplGreyMap(header.m_width, header.m_height, move(data));
 }
@@ -90,11 +90,11 @@ riplGreyMap netpbmLoad(const char* fileName, riplGraphicFormat format)
     RIPL_VALIDATE_ARG_NAME(format == gfPGMASCII || format == gfPGMBinary, "format");
 
     ifstream stream(fileName, ios::in | ios::binary);
-    RIPL_VALIDATE_NEW(stream, error::IOError);
+    RIPL_REQUIRE(stream, error::IOError);
 
     if (format == gfPGMBinary)
     {
-        RIPL_VALIDATE_NEW(stream.peek() == EOF, error::InvalidFileFormat);
+        RIPL_REQUIRE(stream.peek() == EOF, error::InvalidFileFormat);
     }
 
     return netpbmLoad(stream, format);
@@ -106,7 +106,7 @@ void netpbmSave(const char* fileName, riplGraphicFormat format, const riplGreyMa
     RIPL_VALIDATE_ARG_NAME(format == gfPGMBinary, "format");
 
     unique_ptr<FILE, decltype(fclose)*> file(fopen(fileName, "wb"), fclose);
-    RIPL_VALIDATE_NEW(file, error::IOError);
+    RIPL_REQUIRE(file, error::IOError);
 
     fprintf(
         file.get(),

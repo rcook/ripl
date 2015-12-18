@@ -47,6 +47,6 @@ MemoryBuffer::int_type MemoryBuffer::pbackfail(int_type c)
 
 streamsize MemoryBuffer::showmanyc()
 {
-    RIPL_VALIDATE_NEW(less_equal<ConstCharPtr>()(m_current, m_end), error::InvalidOperation);
+    RIPL_REQUIRE(less_equal<ConstCharPtr>()(m_current, m_end), error::InvalidOperation);
     return m_end - m_current;
 }
