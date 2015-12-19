@@ -49,54 +49,81 @@ private:
     HandleState m_state;
 };
 
-static unordered_map<RawHandle, HandleInfo> s_handleInfos;
-
-static RawHandle openRawHandle(const string& name)
+class HandleUniverse
 {
-    auto rawHandle = reinterpret_cast<void*>(s_handleInfos.size() + 100);
-    s_handleInfos.emplace(rawHandle, HandleInfo(rawHandle, name));
+public:
+    HandleUniverse(const HandleUniverse&) = delete;
+    HandleUniverse& operator=(const HandleUniverse&) = delete;
 
-    auto& handleInfo = s_handleInfos.at(rawHandle);
-    handleInfo.setState(HandleState::Opened);
-    return rawHandle;
-}
+public:
+    HandleUniverse() = default;
 
-static const string& getRawHandleName(RawHandle rawHandle)
-{
-    auto& handleInfo = s_handleInfos.at(rawHandle);
-    assert(handleInfo.state() == HandleState::Opened);
-    return handleInfo.name();
-}
+    ~HandleUniverse()
+    {
+        for (const auto& pair : m_handleInfos)
+        {
+            REQUIRE(pair.second.state() == HandleState::Closed);
+        }
+    }
 
-static HandleState getRawHandleState(RawHandle rawHandle)
-{
-    auto& handleInfo = s_handleInfos.at(rawHandle);
-    return handleInfo.state();
-}
+    RawHandle openRawHandle(const string& name)
+    {
+        auto rawHandle = reinterpret_cast<void*>(m_handleInfos.size() + 100);
+        m_handleInfos.emplace(rawHandle, HandleInfo(rawHandle, name));
 
-static void closeRawHandle(RawHandle rawHandle)
-{
-    auto& handleInfo = s_handleInfos.at(rawHandle);
-    assert(handleInfo.state() == HandleState::Opened);
-    handleInfo.setState(HandleState::Closed);
-}
+        auto& handleInfo = m_handleInfos.at(rawHandle);
+        handleInfo.setState(HandleState::Opened);
+        return rawHandle;
+    }
 
-using TestHandle = ScopedHandle<RawHandle, nullptr, decltype(closeRawHandle)*>;
+    const string& getRawHandleName(RawHandle rawHandle) const
+    {
+        auto& handleInfo = m_handleInfos.at(rawHandle);
+        assert(handleInfo.state() == HandleState::Opened);
+        return handleInfo.name();
+    }
 
-static TestHandle openTestHandle(const string& name)
+    HandleState getRawHandleState(RawHandle rawHandle) const
+    {
+        auto& handleInfo = m_handleInfos.at(rawHandle);
+        return handleInfo.state();
+    }
+
+    void closeRawHandle(RawHandle rawHandle)
+    {
+        auto& handleInfo = m_handleInfos.at(rawHandle);
+        assert(handleInfo.state() == HandleState::Opened);
+        handleInfo.setState(HandleState::Closed);
+    }
+
+private:
+    unordered_map<RawHandle, HandleInfo> m_handleInfos;
+};
+
+using CloseFunc = function<void(RawHandle)>;
+using TestHandle = ScopedHandle<RawHandle, nullptr, CloseFunc>;
+using TestUniquePtr = unique_ptr<remove_pointer<RawHandle>::type, CloseFunc>;
+
+static TestHandle openTestHandle(HandleUniverse& universe, const string& name)
 {
     // Uses move constructor
-    TestHandle handle(openRawHandle(name), closeRawHandle);
+    TestHandle handle(
+        universe.openRawHandle(name),
+        [&universe](RawHandle rawHandle) { universe.closeRawHandle(rawHandle); });
     return handle;
 }
 
 TEST_CASE("ScopedHandle", "ScopedHandle")
 {
-    using TestUniquePtr = unique_ptr<remove_pointer<RawHandle>::type, decltype(closeRawHandle)*>;
+    HandleUniverse universe;
+    CloseFunc closeFunc = [&universe](RawHandle rawHandle)
+    {
+        universe.closeRawHandle(rawHandle);
+    };
 
     SECTION("invalid")
     {
-        TestHandle handle(closeRawHandle);
+        TestHandle handle(closeFunc);
 
         REQUIRE(!handle);
 
@@ -108,7 +135,7 @@ TEST_CASE("ScopedHandle", "ScopedHandle")
 
     SECTION("valid")
     {
-        auto handle = openTestHandle("valid");
+        auto handle = openTestHandle(universe, "valid");
 
         REQUIRE(handle);
 
@@ -119,7 +146,7 @@ TEST_CASE("ScopedHandle", "ScopedHandle")
 
         REQUIRE(handle.get());
 
-        REQUIRE(getRawHandleState(handle.get()) == HandleState::Opened);
+        REQUIRE(universe.getRawHandleState(handle.get()) == HandleState::Opened);
     }
 
     SECTION("move")
@@ -128,24 +155,24 @@ TEST_CASE("ScopedHandle", "ScopedHandle")
 
         // Check that handle is moved between ScopeHandle instances correctly
         {
-            auto handle = openTestHandle("move");
+            auto handle = openTestHandle(universe, "move");
             rawHandles.push_back(handle.get());
-            REQUIRE(getRawHandleName(handle.get()).compare("move") == 0);
-            REQUIRE(getRawHandleState(handle.get()) == HandleState::Opened);
+            REQUIRE(universe.getRawHandleName(handle.get()).compare("move") == 0);
+            REQUIRE(universe.getRawHandleState(handle.get()) == HandleState::Opened);
         }
 
         for (auto rawHandle : rawHandles)
         {
-            REQUIRE(getRawHandleState(rawHandle) == HandleState::Closed);
+            REQUIRE(universe.getRawHandleState(rawHandle) == HandleState::Closed);
         }
     }
 
     SECTION("swap")
     {
-        auto handle0 = openTestHandle("swap0");
+        auto handle0 = openTestHandle(universe, "swap0");
         auto rawHandle0 = handle0.get();
 
-        auto handle1 = openTestHandle("swap1");
+        auto handle1 = openTestHandle(universe, "swap1");
         auto rawHandle1 = handle1.get();
 
         REQUIRE(rawHandle0 != rawHandle1);
@@ -153,61 +180,56 @@ TEST_CASE("ScopedHandle", "ScopedHandle")
         handle0.swap(handle1);
 
         REQUIRE(handle0.get() == rawHandle1);
-        REQUIRE(getRawHandleState(handle0.get()) == HandleState::Opened);
+        REQUIRE(universe.getRawHandleState(handle0.get()) == HandleState::Opened);
 
         REQUIRE(handle1.get() == rawHandle0);
-        REQUIRE(getRawHandleState(handle1.get()) == HandleState::Opened);
+        REQUIRE(universe.getRawHandleState(handle1.get()) == HandleState::Opened);
     }
 
     SECTION("release")
     {
-        auto handle = openTestHandle("release");
+        auto handle = openTestHandle(universe, "release");
         auto rawHandle = handle.get();
-        REQUIRE(getRawHandleState(handle.get()) == HandleState::Opened);
+        REQUIRE(universe.getRawHandleState(handle.get()) == HandleState::Opened);
 
-        TestUniquePtr ptr(handle.release(), closeRawHandle);
+        TestUniquePtr ptr(handle.release(), closeFunc);
 
         auto releasedRawHandle = ptr.get();
         REQUIRE(releasedRawHandle == rawHandle);
         REQUIRE_THROWS_AS(handle.get(), runtime_error);
 
-        REQUIRE(getRawHandleState(rawHandle) == HandleState::Opened);
+        REQUIRE(universe.getRawHandleState(rawHandle) == HandleState::Opened);
     }
 
     SECTION("reset")
     {
         SECTION("invalid")
         {
-            auto handle = openTestHandle("reset-invalid");
+            auto handle = openTestHandle(universe, "reset-invalid");
             auto rawHandle = handle.get();
 
-            REQUIRE(getRawHandleState(rawHandle) == HandleState::Opened);
+            REQUIRE(universe.getRawHandleState(rawHandle) == HandleState::Opened);
 
             handle.reset();
 
-            REQUIRE(getRawHandleState(rawHandle) == HandleState::Closed);
+            REQUIRE(universe.getRawHandleState(rawHandle) == HandleState::Closed);
         }
 
         SECTION("other")
         {
-            TestUniquePtr ptr0(openRawHandle("reset-other0"), closeRawHandle);
+            TestUniquePtr ptr0(universe.openRawHandle("reset-other0"), closeFunc);
             auto rawHandle0 = ptr0.get();
 
-            auto handle1 = openTestHandle("reset-other1");
+            auto handle1 = openTestHandle(universe, "reset-other1");
             auto rawHandle1 = handle1.get();
 
-            REQUIRE(getRawHandleState(rawHandle0) == HandleState::Opened);
-            REQUIRE(getRawHandleState(rawHandle1) == HandleState::Opened);
+            REQUIRE(universe.getRawHandleState(rawHandle0) == HandleState::Opened);
+            REQUIRE(universe.getRawHandleState(rawHandle1) == HandleState::Opened);
 
             handle1.reset(ptr0.release());
 
-            REQUIRE(getRawHandleState(rawHandle0) == HandleState::Opened);
-            REQUIRE(getRawHandleState(rawHandle1) == HandleState::Closed);
+            REQUIRE(universe.getRawHandleState(rawHandle0) == HandleState::Opened);
+            REQUIRE(universe.getRawHandleState(rawHandle1) == HandleState::Closed);
         }
-    }
-
-    for (const auto& pair : s_handleInfos)
-    {
-        REQUIRE(pair.second.state() == HandleState::Closed);
     }
 }
