@@ -32,4 +32,5 @@ cmake/
 
 # Temporary files
 *.swp
+*~
 
