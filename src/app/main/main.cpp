@@ -18,13 +18,13 @@ using namespace std;
 
 static vector<string> getCandidatePluginFileNames(const string& pluginDir)
 {
-    using FindHandle = ScopedHandle<HANDLE, INVALID_HANDLE_VALUE, decltype(FindClose)*, FindClose>;
+    using FindHandle = ScopedHandle<HANDLE, INVALID_HANDLE_VALUE, decltype(FindClose)*>;
 
     vector<string> fileNames;
 
     string filter(pluginDir + "\\*.dll");
     WIN32_FIND_DATA findData;
-    FindHandle handle(FindFirstFile(filter.data(), &findData));
+    FindHandle handle(FindFirstFile(filter.data(), &findData), FindClose);
     if (!handle)
     {
         if (GetLastError() == ERROR_PATH_NOT_FOUND)
@@ -48,11 +48,11 @@ static vector<string> getCandidatePluginFileNames(const string& pluginDir)
 
 static vector<string> getFileNames(const string& dir, function<bool(const dirent*)> predicate)
 {
-    using DirHandle = ScopedHandle<DIR*, nullptr, decltype(closedir)*, closedir>;
+    using DirHandle = ScopedHandle<DIR*, nullptr, decltype(closedir)*>;
 
     vector<string> fileNames;
 
-    DirHandle handle(opendir(dir.data()));
+    DirHandle handle(opendir(dir.data()), closedir);
     if (!handle)
     {
         return fileNames;

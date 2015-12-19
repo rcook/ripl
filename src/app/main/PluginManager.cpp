@@ -17,9 +17,9 @@ class PluginManager::Impl
 {
 private:
 #ifdef BUILD_WINDOWS
-    using ModuleHandle = ScopedHandle<HMODULE, nullptr, decltype(FreeLibrary)*, FreeLibrary>;
+    using ModuleHandle = ScopedHandle<HMODULE, nullptr, decltype(FreeLibrary)*>;
 #else
-    using ModuleHandle = ScopedHandle<void*, nullptr, decltype(dlclose)*, dlclose>;
+    using ModuleHandle = ScopedHandle<void*, nullptr, decltype(dlclose)*>;
 #endif
 
 public:
@@ -83,7 +83,7 @@ private:
             const UINT m_oldErrorMode;
         } instance;
 
-        auto module = ModuleHandle(LoadLibrary(fileName.data()));
+        auto module = ModuleHandle(LoadLibrary(fileName.data()), FreeLibrary);
         if (!module && GetLastError() != ERROR_BAD_EXE_FORMAT)
         {
             OSError::throwCurrentError("LoadLibrary");
@@ -91,7 +91,7 @@ private:
 
         return module;
 #else
-        return ModuleHandle(dlopen(fileName.data(), RTLD_LAZY));
+        return ModuleHandle(dlopen(fileName.data(), RTLD_LAZY), dlclose);
 #endif
     }
 

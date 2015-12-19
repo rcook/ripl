@@ -74,19 +74,19 @@ static HandleState getRawHandleState(RawHandle rawHandle)
     return handleInfo.state();
 }
 
-/*static*/ void closeRawHandle(RawHandle rawHandle)
+static void closeRawHandle(RawHandle rawHandle)
 {
     auto& handleInfo = s_handleInfos.at(rawHandle);
     assert(handleInfo.state() == HandleState::Opened);
     handleInfo.setState(HandleState::Closed);
 }
 
-using TestHandle = ScopedHandle<RawHandle, nullptr, decltype(closeRawHandle)*, closeRawHandle>;
+using TestHandle = ScopedHandle<RawHandle, nullptr, decltype(closeRawHandle)*>;
 
 static TestHandle openTestHandle(const string& name)
 {
     // Uses move constructor
-    TestHandle handle(openRawHandle(name));
+    TestHandle handle(openRawHandle(name), closeRawHandle);
     return handle;
 }
 
@@ -96,7 +96,7 @@ TEST_CASE("ScopedHandle", "ScopedHandle")
 
     SECTION("invalid")
     {
-        TestHandle handle;
+        TestHandle handle(closeRawHandle);
 
         REQUIRE(!handle);
 

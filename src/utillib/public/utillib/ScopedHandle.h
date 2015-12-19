@@ -2,7 +2,7 @@
 
 #include "utillib/validate.h"
 
-template<typename THandle, THandle InvalidHandleValue, typename TCloseFunc, TCloseFunc closeFunc>
+template<typename THandle, THandle InvalidHandleValue, typename TCloseFunc>
 class ScopedHandle
 {
 public:
@@ -10,13 +10,21 @@ public:
     ScopedHandle& operator=(const ScopedHandle&) = delete;
 
 public:
-    explicit ScopedHandle(THandle handle = InvalidHandleValue)
+    explicit ScopedHandle(TCloseFunc closeFunc)
+        : m_handle(InvalidHandleValue)
+        , m_closeFunc(closeFunc)
+    {
+    }
+
+    explicit ScopedHandle(THandle handle, TCloseFunc closeFunc)
         : m_handle(handle)
+        , m_closeFunc(closeFunc)
     {
     }
 
     ScopedHandle(ScopedHandle&& other)
         : m_handle(other.release())
+        , m_closeFunc(std::move(other.m_closeFunc))
     {
     }
 
@@ -24,7 +32,7 @@ public:
     {
         if (m_handle != InvalidHandleValue)
         {
-            closeFunc(m_handle);
+            m_closeFunc(m_handle);
             m_handle = InvalidHandleValue;
         }
     }
@@ -49,7 +57,7 @@ public:
 
     void reset(THandle handle = InvalidHandleValue)
     {
-        ScopedHandle temp(m_handle);
+        ScopedHandle temp(m_handle, m_closeFunc);
         m_handle = handle;
     }
 
@@ -62,5 +70,6 @@ public:
 
 private:
     THandle m_handle;
+    TCloseFunc m_closeFunc;
 };
 
