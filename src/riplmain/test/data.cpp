@@ -3,6 +3,7 @@
 #include "resources.h"
 #include "riplfilt.h"
 #include "testlib/MemoryBuffer.h"
+#include <istream>
 
 using namespace std;
 using namespace resources;
