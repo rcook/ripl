@@ -1,7 +1,7 @@
-set(RIPLMAIN ${SRC}/ripl)
+set(RIPLMAIN ${SRC}/ripl/main)
 
 add_executable(ripl
-  ${RIPLMAIN}/riplcmd.cpp
+  ${RIPLMAIN}/main.cpp
 )
 target_include_directories(ripl PRIVATE
   ${CMAKE_CURRENT_BINARY_DIR}/generated
@@ -18,3 +18,4 @@ set_target_properties(
   ripl
   PROPERTIES FOLDER ripl
 )
+
