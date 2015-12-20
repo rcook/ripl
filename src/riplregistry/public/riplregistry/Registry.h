@@ -8,7 +8,7 @@
 #define REGISTER_PLUGIN_OPS(__registrar) \
     extern "C" DLLEXPORT void __registerPluginOps(Registrar& __registrar)
 
-class INTERFACELIB_API Registrar
+class RIPLREGISTRY_API Registrar
 {
 protected:
     Registrar();

@@ -2,6 +2,14 @@
 
 #include "config.h"
 
+#ifdef _MSC_VER
+#   define DLLEXPORT __declspec(dllexport)
+#   define DLLIMPORT __declspec(dllimport)
+#else
+#   define DLLEXPORT __attribute__((visibility("default")))
+#   define DLLIMPORT
+#endif
+
 #ifndef HAVE_MAKE_UNIQUE
 #include <memory>
 
@@ -14,4 +22,3 @@ namespace std
     }
 }
 #endif
-

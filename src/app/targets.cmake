@@ -25,6 +25,7 @@ target_include_directories(app-test-objs PRIVATE
   ${CMAKE_CURRENT_BINARY_DIR}/generated
   ${SRC}/app/main
   ${SRC}/riplregistry/public
+  ${SRC}/shared
 )
 
 add_executable(app
@@ -34,6 +35,7 @@ add_executable(app
 target_include_directories(app PRIVATE
   ${CMAKE_CURRENT_BINARY_DIR}/generated
   ${SRC}/riplregistry/public
+  ${SRC}/shared
   ${SRC}/utillib/public
 )
 target_link_libraries(app
@@ -48,4 +50,3 @@ set_target_properties(
   app
   PROPERTIES FOLDER app
 )
-

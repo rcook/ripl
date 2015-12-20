@@ -1,18 +1,9 @@
 #pragma once
 
-#include "config.h"
+#include "common.h"
 
-#ifdef _MSC_VER
-#   define DLLEXPORT __declspec(dllexport)
-#   define DLLIMPORT __declspec(dllimport)
+#ifdef BUILD_RIPLREGISTRY
+#   define RIPLREGISTRY_API DLLEXPORT
 #else
-#   define DLLEXPORT __attribute__((visibility("default")))
-#   define DLLIMPORT
+#   define RIPLREGISTRY_API DLLIMPORT
 #endif
-
-#ifdef BUILD_INTERFACELIB
-#   define INTERFACELIB_API DLLEXPORT
-#else
-#   define INTERFACELIB_API DLLIMPORT
-#endif
-

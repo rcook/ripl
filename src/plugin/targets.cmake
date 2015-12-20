@@ -8,6 +8,7 @@ target_compile_definitions(plugin-objs PRIVATE
 target_include_directories(plugin-objs PRIVATE
   ${CMAKE_CURRENT_BINARY_DIR}/generated
   ${SRC}/riplregistry/public
+  ${SRC}/shared
 )
 
 add_library(plugin-test-objs OBJECT

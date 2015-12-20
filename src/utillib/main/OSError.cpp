@@ -9,7 +9,7 @@ using namespace std;
 #ifdef BUILD_WINDOWS
 static_assert(sizeof(DWORD) <= sizeof(int), "Must be able to store DWORD error code in int");
 
-using MessageHandle = ScopedHandle<HLOCAL, nullptr, decltype(LocalFree)*, LocalFree>;
+using MessageHandle = ScopedHandle<HLOCAL, nullptr, decltype(LocalFree)*>;
 
 static MessageHandle FormatErrorMessage(DWORD dwError)
 {
@@ -22,7 +22,7 @@ static MessageHandle FormatErrorMessage(DWORD dwError)
         reinterpret_cast<LPSTR>(&hMessage),
         0,
         nullptr);
-    return MessageHandle(hMessage);
+    return MessageHandle(hMessage, LocalFree);
 }
 #endif
 

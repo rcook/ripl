@@ -1,6 +1,7 @@
 #include "catch.hpp"
 #include "utillib/ScopedHandle.h"
 #include <cassert>
+#include <functional>
 #include <unordered_map>
 
 using namespace std;
