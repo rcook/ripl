@@ -1,7 +1,7 @@
 #pragma once
 
-#include "interfacelib/defs.h"
-#include "interfacelib/Registrar.h"
+#include "riplregistry/defs.h"
+#include "riplregistry/Registry.h"
 
 class Op
 {

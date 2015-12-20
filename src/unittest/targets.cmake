@@ -1,11 +1,11 @@
 add_executable(unittest
   $<TARGET_OBJECTS:oplib-test-objs>
   $<TARGET_OBJECTS:riplmain-test-objs>
+  $<TARGET_OBJECTS:riplregistry-objs>
+  $<TARGET_OBJECTS:riplregistry-test-objs>
 
   $<TARGET_OBJECTS:app-objs>
   $<TARGET_OBJECTS:app-test-objs>
-  $<TARGET_OBJECTS:interfacelib-objs>
-  $<TARGET_OBJECTS:interfacelib-test-objs>
   $<TARGET_OBJECTS:plugin-objs>
   $<TARGET_OBJECTS:plugin-test-objs>
   $<TARGET_OBJECTS:utillib-objs>
@@ -19,8 +19,8 @@ if(NOT NO_USE_CATCH_MAIN)
 endif()
 target_include_directories(unittest PRIVATE
   ${SRC}/app/test
-  ${SRC}/interfacelib/test
   ${SRC}/plugin/test
+  ${SRC}/riplregistry/test
   ${SRC}/utillib/test
 )
 target_link_libraries(unittest

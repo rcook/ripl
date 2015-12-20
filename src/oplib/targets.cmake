@@ -61,6 +61,7 @@ add_library(oplib STATIC
   ${OPLIBPUBLIC}/oplib/register.h
 )
 target_include_directories(oplib PRIVATE
+  ${CMAKE_CURRENT_BINARY_DIR}/generated
   ${OPLIBPUBLIC}
   ${SRC}/riplmain
   ${SRC}/ripltool
@@ -79,10 +80,11 @@ else()
 endif()
 
 add_library(oplib-test-objs OBJECT
-  ${CMAKE_CURRENT_BINARY_DIR}/config.h
+  ${CMAKE_CURRENT_BINARY_DIR}/generated/config.h
   ${OPLIBTEST}/AddTest.cpp
 )
 target_include_directories(oplib-test-objs PRIVATE
+  ${CMAKE_CURRENT_BINARY_DIR}/generated
   ${OPLIBMAIN}
   ${SRC}/riplmain
   ${SRC}/testlib/public

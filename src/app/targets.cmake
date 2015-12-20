@@ -1,27 +1,30 @@
 add_library(app-objs OBJECT
-  ${CMAKE_CURRENT_BINARY_DIR}/config.h
+  ${CMAKE_CURRENT_BINARY_DIR}/generated/config.h
   ${SRC}/app/main/Op.cpp
   ${SRC}/app/main/Op.h
   ${SRC}/app/main/PluginManager.cpp
   ${SRC}/app/main/PluginManager.h
-  ${SRC}/app/main/RegistrarImpl.cpp
-  ${SRC}/app/main/RegistrarImpl.h
+  ${SRC}/app/main/RegistryImpl.cpp
+  ${SRC}/app/main/RegistryImpl.h
 )
 target_compile_definitions(app-objs PRIVATE
   BUILD_APP
 )
 target_include_directories(app-objs PRIVATE
-  ${SRC}/interfacelib/public
+  ${CMAKE_CURRENT_BINARY_DIR}/generated
+  ${SRC}/riplregistry/public
+  ${SRC}/shared
   ${SRC}/utillib/public
 )
 
 add_library(app-test-objs OBJECT
-  ${CMAKE_CURRENT_BINARY_DIR}/config.h
+  ${CMAKE_CURRENT_BINARY_DIR}/generated/config.h
   ${SRC}/app/test/OpTest.cpp
 )
 target_include_directories(app-test-objs PRIVATE
+  ${CMAKE_CURRENT_BINARY_DIR}/generated
   ${SRC}/app/main
-  ${SRC}/interfacelib/public
+  ${SRC}/riplregistry/public
 )
 
 add_executable(app
@@ -29,12 +32,13 @@ add_executable(app
   ${SRC}/app/main/main.cpp
 )
 target_include_directories(app PRIVATE
-  ${SRC}/interfacelib/public
+  ${CMAKE_CURRENT_BINARY_DIR}/generated
+  ${SRC}/riplregistry/public
   ${SRC}/utillib/public
 )
 target_link_libraries(app
   ${CMAKE_DL_LIBS}
-  interfacelib
+  riplregistry
   utillib
 )
 
@@ -44,3 +48,4 @@ set_target_properties(
   app
   PROPERTIES FOLDER app
 )
+

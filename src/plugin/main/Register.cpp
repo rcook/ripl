@@ -1,4 +1,4 @@
-#include "interfacelib/Registrar.h"
+#include "riplregistry/Registry.h"
 
 REGISTER_PLUGIN_OPS(registrar)
 {

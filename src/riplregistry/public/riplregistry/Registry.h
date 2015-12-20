@@ -1,7 +1,7 @@
 #pragma once
 
-#include "interfacelib/OpFunc.h"
-#include "interfacelib/defs.h"
+#include "riplregistry/OpFunc.h"
+#include "riplregistry/defs.h"
 #include <string>
 
 #define REGISTER_PLUGIN_OPS_FUNCTION_NAME "__registerPluginOps"

@@ -43,8 +43,8 @@ endif(MSVC)
 set(SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 configure_file(
-  ${SRC}/config.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/config.h
+  ${SRC}/shared/config.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/generated/config.h
 )
 
 include_directories(
@@ -56,19 +56,19 @@ include(src/oplib/targets.cmake)
 include(src/ripl/targets.cmake)
 include(src/riplmain/targets.cmake)
 include(src/riplop/targets.cmake)
+include(src/riplregistry/targets.cmake)
 include(src/ripltool/targets.cmake)
 include(src/testlib/targets.cmake)
 include(src/importresources/targets.cmake)
 
 include(src/app/targets.cmake)
-include(src/interfacelib/targets.cmake)
 include(src/plugin/targets.cmake)
 include(src/unittest/targets.cmake)
 include(src/utillib/targets.cmake)
 
 install(TARGETS
   app
-  interfacelib
+  riplregistry
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
 )
@@ -79,3 +79,4 @@ install(TARGETS
 
 enable_testing()
 add_test(NAME unittest COMMAND unittest)
+

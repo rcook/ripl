@@ -1,5 +1,5 @@
 add_library(utillib-objs OBJECT
-  ${CMAKE_CURRENT_BINARY_DIR}/config.h
+  ${CMAKE_CURRENT_BINARY_DIR}/generated/config.h
   ${SRC}/utillib/main/OSError.cpp
   ${SRC}/utillib/main/fs.cpp
   ${SRC}/utillib/main/string.cpp
@@ -15,7 +15,7 @@ target_include_directories(utillib-objs PRIVATE
 )
 
 add_library(utillib-test-objs OBJECT
-  ${CMAKE_CURRENT_BINARY_DIR}/config.h
+  ${CMAKE_CURRENT_BINARY_DIR}/generated/config.h
   ${SRC}/utillib/test/ScopedHandleTest.cpp
   ${SRC}/utillib/test/StringTest.cpp
   ${SRC}/utillib/test/TrieTest.cpp

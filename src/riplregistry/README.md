@@ -1,0 +1,2 @@
+# RIPL plugin registration API
+

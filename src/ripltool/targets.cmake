@@ -10,6 +10,7 @@ add_library(ripltool STATIC
   ${RIPLTOOLMAIN}/riplwave.h
 )
 target_include_directories(ripltool PRIVATE
+  ${CMAKE_CURRENT_BINARY_DIR}/generated
   ${SRC}/riplmain
 )
 

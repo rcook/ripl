@@ -2,7 +2,7 @@ set(RIPLMAINMAIN ${SRC}/riplmain)
 set(RIPLMAINTEST ${SRC}/riplmain/test)
 
 add_library(riplmain STATIC
-  ${CMAKE_CURRENT_BINARY_DIR}/config.h
+  ${CMAKE_CURRENT_BINARY_DIR}/generated/config.h
   ${RIPLMAINMAIN}/Error.cpp
   ${RIPLMAINMAIN}/Error.h
   ${RIPLMAINMAIN}/Image.h
@@ -29,9 +29,12 @@ add_library(riplmain STATIC
   ${RIPLMAINMAIN}/riplrgb.h
   ${RIPLMAINMAIN}/validate.h
 )
+target_include_directories(riplmain PRIVATE
+  ${CMAKE_CURRENT_BINARY_DIR}/generated
+)
 
 add_library(riplmain-test-objs OBJECT
-  ${CMAKE_CURRENT_BINARY_DIR}/config.h
+  ${CMAKE_CURRENT_BINARY_DIR}/generated/config.h
   ${CMAKE_CURRENT_BINARY_DIR}/resources.cpp
   ${CMAKE_CURRENT_BINARY_DIR}/resources.h
   ${RIPLMAINTEST}/ImageTest.cpp
@@ -40,7 +43,7 @@ add_library(riplmain-test-objs OBJECT
   ${RIPLMAINTEST}/data.h
 )
 target_include_directories(riplmain-test-objs PRIVATE
-  ${CMAKE_CURRENT_BINARY_DIR}
+  ${CMAKE_CURRENT_BINARY_DIR}/generated
   ${RIPLMAINMAIN}
   ${SRC}/testlib/public
 )

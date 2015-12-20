@@ -1,5 +1,5 @@
 #include "PluginManager.h"
-#include "RegistrarImpl.h"
+#include "RegistryImpl.h"
 #include "utillib/OSError.h"
 #include "utillib/ScopedHandle.h"
 #include "utillib/fs.h"

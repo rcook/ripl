@@ -6,6 +6,7 @@ add_library(riplop STATIC
   ${RIPLOPMAIN}/riplop.h
 )
 target_include_directories(riplop PRIVATE
+  ${CMAKE_CURRENT_BINARY_DIR}/generated
   ${SRC}/oplib/public
   ${SRC}/riplmain
   ${SRC}/ripltool

@@ -1,5 +1,6 @@
 #include "PluginManager.h"
 
+#include "common.h"
 #include "utillib/OSError.h"
 #include "utillib/ScopedHandle.h"
 #include "utillib/validate.h"

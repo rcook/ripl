@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "interfacelib/OpFunc.h"
+#include "riplregistry/OpFunc.h"
 
 static void consumeOpFunc(OpFunc func) { }
 

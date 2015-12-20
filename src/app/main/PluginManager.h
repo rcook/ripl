@@ -1,6 +1,6 @@
 #pragma once
 
-#include "interfacelib/Registrar.h"
+#include "riplregistry/Registry.h"
 #include <memory>
 #include <string>
 

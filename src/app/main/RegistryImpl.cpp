@@ -1,4 +1,4 @@
-#include "RegistrarImpl.h"
+#include "RegistryImpl.h"
 #include "utillib/validate.h"
 
 using namespace std;
