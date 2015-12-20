@@ -24,7 +24,23 @@ static string joinPaths(const string& path0, const string& path1)
 
 #if defined(BUILD_LINUX) || defined(BUILD_OSX)
 
-vector<string> getFileNames(const string& dir)
+// Usually, we'd check for DT_REG, but Travis-CI reports DT_UNKNOWN
+// for regular files. Instead, we'll consider directory entries that
+// are _not_ any of the non-DT_UNKNOWN values.
+static bool isRegularFile(const dirent* entry)
+{
+    auto type = entry->d_type;
+
+    return type != DT_FIFO &&
+        type != DT_CHR &&
+        type != DT_DIR &&
+        type != DT_BLK &&
+        type != DT_LNK &&
+        type != DT_SOCK &&
+        type != DT_WHT;
+}
+
+static vector<string> getFileNames(const string& dir)
 {
     unique_ptr<DIR, decltype(closedir)*> dirHandle(opendir(dir.data()), closedir);
     if (!dirHandle)
@@ -36,7 +52,7 @@ vector<string> getFileNames(const string& dir)
     dirent* entry;
     while ((entry = readdir(dirHandle.get())))
     {
-        if (entry->d_type == DT_REG)
+        if (isRegularFile(entry))
         {
             fileNames.push_back(dir + "/" + entry->d_name);
         }
@@ -47,7 +63,7 @@ vector<string> getFileNames(const string& dir)
 
 #else
 
-vector<string> getFileNames(const string& dir)
+static vector<string> getFileNames(const string& dir)
 {
     WIN32_FIND_DATAA findData;
 
