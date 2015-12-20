@@ -1,4 +1,5 @@
-set(OPLIBMAIN ${SRC}/oplib)
+set(OPLIBMAIN ${SRC}/oplib/main)
+set(OPLIBPUBLIC ${SRC}/oplib/public)
 set(OPLIBTEST ${SRC}/oplib/test)
 
 add_library(oplib STATIC
@@ -39,7 +40,6 @@ add_library(oplib STATIC
   ${OPLIBMAIN}/plane.cpp
   ${OPLIBMAIN}/plane.h
   ${OPLIBMAIN}/register.cpp
-  ${OPLIBMAIN}/register.h
   ${OPLIBMAIN}/siahe.cpp
   ${OPLIBMAIN}/siahe.h
   ${OPLIBMAIN}/siahe2.cpp
@@ -58,8 +58,10 @@ add_library(oplib STATIC
   ${OPLIBMAIN}/wvthrsh.h
   ${OPLIBMAIN}/zero.cpp
   ${OPLIBMAIN}/zero.h
+  ${OPLIBPUBLIC}/oplib/register.h
 )
 target_include_directories(oplib PRIVATE
+  ${OPLIBPUBLIC}
   ${SRC}/riplmain
   ${SRC}/ripltool
 )

@@ -1,4 +1,4 @@
-#include "register.h"
+#include "oplib/register.h"
 
 #include "add.h"
 #include "ahe.h"

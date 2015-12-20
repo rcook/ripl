@@ -1,6 +1,6 @@
 #pragma once
 
-#include "register.h"
+#include "oplib/register.h"
 #include <functional>
 
 /** Describes an operator */

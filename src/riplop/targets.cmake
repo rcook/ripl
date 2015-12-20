@@ -6,7 +6,7 @@ add_library(riplop STATIC
   ${RIPLOPMAIN}/riplop.h
 )
 target_include_directories(riplop PRIVATE
-  ${SRC}/oplib
+  ${SRC}/oplib/public
   ${SRC}/riplmain
   ${SRC}/ripltool
 )
