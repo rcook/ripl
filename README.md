@@ -12,18 +12,10 @@ skills have come on along a great deal since then.
 
 ## Building
 
-I've updated this project to use [CMake](http://www.cmake.org/). Run the `build`
-script from the root of the repository to build the project. This will generate
-a Unix-style Makefile and build it, for example:
-
-```bash
-$ ./build Debug
-```
-
-The original build scripts for Borland C++ 4.x, some version of Watcom C++ and
-whatever version of HP-UX was current in 1998 are provided in the `src`
-subdirectory. Fortunately, the project compiles almost completely cleanly using
-a modern toolchain.
+I've updated this project to use [CMake](http://www.cmake.org/). Run the
+`script/run-cmake` from the root of the repository to create the project's build
+system in the `cmake` subdirectory. Other scripts are provided under `script` to
+perform builds, run the unit tests and run the binary.
 
 ## Licence
 
