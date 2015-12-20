@@ -14,7 +14,7 @@ public:
     PluginManager();
     ~PluginManager();
 
-    bool tryRegisterPluginOps(const std::string& fileName, Registrar& registrar);
+    bool tryRegisterPluginOps(const std::string& fileName, Registry& registry);
 
 private:
     class Impl;

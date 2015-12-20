@@ -7,13 +7,12 @@ TEST_CASE("Registrar", "Registrar")
 {
     SECTION("basics")
     {
-        class TestRegistrar : public Registrar
+        class TestRegistry : public Registry
         {
         public:
             void registerOp(const string& name, OpFunc func) override { }
         };
 
-        TestRegistrar registrar;
+        TestRegistry registry;
     }
 }
-

@@ -3,14 +3,14 @@
 
 using namespace std;
 
-void RegistrarImpl::registerOp(const string& name, OpFunc func)
+void RegistryImpl::registerOp(const string& name, OpFunc func)
 {
 	XYZ_REQUIRE(m_names.insert(name));
 
     m_ops.emplace(name, Op(name, func));
 }
 
-int RegistrarImpl::invoke(const string& command, int x, int y) const
+int RegistryImpl::invoke(const string& command, int x, int y) const
 {
 	const auto* name = m_names.findByPrefix(command);
 	XYZ_REQUIRE(name);

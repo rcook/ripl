@@ -91,24 +91,24 @@ int main(int argc, char* const argv[])
     try
     {
         PluginManager pluginManager;
-        RegistrarImpl registrar;
+        RegistryImpl registry;
 
         string dir(getDir(argv[0]));
         string pluginDir(joinPaths(dir, "plugins"));
         for (const auto& fileName : getCandidatePluginFileNames(pluginDir))
         {
-            if (pluginManager.tryRegisterPluginOps(fileName, registrar))
+            if (pluginManager.tryRegisterPluginOps(fileName, registry))
             {
                 cout << "Registered ops in plugin " << fileName << endl;
             }
         }
 
-        for (const auto& pair : registrar.ops())
+        for (const auto& pair : registry.ops())
         {
             cout << pair.first << ": result=" << pair.second.func()(5, 6) << endl;
         }
 
-        cout << "result=" << registrar.invoke("a", 5, 6) << endl;
+        cout << "result=" << registry.invoke("a", 5, 6) << endl;
     }
     catch (const OSError& ex)
     {

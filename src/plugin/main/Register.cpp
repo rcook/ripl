@@ -1,7 +1,7 @@
 #include "riplregistry/Registry.h"
 
-REGISTER_PLUGIN_OPS(registrar)
+RIPL_REGISTER_PLUGIN_OPS(registry)
 {
-    registrar.registerOp("add", [](int x, int y) { return x + y; });
-    registrar.registerOp("multiply", [](int x, int y) { return x * y; });
+    registry.registerOp("add", [](int x, int y) { return x + y; });
+    registry.registerOp("multiply", [](int x, int y) { return x * y; });
 }

@@ -5,10 +5,10 @@
 #include "utillib/Trie.h"
 #include <unordered_map>
 
-class RegistrarImpl : public Registrar
+class RegistryImpl : public Registry
 {
 public:
-    RegistrarImpl() = default;
+    RegistryImpl() = default;
 
 public:
     void registerOp(const std::string& name, OpFunc func) override;

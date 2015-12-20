@@ -31,7 +31,7 @@ public:
     Impl() = default;
     ~Impl() = default;
 
-    bool tryRegisterPluginOps(const string& fileName, Registrar& registrar)
+    bool tryRegisterPluginOps(const string& fileName, Registry& registry)
     {
         const auto* module = tryGetModule(fileName);
         if (!module)
@@ -39,13 +39,13 @@ public:
             return false;
         }
 
-        auto func = tryGetFunc<RegisterPluginOpsFunc>(*module, REGISTER_PLUGIN_OPS_FUNCTION_NAME);
+        auto func = tryGetFunc<RegisterPluginOpsFunc>(*module, RIPL_REGISTER_PLUGIN_OPS_FUNCTION_NAME);
         if (!func)
         {
             return false;
         }
 
-        func(registrar);
+        func(registry);
         return true;
     }
 
@@ -124,7 +124,7 @@ PluginManager::~PluginManager()
 {
 }
 
-bool PluginManager::tryRegisterPluginOps(const string& fileName, Registrar& registrar)
+bool PluginManager::tryRegisterPluginOps(const string& fileName, Registry& registry)
 {
-    return m_impl->tryRegisterPluginOps(fileName, registrar);
+    return m_impl->tryRegisterPluginOps(fileName, registry);
 }
