@@ -17,10 +17,10 @@ bool sobelApplyOperator(riplGreyMap *pinputGreyMap,
         row, col, index, i, j,
         ave_above, ave_below, diff, max_diff,
         offset=neighbourhood*pinputGreyMap->width();
-    riplGrey *buf=(riplGrey *)riplCalloc(buf_size, sizeof(riplGrey)),
-        *inP=pinputGreyMap->data()+offset,
-        *outP=poutputGreyMap->data()+offset,
-        *ptr;
+    auto buf = makeArray<riplGrey>(buf_size);
+    riplGrey* inP = pinputGreyMap->data() + offset;
+    riplGrey* outP = poutputGreyMap->data() + offset;
+    riplGrey* ptr;
 
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
     RIPL_VALIDATE(neighbourhood>0)
@@ -41,43 +41,43 @@ bool sobelApplyOperator(riplGreyMap *pinputGreyMap,
             /* Find the maximum absolute difference of the cross-line averages. */
             max_diff=0;
             /* Line AEI (-45deg diagonal). */
-            for (ave_above=0, i=0, ptr=buf;
+            for (ave_above = 0, i = 0, ptr = buf.get();
                 i<window_side-1; i++, ptr+=window_side) {
                 for (j=i+1; j<window_side; j++) ave_above+=ptr[j];
             }
-            for (ave_below=0, i=1, ptr=buf+window_side; i<window_side;
+            for (ave_below = 0, i = 1, ptr = buf.get() + window_side;  i< window_side;
                 i++, ptr+=window_side) {
                 for (j=0; j<i; j++) ave_below+=ptr[j];
             }
             max_diff = abs(static_cast<long>(ave_above - ave_below));
             /* Line BEH (vertical). */
-            for (ave_above=0, i=0, ptr=buf; i<window_side;
+            for (ave_above = 0, i = 0, ptr = buf.get(); i < window_side;
                 i++, ptr+=window_side) {
                 for (j=neighbourhood+1; j<window_side; j++) ave_above+=ptr[j];
             }
-            for (ave_below=0, i=0, ptr=buf; i<window_side;
+            for (ave_below=0, i=0, ptr = buf.get(); i < window_side;
                 i++, ptr+=window_side) {
                 for (j=0; j<neighbourhood; j++) ave_below+=ptr[j];
             }
             diff = abs(static_cast<long>(ave_above - ave_below));
             if (diff>max_diff) max_diff=diff;
             /* Line CEG (-135deg diagonal). */
-            for (ave_above=0, i=1, ptr=buf+window_side; i<window_side;
+            for (ave_above = 0, i = 1, ptr = buf.get() + window_side; i < window_side;
                 i++, ptr+=window_side) {
                 for (j=window_side-i; j<window_side; j++) ave_above+=ptr[j];
             }
-            for (ave_below=0, i=0, ptr=buf; i<window_side-1;
+            for (ave_below = 0, i = 0, ptr = buf.get(); i < window_side - 1;
                 i++, ptr+=window_side) {
                 for (j=0; j<window_side-1-i; j++) ave_below+=ptr[j];
             }
             diff = abs(static_cast<long>(ave_above - ave_below));
             if (diff>max_diff) max_diff=diff;
             /* Line DEF	(horizontal). */
-            for (ave_above=0, i=0, ptr=buf; i<neighbourhood;
+            for (ave_above = 0, i = 0, ptr = buf.get(); i < neighbourhood;
                 i++, ptr+=window_side) {
                 for (j=0; j<window_side; j++) ave_above+=ptr[j];
             }
-            for (ave_below=0, i=neighbourhood+1, ptr=buf+i*window_side;
+            for (ave_below = 0, i = neighbourhood + 1, ptr = buf.get() + i * window_side;
                 i<window_side; i++, ptr+=window_side) {
                 for (j=0; j<window_side; j++) ave_below+=ptr[j];
             }
@@ -95,7 +95,7 @@ bool sobelApplyOperator(riplGreyMap *pinputGreyMap,
             }
         }
     }
-    riplFree(buf);
+
     return true;
 }
 
