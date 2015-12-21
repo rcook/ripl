@@ -1,5 +1,6 @@
 #include "riplpbm.h"
 
+#include "utillib/ScopedHandle.h"
 #include <fstream>
 #include <functional>
 #include <memory>
@@ -105,7 +106,9 @@ void netpbmSave(const char* fileName, ImageFormat format, const riplGreyMap& ima
     RIPL_VALIDATE_ARG_NAME(fileName, "fileName");
     RIPL_VALIDATE_ARG_NAME(format == ImageFormat::PgmBinary, "format");
 
-    unique_ptr<FILE, decltype(fclose)*> file(fopen(fileName, "wb"), fclose);
+    using FileHandle = ScopedHandle<FILE*, nullptr, decltype(fclose)*>;
+
+    FileHandle file(fopen(fileName, "wb"), fclose);
     RIPL_REQUIRE(file, error::IOError);
 
     fprintf(
