@@ -1,25 +1,10 @@
-/*
- *		RIPL---Richard's Image-Processing Library.
- *		Written by Richard Cook.
- *
- *		riplpars.c
- *		Source file for parsing and string matching stuff.
- *
- *		Version 1.1, last update: 20 January 1998.
- *
- *		History:
- *			20/1/98:		version 1.1.
- *			20/1/98:		first implemented
- *							(moved from riplop to separate file).
- *
- *		Copyright © 1997/8, Richard A. Cook.
- */
-#include <stdlib.h>
-#include <string.h>
-#include <limits.h>
-#include <ctype.h>
 #include "riplpars.h"
+
+#include "common.h"
 #include "ripldbug.h"
+#include <climits>
+#include <cstdlib>
+#include <cstring>
 
 /*
  * Get a value of type 'bool' from command line.
