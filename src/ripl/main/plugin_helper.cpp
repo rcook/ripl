@@ -3,9 +3,11 @@
 #include "utillib/OSError.h"
 #include "utillib/ScopedHandle.h"
 #include "utillib/fs.h"
+#include "utillib/string.h"
 #if defined(BUILD_LINUX) || defined(BUILD_OSX)
 #include <dirent.h>
 #endif
+#include <functional>
 #ifdef BUILD_WINDOWS
 #include <windows.h>
 #endif
