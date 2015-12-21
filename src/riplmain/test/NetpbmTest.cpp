@@ -17,7 +17,7 @@ TEST_CASE("Netpbm", "Netpbm")
         istream stream(&buffer);
 
         auto format = riplReadGraphicFormat(stream);
-        CHECK(format == gfPGMASCII);
+        CHECK(format == ImageFormat::PgmAscii);
     }
 
     SECTION("riplReadGraphicFormat binary PGM")
@@ -28,7 +28,7 @@ TEST_CASE("Netpbm", "Netpbm")
         istream stream(&buffer);
 
         auto format = riplReadGraphicFormat(stream);
-        CHECK(format == gfPGMBinary);
+        CHECK(format == ImageFormat::PgmBinary);
     }
 
     SECTION("riplLoadImage ASCII PGM")

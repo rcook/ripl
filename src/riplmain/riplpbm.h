@@ -3,13 +3,13 @@
 #include "riplgrey.h"
 
 /** Loads a Netpbm-format image from specified stream */
-riplGreyMap netpbmLoad(std::istream& stream, riplGraphicFormat format);
+riplGreyMap netpbmLoad(std::istream& stream, ImageFormat format);
 
 /** Loads a Netpbm-format image from specified file */
-riplGreyMap netpbmLoad(const char* fileName, riplGraphicFormat format);
+riplGreyMap netpbmLoad(const char* fileName, ImageFormat format);
 
 /** Saves specified image to specified file in specified Netpbm format */
 void netpbmSave(
     const char* fileName,
-    riplGraphicFormat format,
+    ImageFormat format,
     const riplGreyMap& image);

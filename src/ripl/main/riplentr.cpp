@@ -141,7 +141,7 @@ int runMain(const RegistryImpl& registry, const vector<string>& args)
         const_cast<const char**>(argv + 2),
         &inputGreyMap,
         &outputGreyMap);
-    riplSaveImage(argv[1], gfPGMBinary, outputGreyMap);
+    riplSaveImage(argv[1], ImageFormat::PgmBinary, outputGreyMap);
 
     // Free images
     return result ? EXIT_SUCCESS : EXIT_FAILURE;

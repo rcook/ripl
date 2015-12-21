@@ -26,18 +26,19 @@ typedef signed long riplBigGreyS;
 #define RIPL_EXECUTEERROR		(RIPL_FIRSTERRORCODE-1)
 #define RIPL_USERERROR			(RIPL_FIRSTERRORCODE-2)
 
-typedef enum tagriplGraphicFormat {
-    gfInvalid=0,
-    gfPBMASCII,
-    gfPBMBinary,
-    gfPGMASCII,
-    gfPGMBinary,
-    gfPPMASCII,
-    gfPPMBinary,
-    gfPCXAny,
-    gfPCXBasic,
-    gfPCXExtended
-} riplGraphicFormat;
+enum class ImageFormat
+{
+    Invalid,
+    PbmAscii,
+    PbmBinary,
+    PgmAscii,
+    PgmBinary,
+    PpmAscii,
+    PpmBinary,
+    PcxAny,
+    PcxBasic,
+    PcxExtended
+};
 
 /** Reads command-line arguments from the specified response file */
 std::vector<std::string> riplParseResponseFile(const std::string& fileName);

@@ -58,20 +58,20 @@ static void readPgmBinary(istream& stream, vector<riplGrey>& data)
     stream.read(reinterpret_cast<char*>(data.data()), data.size() * sizeof(riplGrey));
 }
 
-riplGreyMap netpbmLoad(istream& stream, riplGraphicFormat format)
+riplGreyMap netpbmLoad(istream& stream, ImageFormat format)
 {
-    RIPL_VALIDATE_ARG_NAME(format == gfPGMASCII || format == gfPGMBinary, "format");
+    RIPL_VALIDATE_ARG_NAME(format == ImageFormat::PgmAscii || format == ImageFormat::PgmBinary, "format");
 
     auto header = readHeader(stream);
 
     vector<riplGrey> data(header.m_width * header.m_height);
     switch (format)
     {
-    case gfPGMASCII: // P2
+    case ImageFormat::PgmAscii: // P2
         readPgmAscii(stream, data);
         break;
 
-    case gfPGMBinary: // P5
+    case ImageFormat::PgmBinary: // P5
         readPgmBinary(stream, data);
         break;
 
@@ -84,15 +84,15 @@ riplGreyMap netpbmLoad(istream& stream, riplGraphicFormat format)
     return riplGreyMap(header.m_width, header.m_height, move(data));
 }
 
-riplGreyMap netpbmLoad(const char* fileName, riplGraphicFormat format)
+riplGreyMap netpbmLoad(const char* fileName, ImageFormat format)
 {
     RIPL_VALIDATE_ARG_NAME(fileName, "fileName");
-    RIPL_VALIDATE_ARG_NAME(format == gfPGMASCII || format == gfPGMBinary, "format");
+    RIPL_VALIDATE_ARG_NAME(format == ImageFormat::PgmAscii || format == ImageFormat::PgmBinary, "format");
 
     ifstream stream(fileName, ios::in | ios::binary);
     RIPL_REQUIRE(stream, error::IOError);
 
-    if (format == gfPGMBinary)
+    if (format == ImageFormat::PgmBinary)
     {
         RIPL_REQUIRE(stream.peek() == EOF, error::InvalidFileFormat);
     }
@@ -100,10 +100,10 @@ riplGreyMap netpbmLoad(const char* fileName, riplGraphicFormat format)
     return netpbmLoad(stream, format);
 }
 
-void netpbmSave(const char* fileName, riplGraphicFormat format, const riplGreyMap& image)
+void netpbmSave(const char* fileName, ImageFormat format, const riplGreyMap& image)
 {
     RIPL_VALIDATE_ARG_NAME(fileName, "fileName");
-    RIPL_VALIDATE_ARG_NAME(format == gfPGMBinary, "format");
+    RIPL_VALIDATE_ARG_NAME(format == ImageFormat::PgmBinary, "format");
 
     unique_ptr<FILE, decltype(fclose)*> file(fopen(fileName, "wb"), fclose);
     RIPL_REQUIRE(file, error::IOError);
