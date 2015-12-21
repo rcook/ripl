@@ -1,11 +1,11 @@
 add_executable(unittest
   $<TARGET_OBJECTS:oplib-test-objs>
+  $<TARGET_OBJECTS:ripl-objs>
+  $<TARGET_OBJECTS:ripl-test-objs>
   $<TARGET_OBJECTS:riplmain-test-objs>
   $<TARGET_OBJECTS:riplregistry-objs>
   $<TARGET_OBJECTS:riplregistry-test-objs>
 
-  $<TARGET_OBJECTS:app-objs>
-  $<TARGET_OBJECTS:app-test-objs>
   $<TARGET_OBJECTS:plugin-objs>
   $<TARGET_OBJECTS:plugin-test-objs>
   $<TARGET_OBJECTS:utillib-objs>
@@ -34,3 +34,4 @@ set_target_properties(
   unittest
   PROPERTIES FOLDER unittest
 )
+

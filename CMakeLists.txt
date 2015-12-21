@@ -60,13 +60,12 @@ include(src/ripltool/targets.cmake)
 include(src/testlib/targets.cmake)
 include(src/importresources/targets.cmake)
 
-include(src/app/targets.cmake)
 include(src/plugin/targets.cmake)
 include(src/unittest/targets.cmake)
 include(src/utillib/targets.cmake)
 
 install(TARGETS
-  app
+  ripl
   riplregistry
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
