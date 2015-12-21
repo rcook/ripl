@@ -5,6 +5,8 @@ set(RIPLREGISTRYTEST ${SRC}/riplregistry/test)
 add_library(riplregistry-objs OBJECT
   ${CMAKE_CURRENT_BINARY_DIR}/generated/config.h
   ${RIPLREGISTRYMAIN}/Registry.cpp
+  ${RIPLREGISTRYPUBLIC}/riplregistry/ExecuteFunc.h
+  ${RIPLREGISTRYPUBLIC}/riplregistry/HelpFunc.h
   ${RIPLREGISTRYPUBLIC}/riplregistry/OpFunc.h
   ${RIPLREGISTRYPUBLIC}/riplregistry/Registry.h
   ${RIPLREGISTRYPUBLIC}/riplregistry/defs.h

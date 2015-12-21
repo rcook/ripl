@@ -64,6 +64,7 @@ target_include_directories(oplib PRIVATE
   ${CMAKE_CURRENT_BINARY_DIR}/generated
   ${OPLIBPUBLIC}
   ${SRC}/riplmain
+  ${SRC}/riplregistry/public
   ${SRC}/ripltool
 )
 if(MSVC)
