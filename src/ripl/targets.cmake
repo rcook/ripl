@@ -9,8 +9,6 @@ add_library(ripl-objs OBJECT
   ${RIPLMAIN}/plugin_helper.h
   ${RIPLMAIN}/riplentr.cpp
   ${RIPLMAIN}/riplentr.h
-  ${RIPLMAIN}/riplop.cpp
-  ${RIPLMAIN}/riplop.h
 )
 
 target_include_directories(ripl-objs PRIVATE

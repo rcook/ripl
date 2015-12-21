@@ -14,16 +14,13 @@ void RegistryImpl::registerOp(
     m_ops.emplace(name, Op(name, description, executeFunc, helpFunc));
 }
 
-int RegistryImpl::execute(
-    const string& command,
-    unsigned argc,
-    const char** argv,
-    riplGreyMap* input,
-    riplGreyMap* output) const
+const Op* RegistryImpl::findOpByPrefix(const string& prefix) const
 {
-    const auto* name = m_names.findByPrefix(command);
-    XYZ_REQUIRE(name);
+    const auto* name = m_names.findByPrefix(prefix);
+    if (!name)
+    {
+        return nullptr;
+    }
 
-    const auto& op = m_ops.at(*name);
-    return op.executeFunc()(argc, argv, input, output);
+    return &m_ops.at(*name);
 }

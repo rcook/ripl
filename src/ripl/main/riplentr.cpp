@@ -2,26 +2,79 @@
 
 #include "RegistryImpl.h"
 #include "ripl.h"
-#include "riplop.h"
 #include "Error.h"
 #include <cstring>
 #include <functional>
+#include <iomanip>
+#include <iostream>
 #include <memory>
+#include <sstream>
 
 using namespace std;
 using namespace ripl;
 
-/* Prototypes of static functions. */
 using ResponseFileArgPtr = unique_ptr<char*, function<void(char**)>>;
 
-static ResponseFileArgPtr parseResponseFile(const char* fileName, unsigned* argCount);
+static ResponseFileArgPtr parseResponseFile(
+    const char* fileName,
+    unsigned* argCount)
+{
+    return ResponseFileArgPtr(
+        riplParseResponseFile(fileName, argCount),
+        [](char** p) { riplFree(p); });
+}
 
-static bool execute_arguments(
-    const unordered_map<string, Op>& ops,
+// Execute all operators specified on command line in order
+// passing the output from each operator as the input to the next
+static bool executePipeline(
+    const RegistryImpl& registry,
     unsigned argc,
-    char **argv,
-    riplGreyMap* input,
-    riplGreyMap *output);
+    const char** argv,
+    riplGreyMap *input,
+    riplGreyMap *output)
+{
+    for (; ;)
+    {
+        const char* command = argv[0];
+        const Op* op = registry.findOpByPrefix(command);
+        if (!op)
+        {
+            cerr << "Unrecognized operator \"" << command << "\"" << endl;
+            return false;
+        }
+
+        RIPL_VALIDATE_OP_GREYMAPS(input, output);
+        RIPL_VALIDATE(argv);
+
+        auto result = op->execute(argc - 1, argv + 1, input, output);
+        if (result <= RIPL_FIRSTERRORCODE)
+        {
+            switch (result)
+            {
+            case RIPL_EXECUTEERROR:
+                riplMessage(
+                    itError,
+                    "An error occurred executing operator '%s'!\n",
+                    op->name().data());
+                return false;
+
+            case RIPL_USERERROR:
+            case RIPL_PARAMERROR:
+            default:
+                return false;
+            }
+        }
+
+        argv += result + 1;
+        argc -= result + 1;
+        if (argc < 1)
+        {
+            return true;
+        }
+
+        input->swap(*output);
+    }
+}
 
 int runMain(const RegistryImpl& registry, const vector<string>& args)
 {
@@ -85,10 +138,10 @@ int runMain(const RegistryImpl& registry, const vector<string>& args)
     riplGreyMap outputGreyMap(inputGreyMap.width(), inputGreyMap.height());
 
     // Execute command-line arguments
-    bool result = execute_arguments(
-        registry.ops(),
+    bool result = executePipeline(
+        registry,
         argc - 2,
-        argv + 2,
+        const_cast<const char**>(argv + 2),
         &inputGreyMap,
         &outputGreyMap);
     riplSaveImage(argv[1], gfPGMBinary, outputGreyMap);
@@ -97,60 +150,25 @@ int runMain(const RegistryImpl& registry, const vector<string>& args)
     return result ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
-static ResponseFileArgPtr parseResponseFile(
-    const char* fileName,
-    unsigned* argCount)
-{
-    return ResponseFileArgPtr(
-        riplParseResponseFile(fileName, argCount),
-        [](char** p) { riplFree(p); });
-}
-
-/*
- *		Function takes the remaining command-line arguments and
- *		parses them further---executing the relevant operators,
- *		passing pointers to the input and output greymaps.
- *		This function also multiple operators to be specified on
- *		the single command line and passes the output of each operator
- *		as the input to the input of the next, allowing several
- *		transforms to be applied to a single image.
- */
-static bool execute_arguments(
-    const unordered_map<string, Op>& ops,
-    unsigned argc,
-    char** argv,
-    riplGreyMap *input,
-    riplGreyMap *output)
-{
-    unsigned args_read;
-
-    for (; ;)
-    {
-        args_read = riplOperatorExecute(
-            ops,
-            argc,
-            const_cast<const char**>(argv),
-            input,
-            output);
-        if (args_read < 1)
-        {
-            return false;
-        }
-
-        argv += args_read;
-        argc -= args_read;
-        if (argc < 1)
-        {
-            return true;
-        }
-
-        input->swap(*output);
-    }
-}
-
 void showHelp(const RegistryImpl& registry)
 {
-    const char* opSummary = riplGetOperatorSummary(registry.ops());
+    unsigned maximumNameLength = 0;
+    for (const auto& pair : registry.ops())
+    {
+        auto nameLength = pair.second.name().size();
+        if (nameLength > maximumNameLength)
+        {
+            maximumNameLength = nameLength;
+        }
+    }
+
+    ostringstream os;
+    for (const auto& pair : registry.ops())
+    {
+        os << "  " << left << setw(maximumNameLength) << pair.second.name();
+        os << "  " << pair.second.description();
+        os << "\n";
+    }
 
     riplMessage(
         itInfo,
@@ -163,12 +181,13 @@ void showHelp(const RegistryImpl& registry)
         "Where <op> is one of the following:\n"
         "%s\n"
         "For help on a specific operation:\n\n"
-        "Usage: " RIPL_EXENAME " ? <op>\n", opSummary);
+        "Usage: " RIPL_EXENAME " ? <op>\n",
+        os.str().data());
 }
 
 void showOpHelp(const Op& op)
 {
-    const char* helpText = op.helpFunc()();
+    auto helpText = op.renderHelp();
 
     riplMessage(
         itInfo,
@@ -178,5 +197,5 @@ void showOpHelp(const Op& op)
         "Help for '%s':\n"
         "Usage: " RIPL_EXENAME " " RIPL_CMDLINE " %s",
         op.name().data(),
-        helpText);
+        helpText.data());
 }

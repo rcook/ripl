@@ -19,12 +19,7 @@ public:
 
     const std::unordered_map<std::string, Op>& ops() const { return m_ops; }
 
-    int execute(
-        const std::string& command,
-        unsigned argc,
-        const char** argv,
-        riplGreyMap* input,
-        riplGreyMap* output) const;
+    const Op* findOpByPrefix(const std::string& prefix) const;
 
 private:
     Trie<char, std::string> m_names;

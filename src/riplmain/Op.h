@@ -17,8 +17,8 @@ public:
 
     const std::string& name() const { return m_name; }
     const std::string& description() const { return m_description; }
-    const ExecuteFunc& executeFunc() const { return m_executeFunc; }
-    const HelpFunc& helpFunc() const { return m_helpFunc; }
+    int execute(unsigned argc, const char** argv, riplGreyMap* input, riplGreyMap* output) const;
+    std::string renderHelp() const;
 
 private:
     const std::string m_name;

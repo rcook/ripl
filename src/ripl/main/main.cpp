@@ -89,20 +89,21 @@ static int executeArgs(const string& executableFileName, queue<string>& args)
         }
         else
         {
-            for (const auto& name : remainingArgs)
+            for (const auto& command : remainingArgs)
             {
-                auto iter = registry.ops().find(name);
-                if (iter == registry.ops().end())
+                const Op* op = registry.findOpByPrefix(command);
+                if (op)
                 {
-                    cerr << "Unrecognized operator \"" << name << "\"" << endl;
-                    return EXIT_FAILURE;
+                    showOpHelp(*op);
                 }
                 else
                 {
-                    showOpHelp(iter->second);
+                    cerr << "Unrecognized operator \"" << command << "\"" << endl;
+                    return EXIT_FAILURE;
                 }
             }
         }
+
         return EXIT_SUCCESS;
 
     case CommandMode::RunOperator:
