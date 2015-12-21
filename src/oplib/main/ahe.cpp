@@ -1,9 +1,8 @@
 #include "ahe.h"
 
 #include "alloc.h"
-#include <string.h>
-#include <math.h>
-#include <float.h>
+#include <cfloat>
+#include <cmath>
 
 /* Local defines, enums and structs. */
 #define BSHIFT								(BIG_TMP_BITS-HLB)
@@ -53,11 +52,13 @@ static int parse_arguments(aheConfig *pconfig,
 static struct {
     riplGreyMap *pinput_greymap;
     riplGreyMap *poutput_greymap;
-    riplMidGreyS *pmid_image;
-    riplBigGreyS *pbig_image;
-    long *not_filt;
-    long *filt;
-    float *he_series, *cum_series, *addback_series;
+    Array<riplMidGreyS> pmid_image;
+    Array<riplBigGreyS> pbig_image;
+    Array<long> not_filt;
+    Array<long> filt;
+    Array<float> he_series;
+    Array<float> cum_series;
+    Array<float> addback_series;
     float he_fraction;
 
     int filtShifts, notFiltShifts;
@@ -84,23 +85,13 @@ bool aheApplyOperator(riplGreyMap *pinputGreyMap,
     data.poutput_greymap=poutputGreyMap;
 
     /* Allocate memory for accumulator images, series and filter series. */
-    data.he_series=(float *)riplCalloc(pconfig->num_terms, sizeof(float));
-    RIPL_VALIDATE(data.he_series)
-    data.cum_series=(float *)riplCalloc(pconfig->num_terms, sizeof(float));
-    RIPL_VALIDATE(data.cum_series)
-    data.addback_series=(float *)riplCalloc(pconfig->num_terms, sizeof(float));
-    RIPL_VALIDATE(data.addback_series)
-    data.filt=(long *)riplCalloc(RIPL_GREY_LEVELS , sizeof(long));
-    RIPL_VALIDATE(data.filt)
-    data.not_filt=(long *)riplCalloc(RIPL_GREY_LEVELS , sizeof(long));
-    RIPL_VALIDATE(data.not_filt)
-    data.pbig_image=(riplBigGreyS *)riplCalloc((data.pinput_greymap->width()+1)
-        *(data.pinput_greymap->height()+1), sizeof(riplBigGreyS));
-    RIPL_VALIDATE(data.pbig_image)
-    data.pmid_image=(riplMidGreyS *)riplCalloc(data.pinput_greymap->size(),
-        sizeof(riplMidGreyS));
-    RIPL_VALIDATE(data.pmid_image)
-    memset(data.pmid_image, 0, data.pinput_greymap->size()*sizeof(riplMidGreyS));
+    data.he_series = makeArray<float>(pconfig->num_terms);
+    data.cum_series = makeArray<float>(pconfig->num_terms);
+    data.addback_series = makeArray<float>(pconfig->num_terms);
+    data.filt = makeArray<long>(RIPL_GREY_LEVELS);
+    data.not_filt = makeArray<long>(RIPL_GREY_LEVELS);
+    data.pbig_image = makeArray<riplBigGreyS>((data.pinput_greymap->width() + 1) * (data.pinput_greymap->height() + 1));
+    data.pmid_image = makeArray<riplMidGreyS>(data.pinput_greymap->size(), 0);
 
     /* Initialize series. */
     initialize_series(pconfig);
@@ -109,28 +100,32 @@ bool aheApplyOperator(riplGreyMap *pinputGreyMap,
     for (i=0; i<pconfig->num_terms; i++) {
         set_tables(pconfig, i, ttCos);
         if (data.accShift<MAX_BIT_SHIFT) {
-            filter(data.pinput_greymap->data(),
-                data.pbig_image,
-                data.filt,
+            filter(
+                data.pinput_greymap->data(),
+                data.pbig_image.get(),
+                data.filt.get(),
                 data.pinput_greymap->width(),
                 data.pinput_greymap->height(),
-                pconfig->win_w/2, pconfig->win_h/2);
+                pconfig->win_w / 2,
+                pconfig->win_h / 2);
             accumulate();
         }
         set_tables(pconfig, i, ttSin);
         if (data.accShift<MAX_BIT_SHIFT) {
-            filter(data.pinput_greymap->data(),
-                data.pbig_image,
-                data.filt,
+            filter(
+                data.pinput_greymap->data(),
+                data.pbig_image.get(),
+                data.filt.get(),
                 data.pinput_greymap->width(),
                 data.pinput_greymap->height(),
-                pconfig->win_w/2, pconfig->win_h/2);
+                pconfig->win_w / 2,
+                pconfig->win_h / 2);
             accumulate();
         }
     }
     offset=(riplMidGreyS)ldexp(255-((double)255.0-2*pconfig->inoffset)
         *pconfig->addback_fraction+1, ACC_BITS-OUT_BITS);
-    accP=data.pmid_image;
+    accP=data.pmid_image.get();
     outP=data.poutput_greymap->data();
     for (r=0; r<data.poutput_greymap->height(); r++) {
         for (c=0; c<data.poutput_greymap->width(); c++, accP++) {
@@ -141,14 +136,6 @@ bool aheApplyOperator(riplGreyMap *pinputGreyMap,
         }
     }
     
-    /* Deallocate all temporary/series memory. */
-    riplFree(data.addback_series);
-    riplFree(data.cum_series);
-    riplFree(data.he_series);
-    riplFree(data.pmid_image);
-    riplFree(data.pbig_image);
-    riplFree(data.not_filt);
-    riplFree(data.filt);
     return true;
 }
 
@@ -368,8 +355,8 @@ static void accumulate(void) {
     shift=data.accShift;
     offset=1<<(data.accShift-1);
 
-    bgP=data.pbig_image;
-    agP=data.pmid_image;
+    bgP=data.pbig_image.get();
+    agP=data.pmid_image.get();
     igP=data.pinput_greymap->data();
     for (i=0; i<data.pinput_greymap->size(); i++) {
         temp=data.not_filt[*igP]*(*bgP>>BSHIFT)+offset;
