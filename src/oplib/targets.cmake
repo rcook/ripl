@@ -2,6 +2,7 @@ set(OPLIBMAIN ${SRC}/oplib/main)
 set(OPLIBTEST ${SRC}/oplib/test)
 
 add_library(oplib-objs OBJECT
+  ${SHAREDSRCS}
   ${OPLIBMAIN}/add.cpp
   ${OPLIBMAIN}/add.h
   ${OPLIBMAIN}/ahe.cpp
@@ -58,20 +59,19 @@ add_library(oplib-objs OBJECT
   ${OPLIBMAIN}/zero.cpp
   ${OPLIBMAIN}/zero.h
 )
+
 target_include_directories(oplib-objs PRIVATE
-  ${CMAKE_CURRENT_BINARY_DIR}/generated
   ${SRC}/riplmain
   ${SRC}/riplregistry/public
   ${SRC}/ripltool
-  ${SRC}/shared
 )
 
 add_library(oplib-test-objs OBJECT
-  ${CMAKE_CURRENT_BINARY_DIR}/generated/config.h
+  ${SHAREDSRCS}
   ${OPLIBTEST}/AddTest.cpp
 )
+
 target_include_directories(oplib-test-objs PRIVATE
-  ${CMAKE_CURRENT_BINARY_DIR}/generated
   ${OPLIBMAIN}
   ${SRC}/riplmain
   ${SRC}/testlib/public
@@ -80,6 +80,7 @@ target_include_directories(oplib-test-objs PRIVATE
 add_library(oplib SHARED
   $<TARGET_OBJECTS:oplib-objs>
 )
+
 if(MSVC)
   target_link_libraries(oplib
     riplmain

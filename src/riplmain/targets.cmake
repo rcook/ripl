@@ -2,7 +2,7 @@ set(RIPLMAINMAIN ${SRC}/riplmain)
 set(RIPLMAINTEST ${SRC}/riplmain/test)
 
 add_library(riplmain STATIC
-  ${CMAKE_CURRENT_BINARY_DIR}/generated/config.h
+  ${SHAREDSRCS}
   ${RIPLMAINMAIN}/Error.cpp
   ${RIPLMAINMAIN}/Error.h
   ${RIPLMAINMAIN}/Image.h
@@ -33,29 +33,26 @@ add_library(riplmain STATIC
   ${RIPLMAINMAIN}/riplrgb.h
   ${RIPLMAINMAIN}/validate.h
 )
+
 # $TODO: Eliminate circular dependency between riplmain and riplregistry!
 target_include_directories(riplmain PRIVATE
-  ${CMAKE_CURRENT_BINARY_DIR}/generated
   ${SRC}/riplregistry/public
-  ${SRC}/shared
   ${SRC}/utillib/public
 )
 
 add_library(riplmain-test-objs OBJECT
-  ${CMAKE_CURRENT_BINARY_DIR}/generated/config.h
-  ${CMAKE_CURRENT_BINARY_DIR}/resources.cpp
-  ${CMAKE_CURRENT_BINARY_DIR}/resources.h
+  ${CMAKE_CURRENT_BINARY_DIR}/generated/resources.cpp
+  ${CMAKE_CURRENT_BINARY_DIR}/generated/resources.h
   ${RIPLMAINTEST}/ImageTest.cpp
   ${RIPLMAINTEST}/NetpbmTest.cpp
   ${RIPLMAINTEST}/OpTest.cpp
   ${RIPLMAINTEST}/data.cpp
   ${RIPLMAINTEST}/data.h
 )
+
 target_include_directories(riplmain-test-objs PRIVATE
-  ${CMAKE_CURRENT_BINARY_DIR}/generated
   ${RIPLMAINMAIN}
   ${SRC}/riplregistry/public
-  ${SRC}/shared
   ${SRC}/testlib/public
 )
 

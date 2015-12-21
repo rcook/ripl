@@ -2,7 +2,7 @@
 
 #include "config.h"
 
-#ifdef _MSC_VER
+#ifdef BUILD_WINDOWS
 #   define DLLEXPORT __declspec(dllexport)
 #   define DLLIMPORT __declspec(dllimport)
 #else

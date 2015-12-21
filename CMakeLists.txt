@@ -7,7 +7,7 @@ include(RequireCpp11)
 include(SetCompilerFlags)
 
 cmake_minimum_required(VERSION 2.8.12)
-project(Ripl)
+project(ripl)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER zzzCMakePredefinedTargets)
@@ -42,6 +42,10 @@ else()
 endif(MSVC)
 
 set(SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(SHAREDSRCS
+  ${CMAKE_CURRENT_BINARY_DIR}/generated/config.h
+  ${SRC}/shared/common.h
+)
 
 configure_file(
   ${SRC}/shared/config.h.in
@@ -49,7 +53,8 @@ configure_file(
 )
 
 include_directories(
-  ${CMAKE_CURRENT_BINARY_DIR}
+  ${CMAKE_CURRENT_BINARY_DIR}/generated
+  ${SRC}/shared
   third-party/catch/single_include
 )
 
@@ -65,7 +70,6 @@ include(src/utillib/targets.cmake)
 
 install(TARGETS
   ripl
-  riplregistry
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
 )

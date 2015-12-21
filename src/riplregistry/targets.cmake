@@ -2,48 +2,37 @@ set(RIPLREGISTRYMAIN ${SRC}/riplregistry/main)
 set(RIPLREGISTRYPUBLIC ${SRC}/riplregistry/public)
 set(RIPLREGISTRYTEST ${SRC}/riplregistry/test)
 
-add_library(riplregistry-objs OBJECT
-  ${CMAKE_CURRENT_BINARY_DIR}/generated/config.h
+add_library(riplregistry STATIC
+  ${SHAREDSRCS}
   ${RIPLREGISTRYMAIN}/Registry.cpp
   ${RIPLREGISTRYPUBLIC}/riplregistry/ExecuteFunc.h
   ${RIPLREGISTRYPUBLIC}/riplregistry/HelpFunc.h
   ${RIPLREGISTRYPUBLIC}/riplregistry/OpFunc.h
   ${RIPLREGISTRYPUBLIC}/riplregistry/Registry.h
-  ${RIPLREGISTRYPUBLIC}/riplregistry/defs.h
 )
-target_compile_definitions(riplregistry-objs PRIVATE
-  BUILD_RIPLREGISTRY
-)
-target_include_directories(riplregistry-objs PRIVATE
-  ${CMAKE_CURRENT_BINARY_DIR}/generated
+
+target_compile_definitions(riplregistry PRIVATE BUILD_RIPLREGISTRY)
+
+target_include_directories(riplregistry PRIVATE
   ${RIPLREGISTRYPUBLIC}
   ${SRC}/riplmain
-  ${SRC}/shared
 )
 
 add_library(riplregistry-test-objs OBJECT
-  ${CMAKE_CURRENT_BINARY_DIR}/generated/config.h
+  ${SHAREDSRCS}
   ${RIPLREGISTRYTEST}/OpFuncTest.cpp
   ${RIPLREGISTRYTEST}/RegistryTest.cpp
 )
-target_compile_definitions(riplregistry-test-objs PRIVATE
-  BUILD_RIPLREGISTRY
-)
+
+target_compile_definitions(riplregistry-test-objs PRIVATE BUILD_RIPLREGISTRY)
+
 target_include_directories(riplregistry-test-objs PRIVATE
-  ${CMAKE_CURRENT_BINARY_DIR}/generated
   ${RIPLREGISTRYPUBLIC}
   ${SRC}/riplmain
-  ${SRC}/shared
-)
-
-add_library(riplregistry SHARED
-  $<TARGET_OBJECTS:riplregistry-objs>
 )
 
 set_target_properties(
-  riplregistry-objs
   riplregistry-test-objs
   riplregistry
   PROPERTIES FOLDER riplregistry
 )
-

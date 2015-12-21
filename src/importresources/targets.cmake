@@ -10,8 +10,8 @@ add_executable(importresources
 )
 
 add_custom_command(
-  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/resources.cpp ${CMAKE_CURRENT_BINARY_DIR}/resources.h
-  COMMAND importresources ${RESOURCES} ${CMAKE_CURRENT_BINARY_DIR}
+  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/generated/resources.cpp ${CMAKE_CURRENT_BINARY_DIR}/generated/resources.h
+  COMMAND importresources ${RESOURCES} ${CMAKE_CURRENT_BINARY_DIR}/generated
   DEPENDS
     ${RESOURCES}/casablanca.ascii.pgm
     ${RESOURCES}/casablanca.dat

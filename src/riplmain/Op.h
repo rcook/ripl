@@ -3,7 +3,6 @@
 #include "riplregistry/ExecuteFunc.h"
 #include "riplregistry/HelpFunc.h"
 #include "riplregistry/Registry.h"
-#include "riplregistry/defs.h"
 
 class Op
 {
