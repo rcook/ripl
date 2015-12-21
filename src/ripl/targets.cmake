@@ -5,6 +5,8 @@ add_library(ripl-objs OBJECT
   ${SHAREDSRCS}
   ${RIPLMAIN}/PluginManager.cpp
   ${RIPLMAIN}/PluginManager.h
+  ${RIPLMAIN}/plugin_helper.cpp
+  ${RIPLMAIN}/plugin_helper.h
   ${RIPLMAIN}/riplentr.cpp
   ${RIPLMAIN}/riplentr.h
   ${RIPLMAIN}/riplop.cpp

@@ -1,19 +1,12 @@
 #pragma once
 
-#include "riplgrey.h"
-#include "RegistryImpl.h"
+#include <string>
+#include <vector>
 
-int riplMain1(
-    const RegistryImpl& registry,
-    unsigned argc,
-    char **argv);
+class RegistryImpl;
 
-int riplMain2(
-    const RegistryImpl& registry,
-    unsigned argc,
-    char** argv,
-    riplGreyMap* pinputGreyMap,
-    riplGreyMap* poutputGreyMap);
+/* Processes command-line arguments and executes operators */
+int runMain(const RegistryImpl& registry, const std::vector<std::string>& args);
 
 /** Shows general help information */
 void showHelp(const RegistryImpl& registry);

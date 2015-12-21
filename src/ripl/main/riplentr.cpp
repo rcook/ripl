@@ -1,5 +1,6 @@
 #include "riplentr.h"
 
+#include "RegistryImpl.h"
 #include "ripl.h"
 #include "riplop.h"
 #include "Error.h"
@@ -22,21 +23,26 @@ static bool execute_arguments(
     riplGreyMap* input,
     riplGreyMap *output);
 
-static bool help_arguments(
+static bool showOpHelp(
     const unordered_map<string, Op>& ops,
     unsigned argc,
     char **argv);
 
-/*
- *		riplMain1
- *		Main (command-line) entrypoint for programme.
- *		Function parses command-line arguments and response-file
- *		input as necessary. It also loads and saves the input and
- *		output image files. DO NOT PASS EXECUTABLE NAME AS
- *		FIRST ARGUMENT!
- */
-int riplMain1(const RegistryImpl& registry, unsigned argc, char **argv)
+int runMain(const RegistryImpl& registry, const vector<string>& args)
 {
+    using CharPtr = char*;
+
+    // $TODO: Eliminate this ridiculous code
+    vector<string> argsCopy(args);
+    unique_ptr<CharPtr[]> pointers = unique_ptr<CharPtr[]>(new CharPtr[argsCopy.size()]);
+    for (size_t i = 0; i < argsCopy.size(); ++i)
+    {
+        pointers[i] = const_cast<CharPtr>(args[i].data());
+    }
+
+    unsigned argc = argsCopy.size();
+    char** argv = pointers.get();
+
     ResponseFileArgPtr respArgv;
     if (argc > 0 && **argv == '@')
     {
@@ -82,7 +88,7 @@ int riplMain1(const RegistryImpl& registry, unsigned argc, char **argv)
         }
         else
         {
-            if (!help_arguments(registry.ops(), argc - 1, argv + 1))
+            if (!showOpHelp(registry.ops(), argc - 1, argv + 1))
             {
                 return EXIT_FAILURE;
             }
@@ -119,91 +125,6 @@ int riplMain1(const RegistryImpl& registry, unsigned argc, char **argv)
 
     // Free images
     return result ? EXIT_SUCCESS : EXIT_FAILURE;
-}
-
-/*
- *		riplMain2
- *		Alternative entrypoint for programme.
- *		Function parses command-line arguments and response-file
- *		input as necessary. It also loads and saves the input and
- *		output image files. Input and output greymaps are passed
- *		as additional arguments. DO NOT PASS EXECUTABLE NAME AS
- *		FIRST ARGUMENT!
- */
-int riplMain2(
-    const RegistryImpl& registry,
-    unsigned argc,
-    char** argv,
-    riplGreyMap* pinputGreyMap,
-    riplGreyMap* poutputGreyMap)
-{
-    RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap);
-
-    ResponseFileArgPtr respArgv;
-    if (argc > 0 && **argv == '@')
-    {
-        // Take command line from a response file
-        if (argc > 1)
-        {
-            showHelp(registry);
-            return EXIT_FAILURE;
-        }
-
-        if (!riplFileExists(*argv + 1))
-        {
-            riplMessage(itError, "Response file %s does not exist!\n", *argv + 1);
-            return EXIT_FAILURE;
-        }
-
-        respArgv = parseResponseFile(*argv + 1, &argc);
-        if (!respArgv)
-        {
-            riplMessage(itError,
-                "Error reading response file %s!\n"
-                "[File error, line too long or file too long]\n", *argv + 1);
-            return EXIT_FAILURE;
-        }
-
-        argv = respArgv.get();
-    }
-
-    if (argc == 0)
-    {
-        // No arguments supplied
-        showHelp(registry);
-        return EXIT_FAILURE;
-    }
-
-    if (strcmp(argv[0], "?") == 0)
-    {
-        // User is requesting some help
-        if (argc < 2)
-        {
-            showHelp(registry);
-            return EXIT_FAILURE;
-        }
-        else
-        {
-            riplMessage(
-                itInfo,
-                RIPL_APPNAME " Version " RIPL_VERSION ", built " RIPL_BUILD_DATE "\n"
-                RIPL_DESCRIPTION "\n"
-                "Written by " RIPL_AUTHOR "\n\n");
-            if (!help_arguments(registry.ops(), argc - 1, argv + 1))
-            {
-                return EXIT_FAILURE;
-            }
-        }
-        return EXIT_SUCCESS;
-    }
-
-    // Execute command-line arguments
-    if (!execute_arguments(registry.ops(), argc, argv, pinputGreyMap, poutputGreyMap))
-    {
-        return EXIT_FAILURE;
-    }
-
-    return EXIT_SUCCESS;
 }
 
 static ResponseFileArgPtr parseResponseFile(
@@ -258,7 +179,7 @@ static bool execute_arguments(
 }
 
 /* Displays help screens of operators specified on command line. */
-static bool help_arguments(
+static bool showOpHelp(
     const unordered_map<string, Op>& ops,
     unsigned argc,
     char** argv)

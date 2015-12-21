@@ -1,135 +1,130 @@
 #include "PluginManager.h"
 #include "RegistryImpl.h"
 #include "riplentr.h"
+#include "plugin_helper.h"
 #include "utillib/OSError.h"
-#include "utillib/ScopedHandle.h"
 #include "utillib/fs.h"
-#include "utillib/string.h"
-#include <cstring>
-#if defined(BUILD_LINUX) || defined(BUILD_OSX)
-#include <dirent.h>
-#endif
 #include <iostream>
-#ifdef BUILD_WINDOWS
-#include <windows.h>
-#endif
+#include <queue>
+#include <string>
 
 using namespace std;
 
-#ifdef BUILD_WINDOWS
-
-static vector<string> getCandidatePluginFileNames(const string& pluginDir)
+enum class CommandMode
 {
-    using FindHandle = ScopedHandle<HANDLE, INVALID_HANDLE_VALUE, decltype(FindClose)*>;
+    Invalid,
+    ShowHelp,
+    RunOperator
+};
 
-    vector<string> fileNames;
-
-    string filter(pluginDir + "\\*.dll");
-    WIN32_FIND_DATA findData;
-    FindHandle handle(FindFirstFile(filter.data(), &findData), FindClose);
-    if (!handle)
-    {
-        if (GetLastError() == ERROR_PATH_NOT_FOUND)
-        {
-            return fileNames;
-        }
-
-        OSError::throwCurrentError("FindFirstFile");
-    }
-
-    do 
-    {
-        fileNames.emplace_back(joinPaths(pluginDir, findData.cFileName));
-    }
-    while (FindNextFile(handle.get(), &findData));
-
-    return fileNames;
+static bool isDebugCommand(const string& arg)
+{
+    return arg.compare("--debug") == 0;
 }
 
-#else
-
-static vector<string> getFileNames(const string& dir, function<bool(const dirent*)> predicate)
+static bool isPluginDirCommand(const string& arg)
 {
-    using DirHandle = ScopedHandle<DIR*, nullptr, decltype(closedir)*>;
+    return arg.compare("--plugin-dir") == 0;
+}
 
-    vector<string> fileNames;
+static bool isHelpCommand(const string& arg)
+{
+    return arg.compare("-h") == 0 ||
+        arg.compare("--help") == 0 ||
+        arg.compare("-?") == 0;
+}
 
-    DirHandle handle(opendir(dir.data()), closedir);
-    if (!handle)
+static int executeArgs(const string& executableFileName, queue<string>& args)
+{
+    string pluginDir;
+    auto commandMode = CommandMode::Invalid;
+
+    for (; !args.empty(); args.pop())
     {
-        return fileNames;
-    }
+        const auto& arg = args.front();
 
-    dirent* entry;
-    while ((entry = readdir(handle.get())))
-    {
-        if (predicate(entry))
+        if (isHelpCommand(arg))
         {
-            fileNames.emplace_back(joinPaths(dir, entry->d_name));
+            commandMode = CommandMode::ShowHelp;
+        }
+        if (isPluginDirCommand(arg))
+        {
+            args.pop();
+            pluginDir = args.front();
+        }
+        else
+        {
+            commandMode = CommandMode::RunOperator;
+            break;
         }
     }
 
-    return fileNames;
-}
-
-static vector<string> getCandidatePluginFileNames(const string& pluginDir)
-{
-    return getFileNames(pluginDir, [](const dirent* entry)
+    if (pluginDir.empty())
     {
-        return entry->d_type == DT_REG
-            && stringBeginsWith(entry->d_name, "lib")
-#ifdef BUILD_LINUX
-            && stringEndsWith(entry->d_name, ".so");
-#else
-            && stringEndsWith(entry->d_name, ".dylib");
-#endif
-    });
-}
+        pluginDir = joinPaths(getDir(executableFileName), "plugins");
+    }
 
-#endif
+    PluginManager pluginManager;
+    RegistryImpl registry;
+    for (const auto& fileName : getCandidatePluginFileNames(pluginDir))
+    {
+        pluginManager.tryRegisterPluginOps(fileName, registry);
+    }
 
-static bool isHelpCommand(const char* arg)
-{
-    return strcmp(arg, "-h") == 0 ||
-        strcmp(arg, "--help") == 0 ||
-        strcmp(arg, "-?") == 0;
+    switch (commandMode)
+    {
+    case CommandMode::ShowHelp:
+        showHelp(registry);
+        return EXIT_SUCCESS;
+
+    case CommandMode::RunOperator:
+    {
+        vector<string> remainingArgs;
+        for (; !args.empty(); args.pop())
+        {
+            remainingArgs.emplace_back(args.front());
+        }
+
+        return runMain(registry, remainingArgs);
+    }
+
+    default:
+        showHelp(registry);
+        return EXIT_FAILURE;
+    }
 }
 
 int main(int argc, char* argv[])
 {
-    try
+    string executableFileName(argv[0]);
+    queue<string> args;
+    for (int i = 1; i < argc; ++i)
     {
-        PluginManager pluginManager;
-        RegistryImpl registry;
-
-        string dir(getDir(argv[0]));
-        string pluginDir(joinPaths(dir, "plugins"));
-        for (const auto& fileName : getCandidatePluginFileNames(pluginDir))
-        {
-            pluginManager.tryRegisterPluginOps(fileName, registry);
-        }
-
-        if (argc == 2 && isHelpCommand(argv[1]))
-        {
-            showHelp(registry);
-            return EXIT_SUCCESS;
-        }
-        else
-        {
-            return riplMain1(registry, argc - 1, argv + 1);
-        }
-
+        args.emplace(argv[i]);
     }
-    catch (const OSError& ex)
+
+    if (!args.empty() && isDebugCommand(args.front()))
     {
-        cout
-            << "Unhandled OS error:" << endl
-            << "  code: " << ex.code() << endl
-            << "  osFunctionName: " << ex.osFunctionName() << endl
-            << "  message: " << ex.what() << endl;
+        args.pop();
+        executeArgs(executableFileName, args);
     }
-    catch (const runtime_error& ex)
+    else
     {
-        cout << "Unhandled exception: " << ex.what() << endl;
+        try
+        {
+            executeArgs(executableFileName, args);
+        }
+        catch (const OSError& ex)
+        {
+            cout
+                << "Unhandled OS error:" << endl
+                << "  code: " << ex.code() << endl
+                << "  osFunctionName: " << ex.osFunctionName() << endl
+                << "  message: " << ex.what() << endl;
+        }
+        catch (const runtime_error& ex)
+        {
+            cout << "Unhandled exception: " << ex.what() << endl;
+        }
     }
 }
