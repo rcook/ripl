@@ -10,15 +10,14 @@ bool wmraApplyOperator(riplGreyMap *pinputGreyMap,
     float threshold) {
 
     riplwtFilter filter;
-    float *vector;
     unsigned long i;
 
-    RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
-    RIPL_VALIDATE_IS_POWER_OF_2(pinputGreyMap->height())
-    RIPL_VALIDATE_IS_POWER_OF_2(pinputGreyMap->width())
+    RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap);
+    RIPL_VALIDATE_IS_POWER_OF_2(pinputGreyMap->height());
+    RIPL_VALIDATE_IS_POWER_OF_2(pinputGreyMap->width());
 
     /* Copy input image grey levels into newly allocated float vector. */
-    vector=(float *)riplCalloc(pinputGreyMap->size(), sizeof(float));
+    auto vector = makeArray<float>(pinputGreyMap->size());
     for (i=0; i<pinputGreyMap->size(); i++)
         vector[i]=(float)pinputGreyMap->data()[i];
 
@@ -26,7 +25,8 @@ bool wmraApplyOperator(riplGreyMap *pinputGreyMap,
     riplwtSetupFilter(filter_type, &filter);
 
     /* Perform wavelet transform. */
-    riplwt2DWT(vector,
+    riplwt2DWT(
+        vector.get(),
         pinputGreyMap->height(),
         pinputGreyMap->width(),
         ttForward,
@@ -39,8 +39,6 @@ bool wmraApplyOperator(riplGreyMap *pinputGreyMap,
             ? 0:RIPL_MAX_GREY);
     }
 
-    /* Tidy up. */
-    riplFree(vector);
     return true;
 }
 
