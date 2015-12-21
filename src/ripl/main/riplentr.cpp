@@ -1,23 +1,4 @@
-/*
- *		RIPL---Richard's Image-Processing Library.
- *		Written by Richard Cook.
- *
- *		riplentr.c
- *		Main source file for main Ripl entrypoint.
- *
- *		Version 1.1, last update: 3 February 1998.
- *
- *		History:
- *			3/1/98:			made cosmetic changes to help screens.
- *			24/1/98:		fixed response file bug.
- *			24/1/98:		renamed RIPL_PARSEERROR to RIPL_PARAMERROR.
- *			20/1/98:		version 1.1 (renamed riplentr).
- *			31/12/97:	modified included file list.
- *			16/12/97:	modified execute_arguments.
- *			27/11/97:	last major update.
- *
- *		Copyright © 1997/8, Richard A. Cook.
- */
+#include "riplentr.h"
 
 #include "ripl.h"
 #include "riplop.h"
@@ -35,49 +16,18 @@ using ResponseFileArgPtr = unique_ptr<char*, function<void(char**)>>;
 static ResponseFileArgPtr parseResponseFile(const char* fileName, unsigned* argCount);
 
 static bool execute_arguments(
-    const vector<riplOperator>& ops,
+    const unordered_map<string, Op>& ops,
     unsigned argc,
     char **argv,
     riplGreyMap* input,
     riplGreyMap *output);
 
 static bool help_arguments(
-    const vector<riplOperator>& ops,
+    const unordered_map<string, Op>& ops,
     unsigned argc,
     char **argv);
 
-static void general_help(const vector<riplOperator>& ops);
-
-class RegistrarImpl : public Registrar
-{
-public:
-    RegistrarImpl(const RegistrarImpl&) = delete;
-    RegistrarImpl& operator=(const RegistrarImpl&) = delete;
-
-public:
-    RegistrarImpl() = default;
-    ~RegistrarImpl() = default;
-
-    void registerOp(
-        const char* name,
-        const char* description,
-        ExecuteFunc executeFunc,
-        HelpFunc helpFunc) override;
-
-    const vector<riplOperator>& ops() const { return m_ops; }
-
-private:
-    vector<riplOperator> m_ops;
-};
-
-void RegistrarImpl::registerOp(
-    const char* name,
-    const char* description,
-    ExecuteFunc executeFunc,
-    HelpFunc helpFunc)
-{
-    m_ops.emplace_back(name, description, executeFunc, helpFunc);
-}
+static void general_help(const unordered_map<string, Op>& ops);
 
 /*
  *		riplMain1
@@ -87,18 +37,15 @@ void RegistrarImpl::registerOp(
  *		output image files. DO NOT PASS EXECUTABLE NAME AS
  *		FIRST ARGUMENT!
  */
-int riplMain1(unsigned argc, char **argv)
+int riplMain1(const RegistryImpl& registry, unsigned argc, char **argv)
 {
-    RegistrarImpl registrar;
-    oplib_registerOps(registrar);
-
     ResponseFileArgPtr respArgv;
     if (argc > 0 && **argv == '@')
     {
         // Take command line from a response file
         if (argc > 1)
         {
-            general_help(registrar.ops());
+            general_help(registry.ops());
             return EXIT_FAILURE;
         }
 
@@ -123,7 +70,7 @@ int riplMain1(unsigned argc, char **argv)
     if (argc == 0)
     {
         // No arguments supplied
-        general_help(registrar.ops());
+        general_help(registry.ops());
         return EXIT_FAILURE;
     }
 
@@ -132,12 +79,12 @@ int riplMain1(unsigned argc, char **argv)
         // User is requesting some help
         if (argc < 2)
         {
-            general_help(registrar.ops());
+            general_help(registry.ops());
             return EXIT_FAILURE;
         }
         else
         {
-            if (!help_arguments(registrar.ops(), argc - 1, argv + 1))
+            if (!help_arguments(registry.ops(), argc - 1, argv + 1))
             {
                 return EXIT_FAILURE;
             }
@@ -147,7 +94,7 @@ int riplMain1(unsigned argc, char **argv)
 
     if (argc < 3)
     {
-        general_help(registrar.ops());
+        general_help(registry.ops());
         return EXIT_FAILURE;
     }
 
@@ -165,7 +112,7 @@ int riplMain1(unsigned argc, char **argv)
 
     // Execute command-line arguments
     bool result = execute_arguments(
-        registrar.ops(),
+        registry.ops(),
         argc - 2,
         argv + 2,
         &inputGreyMap,
@@ -185,12 +132,14 @@ int riplMain1(unsigned argc, char **argv)
  *		as additional arguments. DO NOT PASS EXECUTABLE NAME AS
  *		FIRST ARGUMENT!
  */
-int riplMain2(unsigned argc, char** argv, riplGreyMap* pinputGreyMap, riplGreyMap* poutputGreyMap)
+int riplMain2(
+    const RegistryImpl& registry,
+    unsigned argc,
+    char** argv,
+    riplGreyMap* pinputGreyMap,
+    riplGreyMap* poutputGreyMap)
 {
     RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap);
-    
-    RegistrarImpl registrar;
-    oplib_registerOps(registrar);
 
     ResponseFileArgPtr respArgv;
     if (argc > 0 && **argv == '@')
@@ -198,7 +147,7 @@ int riplMain2(unsigned argc, char** argv, riplGreyMap* pinputGreyMap, riplGreyMa
         // Take command line from a response file
         if (argc > 1)
         {
-            general_help(registrar.ops());
+            general_help(registry.ops());
             return EXIT_FAILURE;
         }
 
@@ -223,7 +172,7 @@ int riplMain2(unsigned argc, char** argv, riplGreyMap* pinputGreyMap, riplGreyMa
     if (argc == 0)
     {
         // No arguments supplied
-        general_help(registrar.ops());
+        general_help(registry.ops());
         return EXIT_FAILURE;
     }
 
@@ -232,7 +181,7 @@ int riplMain2(unsigned argc, char** argv, riplGreyMap* pinputGreyMap, riplGreyMa
         // User is requesting some help
         if (argc < 2)
         {
-            general_help(registrar.ops());
+            general_help(registry.ops());
             return EXIT_FAILURE;
         }
         else
@@ -242,7 +191,7 @@ int riplMain2(unsigned argc, char** argv, riplGreyMap* pinputGreyMap, riplGreyMa
                 RIPL_APPNAME " Version " RIPL_VERSION ", built " RIPL_DATE "\n"
                 RIPL_DESCRIPTION "\n"
                 "Written by " RIPL_AUTHOR "\n\n");
-            if (!help_arguments(registrar.ops(), argc - 1, argv + 1))
+            if (!help_arguments(registry.ops(), argc - 1, argv + 1))
             {
                 return EXIT_FAILURE;
             }
@@ -251,7 +200,7 @@ int riplMain2(unsigned argc, char** argv, riplGreyMap* pinputGreyMap, riplGreyMa
     }
 
     // Execute command-line arguments
-    if (!execute_arguments(registrar.ops(), argc, argv, pinputGreyMap, poutputGreyMap))
+    if (!execute_arguments(registry.ops(), argc, argv, pinputGreyMap, poutputGreyMap))
     {
         return EXIT_FAILURE;
     }
@@ -278,7 +227,7 @@ static ResponseFileArgPtr parseResponseFile(
  *		transforms to be applied to a single image.
  */
 static bool execute_arguments(
-    const vector<riplOperator>& ops,
+    const unordered_map<string, Op>& ops,
     unsigned argc,
     char** argv,
     riplGreyMap *input,
@@ -312,7 +261,7 @@ static bool execute_arguments(
 
 /* Displays help screens of operators specified on command line. */
 static bool help_arguments(
-    const vector<riplOperator>& ops,
+    const unordered_map<string, Op>& ops,
     unsigned argc,
     char** argv)
 {
@@ -328,7 +277,7 @@ static bool help_arguments(
 }
 
 /* Displays general help information. */
-static void general_help(const vector<riplOperator>& ops)
+static void general_help(const unordered_map<string, Op>& ops)
 {
     riplMessage(
         itInfo,

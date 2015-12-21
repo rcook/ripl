@@ -1,8 +1,7 @@
 set(OPLIBMAIN ${SRC}/oplib/main)
-set(OPLIBPUBLIC ${SRC}/oplib/public)
 set(OPLIBTEST ${SRC}/oplib/test)
 
-add_library(oplib STATIC
+add_library(oplib-objs OBJECT
   ${OPLIBMAIN}/add.cpp
   ${OPLIBMAIN}/add.h
   ${OPLIBMAIN}/ahe.cpp
@@ -58,14 +57,28 @@ add_library(oplib STATIC
   ${OPLIBMAIN}/wvthrsh.h
   ${OPLIBMAIN}/zero.cpp
   ${OPLIBMAIN}/zero.h
-  ${OPLIBPUBLIC}/oplib/register.h
 )
-target_include_directories(oplib PRIVATE
+target_include_directories(oplib-objs PRIVATE
   ${CMAKE_CURRENT_BINARY_DIR}/generated
-  ${OPLIBPUBLIC}
   ${SRC}/riplmain
   ${SRC}/riplregistry/public
   ${SRC}/ripltool
+  ${SRC}/shared
+)
+
+add_library(oplib-test-objs OBJECT
+  ${CMAKE_CURRENT_BINARY_DIR}/generated/config.h
+  ${OPLIBTEST}/AddTest.cpp
+)
+target_include_directories(oplib-test-objs PRIVATE
+  ${CMAKE_CURRENT_BINARY_DIR}/generated
+  ${OPLIBMAIN}
+  ${SRC}/riplmain
+  ${SRC}/testlib/public
+)
+
+add_library(oplib SHARED
+  $<TARGET_OBJECTS:oplib-objs>
 )
 if(MSVC)
   target_link_libraries(oplib
@@ -80,18 +93,8 @@ else()
   )
 endif()
 
-add_library(oplib-test-objs OBJECT
-  ${CMAKE_CURRENT_BINARY_DIR}/generated/config.h
-  ${OPLIBTEST}/AddTest.cpp
-)
-target_include_directories(oplib-test-objs PRIVATE
-  ${CMAKE_CURRENT_BINARY_DIR}/generated
-  ${OPLIBMAIN}
-  ${SRC}/riplmain
-  ${SRC}/testlib/public
-)
-
 set_target_properties(
+  oplib-objs
   oplib-test-objs
   oplib
   PROPERTIES FOLDER oplib

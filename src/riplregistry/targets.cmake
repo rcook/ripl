@@ -17,6 +17,7 @@ target_compile_definitions(riplregistry-objs PRIVATE
 target_include_directories(riplregistry-objs PRIVATE
   ${CMAKE_CURRENT_BINARY_DIR}/generated
   ${RIPLREGISTRYPUBLIC}
+  ${SRC}/riplmain
   ${SRC}/shared
 )
 
@@ -31,6 +32,7 @@ target_compile_definitions(riplregistry-test-objs PRIVATE
 target_include_directories(riplregistry-test-objs PRIVATE
   ${CMAKE_CURRENT_BINARY_DIR}/generated
   ${RIPLREGISTRYPUBLIC}
+  ${SRC}/riplmain
   ${SRC}/shared
 )
 

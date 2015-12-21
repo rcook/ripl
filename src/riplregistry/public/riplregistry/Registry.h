@@ -1,6 +1,7 @@
 #pragma once
 
-#include "riplregistry/OpFunc.h"
+#include "riplregistry/ExecuteFunc.h"
+#include "riplregistry/HelpFunc.h"
 #include "riplregistry/defs.h"
 #include <string>
 
@@ -14,7 +15,11 @@ protected:
     Registry();
 
 public:
-    virtual void registerOp(const std::string& name, OpFunc func) = 0;
+    virtual void registerOp(
+        const char* name,
+        const char* description,
+        ExecuteFunc executeFunc,
+        HelpFunc helpFunc) = 0;
 };
 
 using RegisterPluginOpsFunc = void(*)(Registry&);

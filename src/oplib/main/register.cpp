@@ -1,5 +1,3 @@
-#include "oplib/register.h"
-
 #include "add.h"
 #include "ahe.h"
 #include "binmorph.h"
@@ -26,6 +24,7 @@
 #include "wmra.h"
 #include "wvthrsh.h"
 #include "zero.h"
+#include "riplregistry/Registry.h"
 #include <functional>
 
 using namespace std;
@@ -37,32 +36,32 @@ static int convertNewOperator(unsigned argc, const char** argv, riplGreyMap* inp
     return executeFunc(*output, vector<string>(argv, argv + argc), *input);
 }
 
-void oplib_registerOps(Registrar& registrar)
+RIPL_REGISTER_PLUGIN_OPS(registry)
 {
-    registrar.registerOp("add", "add images together pixel by pixel", convertNewOperator<addExecute>, addHelp);
-    registrar.registerOp("ahe", "perform adaptive histogram equalization", aheExecute, aheHelp);
-    registrar.registerOp("binmorph", "apply binary morphological operators", binmorphExecute, binmorphHelp);
-    registrar.registerOp("carve", "carve image up", carveExecute, carveHelp);
-    registrar.registerOp("conv", "perform 2D convolution", convExecute, convHelp);
-    registrar.registerOp("dllconv", "perform 2D convolution (alternative syntax)", dllconvExecute, dllconvHelp);
-    registrar.registerOp("fftfilt", "apply FFT-based filter", fftfiltExecute, fftfiltHelp);
-    registrar.registerOp("gaussian", "perform Gaussian smoothing", gaussExecute, gaussHelp);
-    registrar.registerOp("glmorph", "apply grey-level morphological operators", glmorphExecute, glmorphHelp);
-    registrar.registerOp("globalhe", "apply global histogram equalization to image", globalHEExecute, globalHEHelp);
-    registrar.registerOp("magsynth", "perform Fourier-magnitude-only synthesis", magsynthExecute, magsynthHelp);
-    registrar.registerOp("marrhildreth", "perform Marr-Hildreth edge detection", marrhildExecute, marrhildHelp);
-    registrar.registerOp("mask", "apply mask to image", maskExecute, maskHelp);
-    registrar.registerOp("median", "apply median filter", medianExecute, medianHelp);
-    registrar.registerOp("nop", "no-op filter", nopExecute, nopHelp);
-    registrar.registerOp("phasesynth", "perform Fourier-phase-only synthesis", phasesynthExecute, phasesynthHelp);
-    registrar.registerOp("plane", "extract bitplane from image", planeExecute, planeHelp);
-    registrar.registerOp("siahe", "apply subimage-based AHE to image", siaheExecute, siaheHelp);
-    registrar.registerOp("siahe2", "apply extended raised-cosine subimage AHE to image", siahe2Execute, siahe2Help);
-    registrar.registerOp("sobel", "perform Sobel edge detection", sobelExecute, sobelHelp);
-    registrar.registerOp("spectrum", "obtain normalized spectrum of image", spectrumExecute, spectrumHelp);
-    registrar.registerOp("test", "test RConsole", testExecute, testHelp);
-    registrar.registerOp("threshold", "threshold image", thresholdExecute, thresholdHelp);
-    registrar.registerOp("wavethresh", "reconstruct after wavelet thresholding", wavethreshExecute, wavethreshHelp);
-    registrar.registerOp("wmra", "wavelet-based multiresolution analysis", wmraExecute, wmraHelp);
-    registrar.registerOp("zero", "apply zeroing operator to image", zeroExecute, zeroHelp);
+    registry.registerOp("add", "add images together pixel by pixel", convertNewOperator<addExecute>, addHelp);
+    registry.registerOp("ahe", "perform adaptive histogram equalization", aheExecute, aheHelp);
+    registry.registerOp("binmorph", "apply binary morphological operators", binmorphExecute, binmorphHelp);
+    registry.registerOp("carve", "carve image up", carveExecute, carveHelp);
+    registry.registerOp("conv", "perform 2D convolution", convExecute, convHelp);
+    registry.registerOp("dllconv", "perform 2D convolution (alternative syntax)", dllconvExecute, dllconvHelp);
+    registry.registerOp("fftfilt", "apply FFT-based filter", fftfiltExecute, fftfiltHelp);
+    registry.registerOp("gaussian", "perform Gaussian smoothing", gaussExecute, gaussHelp);
+    registry.registerOp("glmorph", "apply grey-level morphological operators", glmorphExecute, glmorphHelp);
+    registry.registerOp("globalhe", "apply global histogram equalization to image", globalHEExecute, globalHEHelp);
+    registry.registerOp("magsynth", "perform Fourier-magnitude-only synthesis", magsynthExecute, magsynthHelp);
+    registry.registerOp("marrhildreth", "perform Marr-Hildreth edge detection", marrhildExecute, marrhildHelp);
+    registry.registerOp("mask", "apply mask to image", maskExecute, maskHelp);
+    registry.registerOp("median", "apply median filter", medianExecute, medianHelp);
+    registry.registerOp("nop", "no-op filter", nopExecute, nopHelp);
+    registry.registerOp("phasesynth", "perform Fourier-phase-only synthesis", phasesynthExecute, phasesynthHelp);
+    registry.registerOp("plane", "extract bitplane from image", planeExecute, planeHelp);
+    registry.registerOp("siahe", "apply subimage-based AHE to image", siaheExecute, siaheHelp);
+    registry.registerOp("siahe2", "apply extended raised-cosine subimage AHE to image", siahe2Execute, siahe2Help);
+    registry.registerOp("sobel", "perform Sobel edge detection", sobelExecute, sobelHelp);
+    registry.registerOp("spectrum", "obtain normalized spectrum of image", spectrumExecute, spectrumHelp);
+    registry.registerOp("test", "test RConsole", testExecute, testHelp);
+    registry.registerOp("threshold", "threshold image", thresholdExecute, thresholdHelp);
+    registry.registerOp("wavethresh", "reconstruct after wavelet thresholding", wavethreshExecute, wavethreshHelp);
+    registry.registerOp("wmra", "wavelet-based multiresolution analysis", wmraExecute, wmraHelp);
+    registry.registerOp("zero", "apply zeroing operator to image", zeroExecute, zeroHelp);
 }

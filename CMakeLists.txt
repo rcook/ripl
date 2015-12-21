@@ -31,6 +31,7 @@ check_function_exists(strupr HAVE_STRUPR)
 if(MSVC)
   set(WARNING_FLAGS "")
   set(WARNING_FLAGS "${WARNING_FLAGS} -wd4018") # "signed/unsigned mismatch"
+  set(WARNING_FLAGS "${WARNING_FLAGS} -wd4180") # "qualifier applied to function type has no meaning; ignored"
   set(WARNING_FLAGS "${WARNING_FLAGS} -wd4244") # "conversion from 'double' to 'int', possible loss of data"
   set(WARNING_FLAGS "${WARNING_FLAGS} -wd4305") # "truncation from 'double' to 'float'"
   set(WARNING_FLAGS "${WARNING_FLAGS} -wd4838") # "conversion from 'double' to 'float' requires a narrowing conversion"
@@ -59,8 +60,6 @@ include(src/riplregistry/targets.cmake)
 include(src/ripltool/targets.cmake)
 include(src/testlib/targets.cmake)
 include(src/importresources/targets.cmake)
-
-include(src/plugin/targets.cmake)
 include(src/unittest/targets.cmake)
 include(src/utillib/targets.cmake)
 
@@ -71,10 +70,9 @@ install(TARGETS
   LIBRARY DESTINATION lib
 )
 install(TARGETS
-  plugin
+  oplib
   DESTINATION bin/plugins
 )
 
 enable_testing()
 add_test(NAME unittest COMMAND unittest)
-

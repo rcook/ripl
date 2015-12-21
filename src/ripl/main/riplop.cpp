@@ -1,26 +1,7 @@
-/*
- *		RIPL---Richard's Image-Processing Library.
- *		Written by Richard Cook.
- *
- *		riplop.c
- *		Source file for operator stuff.
- *
- *		Version 1.1, last update: 3 February 1998.
- *
- *		History:
- *			3/1/98:			made cosmetic changes to help screens.
- *			24/1/98:		renamed RIPL_PARSEERROR to RIPL_PARAMERROR.
- *			21/1/98:		added RIPL_EXECUTEERROR message box output.
- *			20/1/98:		move many functions into new file 'riplpars.c'.
- *			19/1/98:		insert Watcom compiler preprocessor stuff
- *							(to suppress compiler warnings).
- *			27/11/97:	first implemented.
- *
- *		Copyright © 1997/8, Richard A. Cook.
- */
-
-#include "ripldbug.h"
 #include "riplop.h"
+
+#include "Op.h"
+#include "ripldbug.h"
 #include "riplmsg.h"
 #include "riplpars.h"
 #include <cstdio>
@@ -32,7 +13,7 @@ using namespace std;
 #define BUFFER_LEN		2048
 
 /* Return list of all operators and one-line help. */
-const char* riplGetOperatorSummary(const vector<riplOperator>& ops)
+const char* riplGetOperatorSummary(const unordered_map<string, Op>& ops)
 {
     static char buffer[BUFFER_LEN];
     static const char spaces[]="                                        ";
@@ -40,18 +21,18 @@ const char* riplGetOperatorSummary(const vector<riplOperator>& ops)
     char *buf_ptr;
 
     max_len=0;
-    for (const auto& op : ops)
+    for (const auto& pair : ops)
     {
-        if (strlen(op.name) > max_len)
+        if (pair.second.name().size() > max_len)
         {
-            max_len = strlen(op.name);
+            max_len = pair.second.name().size();
         }
     }
 
     buf_ptr=buffer;
-    for (const auto& op: ops)
+    for (const auto& pair : ops)
     {
-        unsigned len = strlen(op.name);
+        unsigned len = pair.second.name().size();
 
         int prefixLength = 0; // $TODO: Figure this out using trie
         if (prefixLength > 0)
@@ -60,44 +41,36 @@ const char* riplGetOperatorSummary(const vector<riplOperator>& ops)
                 buf_ptr,
                 "   %.*s(%s)",
                 prefixLength,
-                op.name,
-                op.name + prefixLength);
+                pair.second.name().data(),
+                pair.second.name().data() + prefixLength);
             len+=2;
         }
         else
         {
-            buf_ptr += sprintf(buf_ptr, "   %s", op.name);
+            buf_ptr += sprintf(buf_ptr, "   %s", pair.second.name().data());
         }
 
-        buf_ptr += sprintf(buf_ptr, "%.*s%s\n", max_len + 4 - len, spaces, op.comment);
+        buf_ptr += sprintf(buf_ptr, "%.*s%s\n", max_len + 4 - len, spaces, pair.second.description().data());
     }
 
     return buffer;
 }
 
 /* Display help for a specific operator. */
-bool riplOperatorHelp(const vector<riplOperator>& ops, const char *name)
+bool riplOperatorHelp(const unordered_map<string, Op>& ops, const char* name)
 {
-    for (const auto& op : ops)
+    for (const auto& pair : ops)
     {
-        if (riplMatch(name, op.name, 0/*prefixLength*/))
+        if (riplMatch(name, pair.second.name().data(), 0/*prefixLength*/))
         {
-            if (op.help)
-            {
-                const char* help_message = op.help();
-                if (help_message) {
-                    riplMessage(itInfo,
-                        RIPL_APPNAME " Version " RIPL_VERSION ", built " RIPL_DATE "\n"
-                        RIPL_DESCRIPTION "\n"
-                        "Written by " RIPL_AUTHOR "\n\n"
-                        "Help for '%s':\n"
-                        "Usage: " RIPL_EXENAME " " RIPL_CMDLINE " %s",
-                        name,
-                        help_message);
-                    return true;
-                }
-            }
-            riplMessage(itInfo, "No help available for operator '%s'.\n", name);
+            riplMessage(itInfo,
+                RIPL_APPNAME " Version " RIPL_VERSION ", built " RIPL_DATE "\n"
+                RIPL_DESCRIPTION "\n"
+                "Written by " RIPL_AUTHOR "\n\n"
+                "Help for '%s':\n"
+                "Usage: " RIPL_EXENAME " " RIPL_CMDLINE " %s",
+                name,
+                pair.second.helpFunc()());
             return true;
         }
     }
@@ -107,7 +80,7 @@ bool riplOperatorHelp(const vector<riplOperator>& ops, const char *name)
 
 /* Execute the next part of the command line. */
 unsigned riplOperatorExecute(
-    const vector<riplOperator>& ops,
+    const unordered_map<string, Op>& ops,
     unsigned argc,
     const char** argv,
     riplGreyMap* input,
@@ -118,34 +91,29 @@ unsigned riplOperatorExecute(
     RIPL_VALIDATE_OP_GREYMAPS(input, output)
     RIPL_VALIDATE(argv)
 
-    for (const auto& op : ops)
+    for (const auto& pair : ops)
     {
-        if (riplMatch(argv[0], op.name, 0/*prefixLength*/))
+        if (riplMatch(argv[0], pair.second.name().data(), 0/*prefixLength*/))
         {
-            if (op.execute)
+            args_read = pair.second.executeFunc()(argc - 1, argv + 1, input, output);
+            if (args_read <= RIPL_FIRSTERRORCODE)
             {
-                args_read = op.execute(argc - 1, argv + 1, input, output);
-                if (args_read <= RIPL_FIRSTERRORCODE)
-                {
-                    switch (args_read) {
-                    case RIPL_EXECUTEERROR:
-                        riplMessage(itError,
-                            "An error occurred executing operator '%s'!\n",
-                            op.name);
-                        break;
-                    case RIPL_USERERROR:
-                    case RIPL_PARAMERROR:
-                    default:
-                        break;
-                    }
-                    return 0;
+                switch (args_read) {
+                case RIPL_EXECUTEERROR:
+                    riplMessage(itError,
+                        "An error occurred executing operator '%s'!\n",
+                        pair.second.name().data());
+                    break;
+                case RIPL_USERERROR:
+                case RIPL_PARAMERROR:
+                default:
+                    break;
                 }
-                return args_read+1;
+                return 0;
             }
-            return 1;
+            return args_read+1;
         }
     }
     riplMessage(itError, "Unrecognized operator '%s'!\n", argv[0]);
     return 0;
 }
-

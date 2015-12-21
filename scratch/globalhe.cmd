@@ -1,2 +1,2 @@
 @echo off
-..\cmake\Debug\ripl.exe lena.pgm output\lena-globalhe.pgm globalhe
+..\cmake\Debug\install\bin\ripl.exe ..\resources\lena.pgm output\lena-globalhe.pgm globalhe

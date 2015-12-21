@@ -10,7 +10,7 @@ TEST_CASE("Registrar", "Registrar")
         class TestRegistry : public Registry
         {
         public:
-            void registerOp(const string& name, OpFunc func) override { }
+            void registerOp(const char* name, const char* description, ExecuteFunc executeFunc, HelpFunc helpFunc) override { }
         };
 
         TestRegistry registry;

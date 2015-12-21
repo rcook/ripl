@@ -11,9 +11,20 @@ public:
     RegistryImpl() = default;
 
 public:
-    void registerOp(const std::string& name, OpFunc func) override;
+    void registerOp(
+        const char* name,
+        const char* description,
+        ExecuteFunc executeFunc,
+        HelpFunc helpFunc) override;
+
     const std::unordered_map<std::string, Op>& ops() const { return m_ops; }
-    int invoke(const std::string& command, int x, int y) const;
+
+    int execute(
+        const std::string& command,
+        unsigned argc,
+        const char** argv,
+        riplGreyMap* input,
+        riplGreyMap* output) const;
 
 private:
     Trie<char, std::string> m_names;

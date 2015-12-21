@@ -98,20 +98,10 @@ int main(int argc, char* argv[])
         string pluginDir(joinPaths(dir, "plugins"));
         for (const auto& fileName : getCandidatePluginFileNames(pluginDir))
         {
-            if (pluginManager.tryRegisterPluginOps(fileName, registry))
-            {
-                cout << "Registered ops in plugin " << fileName << endl;
-            }
+            pluginManager.tryRegisterPluginOps(fileName, registry);
         }
 
-        for (const auto& pair : registry.ops())
-        {
-            cout << pair.first << ": result=" << pair.second.func()(5, 6) << endl;
-        }
-
-        cout << "result=" << registry.invoke("a", 5, 6) << endl;
-
-        return riplMain1(argc - 1, argv + 1);
+        return riplMain1(registry, argc - 1, argv + 1);
     }
     catch (const OSError& ex)
     {
