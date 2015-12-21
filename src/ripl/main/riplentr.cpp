@@ -23,11 +23,6 @@ static bool execute_arguments(
     riplGreyMap* input,
     riplGreyMap *output);
 
-static bool showOpHelp(
-    const unordered_map<string, Op>& ops,
-    unsigned argc,
-    char **argv);
-
 int runMain(const RegistryImpl& registry, const vector<string>& args)
 {
     using CharPtr = char*;
@@ -69,31 +64,6 @@ int runMain(const RegistryImpl& registry, const vector<string>& args)
         }
 
         argv = respArgv.get();
-    }
-
-    if (argc == 0)
-    {
-        // No arguments supplied
-        showHelp(registry);
-        return EXIT_FAILURE;
-    }
-
-    if (strcmp(argv[0], "?") == 0)
-    {
-        // User is requesting some help
-        if (argc < 2)
-        {
-            showHelp(registry);
-            return EXIT_FAILURE;
-        }
-        else
-        {
-            if (!showOpHelp(registry.ops(), argc - 1, argv + 1))
-            {
-                return EXIT_FAILURE;
-            }
-        }
-        return EXIT_SUCCESS;
     }
 
     if (argc < 3)
@@ -178,23 +148,6 @@ static bool execute_arguments(
     }
 }
 
-/* Displays help screens of operators specified on command line. */
-static bool showOpHelp(
-    const unordered_map<string, Op>& ops,
-    unsigned argc,
-    char** argv)
-{
-    for (unsigned i = 0; i < argc; ++i)
-    {
-        if (!riplOperatorHelp(ops, argv[i]))
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
 void showHelp(const RegistryImpl& registry)
 {
     const char* opSummary = riplGetOperatorSummary(registry.ops());
@@ -211,4 +164,19 @@ void showHelp(const RegistryImpl& registry)
         "%s\n"
         "For help on a specific operation:\n\n"
         "Usage: " RIPL_EXENAME " ? <op>\n", opSummary);
+}
+
+void showOpHelp(const Op& op)
+{
+    const char* helpText = op.helpFunc()();
+
+    riplMessage(
+        itInfo,
+        RIPL_APPNAME " Version " RIPL_VERSION ", built " RIPL_BUILD_DATE "\n"
+        RIPL_DESCRIPTION "\n"
+        "Written by " RIPL_AUTHOR "\n\n"
+        "Help for '%s':\n"
+        "Usage: " RIPL_EXENAME " " RIPL_CMDLINE " %s",
+        op.name().data(),
+        helpText);
 }

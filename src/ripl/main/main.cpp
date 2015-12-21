@@ -31,7 +31,8 @@ static bool isHelpCommand(const string& arg)
 {
     return arg.compare("-h") == 0 ||
         arg.compare("--help") == 0 ||
-        arg.compare("-?") == 0;
+        arg.compare("-?") == 0 ||
+        arg.compare("?") == 0;
 }
 
 static int executeArgs(const string& executableFileName, queue<string>& args)
@@ -43,20 +44,28 @@ static int executeArgs(const string& executableFileName, queue<string>& args)
     {
         const auto& arg = args.front();
 
-        if (isHelpCommand(arg))
-        {
-            commandMode = CommandMode::ShowHelp;
-        }
         if (isPluginDirCommand(arg))
         {
             args.pop();
             pluginDir = args.front();
+        }
+        else if (isHelpCommand(arg))
+        {
+            args.pop();
+            commandMode = CommandMode::ShowHelp;
+            break;
         }
         else
         {
             commandMode = CommandMode::RunOperator;
             break;
         }
+    }
+
+    vector<string> remainingArgs;
+    for (; !args.empty(); args.pop())
+    {
+        remainingArgs.emplace_back(args.front());
     }
 
     if (pluginDir.empty())
@@ -74,19 +83,30 @@ static int executeArgs(const string& executableFileName, queue<string>& args)
     switch (commandMode)
     {
     case CommandMode::ShowHelp:
-        showHelp(registry);
+        if (remainingArgs.empty())
+        {
+            showHelp(registry);
+        }
+        else
+        {
+            for (const auto& name : remainingArgs)
+            {
+                auto iter = registry.ops().find(name);
+                if (iter == registry.ops().end())
+                {
+                    cerr << "Unrecognized operator \"" << name << "\"" << endl;
+                    return EXIT_FAILURE;
+                }
+                else
+                {
+                    showOpHelp(iter->second);
+                }
+            }
+        }
         return EXIT_SUCCESS;
 
     case CommandMode::RunOperator:
-    {
-        vector<string> remainingArgs;
-        for (; !args.empty(); args.pop())
-        {
-            remainingArgs.emplace_back(args.front());
-        }
-
         return runMain(registry, remainingArgs);
-    }
 
     default:
         showHelp(registry);

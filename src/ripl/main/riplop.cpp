@@ -56,28 +56,6 @@ const char* riplGetOperatorSummary(const unordered_map<string, Op>& ops)
     return buffer;
 }
 
-/* Display help for a specific operator. */
-bool riplOperatorHelp(const unordered_map<string, Op>& ops, const char* name)
-{
-    for (const auto& pair : ops)
-    {
-        if (riplMatch(name, pair.second.name().data(), 0/*prefixLength*/))
-        {
-            riplMessage(itInfo,
-                RIPL_APPNAME " Version " RIPL_VERSION ", built " RIPL_BUILD_DATE "\n"
-                RIPL_DESCRIPTION "\n"
-                "Written by " RIPL_AUTHOR "\n\n"
-                "Help for '%s':\n"
-                "Usage: " RIPL_EXENAME " " RIPL_CMDLINE " %s",
-                name,
-                pair.second.helpFunc()());
-            return true;
-        }
-    }
-    riplMessage(itError, "Unrecognized operator '%s'!\n", name);
-    return false;
-}
-
 /* Execute the next part of the command line. */
 unsigned riplOperatorExecute(
     const unordered_map<string, Op>& ops,
