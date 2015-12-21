@@ -1,8 +1,15 @@
 #include "riplwave.h"
-#include <cstdlib>
 
-#define riplCalloc calloc
-#define riplFree free
+#include <memory>
+
+using namespace std;
+
+using FloatArray = unique_ptr<float[]>;
+
+static FloatArray makeFloatArray(size_t count)
+{
+    return FloatArray(new float[count]);
+}
 
 /*
  * Applies a one-dimensional discrete wavelet transform to the
@@ -48,16 +55,17 @@ void riplwt1DWT(float *data,
  * If NULL is specified for 'pfiltFunc' then 'riplwtPartialWT' is used by
  * default.
  */
-void riplwtNDWT(float *data,
-    unsigned long *nn,
+void riplwtNDWT(
+    float* data,
+    unsigned long* nn,
     unsigned ndim,
     riplTransformType type,
     riplwtFiltFunc pfiltFunc,
-    void *arg) {
+    void* arg)
+{
 
     unsigned long i1, i2, i3, k, n, nnew, nprev, nt, ntot;
     unsigned idim;
-    float *wksp;
 
     RIPL_VALIDATE(data && nn)
     RIPL_VALIDATE(type==ttForward || type==ttInverse)
@@ -67,8 +75,9 @@ void riplwtNDWT(float *data,
 
     if (!pfiltFunc) pfiltFunc=riplwtFilterFunc;
     for (idim=0, ntot=1; idim<ndim; idim++) ntot*=nn[idim];
-    wksp=(float *)riplCalloc(ntot, sizeof(float));
-    RIPL_VALIDATE(wksp)
+
+    auto wksp = makeFloatArray(ntot);
+
     nprev=1;
     for (idim=0; idim<ndim; idim++) {
         n=nn[idim];
@@ -78,10 +87,16 @@ void riplwtNDWT(float *data,
                 for (i1=0; i1<nprev; i1++) {
                     for (k=0, i3=i1+i2; k<n; k++, i3+=nprev) wksp[k]=data[i3];
                     if (type==ttForward) {
-                        for (nt=n; nt>=4; nt>>=1) pfiltFunc(wksp, nt, type, arg);
+                        for (nt = n; nt >= 4; nt >>= 1)
+                        {
+                            pfiltFunc(wksp.get(), nt, type, arg);
+                        }
                     }
                     else {
-                        for (nt=4; nt<=n; nt<<=1) pfiltFunc(wksp, nt, type, arg);
+                        for (nt = 4; nt <= n; nt <<= 1)
+                        {
+                            pfiltFunc(wksp.get(), nt, type, arg);
+                        }
                     }
                     for (k=0, i3=i1+i2; k<n; k++, i3+=nprev) data[i3]=wksp[k];
                 }
@@ -89,7 +104,6 @@ void riplwtNDWT(float *data,
         }
         nprev=nnew;
     }
-    riplFree(wksp);
 }
 
 /*
@@ -131,12 +145,12 @@ void riplwt2DWT(float *data,
  * inverse filtering is specified by 'type' while the 'n'-point data
  * is pointed to by 'data'.
  */
-void riplwtFilterFunc(float *data,
+void riplwtFilterFunc(
+    float* data,
     unsigned long len,
     riplTransformType type,
-    void *arg) {
-
-    float *temp;
+    void* arg)
+{
     unsigned long half=len>>1, i1, i2, i3, i4, i5;
     const riplwtFilter *pfilt=(riplwtFilter *)arg;
 
@@ -148,8 +162,8 @@ void riplwtFilterFunc(float *data,
     if (len<4) return;
 
     /* Allocate and initialize temporary vector. */
-    temp=(float *)riplCalloc(len, sizeof(float));
-    RIPL_VALIDATE(temp)
+    auto temp = makeFloatArray(len);
+
     for (i1=0; i1<len; i1++) temp[i1]=0.0;
 
     if (type==ttForward) {
@@ -175,7 +189,6 @@ void riplwtFilterFunc(float *data,
         }
     }
     for (i1=0; i1<len; i1++) data[i1]=temp[i1];
-    riplFree(temp);
 }
 
 /*
