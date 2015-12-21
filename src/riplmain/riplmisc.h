@@ -1,28 +1,9 @@
-/*
- *		RIPL---Richard's Image-Processing Library.
- *		Written by Richard Cook.
- *
- *		riplmisc.h
- *		Header file declaring general-purpose data types and functions.
- *
- *		Version 1.1, last update: 10 February  1998.
- *
- *		History:
- *			10/2/98:		increased maximum image size.
- *			4/2/98:			modified 'riplGraphicFormat'.
- *			4/2/98:			added 'riplByte' data type.
- *			24/1/98:		renamed RIPL_PARSEERROR to RIPL_PARAMERROR.
- *			23/1/98:		added new RIPL_USERERROR return code.
- *			20/1/98:		version 1.1.
- *			27/11/97:	first version.
- *
- *		Copyright © 1997/8, Richard A. Cook.
- */
-#ifndef _RIPLMISC_H_INCLUDED
-#define _RIPLMISC_H_INCLUDED
+#pragma once
 
 #include "ripldefs.h"
 #include "config.h"
+#include <string>
+#include <vector>
 
 typedef unsigned char riplGrey;
 typedef unsigned char riplByte;
@@ -58,21 +39,9 @@ typedef enum tagriplGraphicFormat {
     gfPCXExtended
 } riplGraphicFormat;
 
-char **riplParseResponseFile(const char *pfileName,
-    unsigned *pargc);
+/** Reads command-line arguments from the specified response file */
+std::vector<std::string> riplParseResponseFile(const std::string& fileName);
+
 bool riplFileExists(const char *pfileName);
+
 int riplRound(double val);
-
-/* Non-ANSI string functions. */
-#ifndef HAVE_STRLWR
-char *strlwr(char *s);
-#endif
-#ifndef HAVE_STRUPR
-char *strupr(char *s);
-#endif
-#ifndef HAVE_STRDUP
-char *strdup(const char *s);
-#endif
-
-#endif
-

@@ -13,17 +13,6 @@
 using namespace std;
 using namespace ripl;
 
-using ResponseFileArgPtr = unique_ptr<char*, function<void(char**)>>;
-
-static ResponseFileArgPtr parseResponseFile(
-    const char* fileName,
-    unsigned* argCount)
-{
-    return ResponseFileArgPtr(
-        riplParseResponseFile(fileName, argCount),
-        [](char** p) { free(p); });
-}
-
 // Execute all operators specified on command line in order
 // passing the output from each operator as the input to the next
 static bool executePipeline(
@@ -91,7 +80,6 @@ int runMain(const RegistryImpl& registry, const vector<string>& args)
     unsigned argc = argsCopy.size();
     char** argv = pointers.get();
 
-    ResponseFileArgPtr respArgv;
     if (argc > 0 && **argv == '@')
     {
         // Take command line from a response file
@@ -101,22 +89,31 @@ int runMain(const RegistryImpl& registry, const vector<string>& args)
             return EXIT_FAILURE;
         }
 
-        if (!riplFileExists(*argv + 1))
+        string responseFileName = *argv + 1;
+        if (!riplFileExists(responseFileName.data()))
         {
-            riplMessage(itError, "Response file %s does not exist!\n", *argv + 1);
+            riplMessage(itError, "Response file %s does not exist!\n", responseFileName.data());
             return EXIT_FAILURE;
         }
 
-        respArgv = parseResponseFile(*argv + 1, &argc);
-        if (!respArgv)
+        auto result = riplParseResponseFile(responseFileName);
+        if (result.empty())
         {
             riplMessage(itError,
                 "Error reading response file %s!\n"
-                "[File error, line too long or file too long]\n", *argv + 1);
+                "[File error, line too long or file too long]\n", responseFileName.data());
             return EXIT_FAILURE;
         }
 
-        argv = respArgv.get();
+        // $TODO: Eliminate this ridiculous code
+        unique_ptr<CharPtr[]> pointers2 = unique_ptr<CharPtr[]>(new CharPtr[result.size()]);
+        for (size_t i = 0; i < result.size(); ++i)
+        {
+            pointers2[i] = const_cast<CharPtr>(result[i].data());
+        }
+
+        argc = result.size();
+        argv = pointers2.get();
     }
 
     if (argc < 3)

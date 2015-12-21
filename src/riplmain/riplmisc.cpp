@@ -1,60 +1,27 @@
 #include "riplmisc.h"
 
+#include "Error.h"
 #include "ripldbug.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+#include "validate.h"
+#include <fstream>
 
-/* Constants for local use. */
-#define ARG_BUFFER_SIZE		256
-#define RESP_LINE_SIZE		100
+using namespace std;
+using namespace ripl;
 
-/* Read command-line arguments from the specified response file. */
-char **riplParseResponseFile(const char *pfileName,
-    unsigned *pargc) {
-    FILE *pfile;
-    static char arg_buffer[ARG_BUFFER_SIZE];
-    char line_buffer[RESP_LINE_SIZE];
-    unsigned i, remain=ARG_BUFFER_SIZE, count=0;
-    char *line_ptr, *arg_ptr=arg_buffer, **pargv;
+vector<string> riplParseResponseFile(const string& fileName)
+{
+    ifstream stream(fileName, ios::in);
+    RIPL_REQUIRE(stream, error::IOError);
 
-    RIPL_VALIDATE(pfileName)
-    RIPL_VALIDATE(pargc)
-
-    /* Open response file and read it in line by line. */
-    pfile=fopen(pfileName, "rt");
-    RIPL_VALIDATE(pfile)
-    while (!feof(pfile)) {
-        memset(line_buffer, 0, RESP_LINE_SIZE);
-        if (!fgets(line_buffer, RESP_LINE_SIZE, pfile)) break;
-        line_ptr=strtok(line_buffer, " \t\n\r");
-        while (line_ptr) {
-            i=strlen(line_ptr);
-            if (i+1>remain) {
-                fclose(pfile);
-                return NULL;
-            }
-            strcpy(arg_ptr, line_ptr);
-            arg_ptr+=i+1;
-            remain-=i+1;
-            line_ptr=strtok(NULL, " \t\n\r");
-            count++;
-        }
+    vector<string> args;
+    while (!stream.eof())
+    {
+        string arg;
+        stream >> arg;
+        args.emplace_back(arg);
     }
-    if (ferror(pfile)) {
-        fclose(pfile);
-        return NULL;
-    }
-    fclose(pfile);
-    *pargc=count;
-    pargv=(char **)calloc(count, sizeof(char *));
-    RIPL_VALIDATE(pargv)
-    for (arg_ptr=arg_buffer, i=0; i<count; i++) {
-        pargv[i]=arg_ptr;
-        arg_ptr=strchr(arg_ptr, 0)+1;
-    }
-    return pargv;
+
+    return args;
 }
 
 /* Return 'true' if specified file exists. */
