@@ -36,6 +36,7 @@ add_library(riplmain STATIC
 
 # $TODO: Eliminate circular dependency between riplmain and riplregistry!
 target_include_directories(riplmain PRIVATE
+  ${RIPLMAINMAIN}
   ${SRC}/riplregistry/public
   ${SRC}/utillib/public
 )
