@@ -5,6 +5,7 @@
 #include "utillib/ScopedHandle.h"
 #include "utillib/fs.h"
 #include "utillib/string.h"
+#include <cstring>
 #if defined(BUILD_LINUX) || defined(BUILD_OSX)
 #include <dirent.h>
 #endif
@@ -87,6 +88,13 @@ static vector<string> getCandidatePluginFileNames(const string& pluginDir)
 
 #endif
 
+static bool isHelpCommand(const char* arg)
+{
+    return strcmp(arg, "-h") == 0 ||
+        strcmp(arg, "--help") == 0 ||
+        strcmp(arg, "-?") == 0;
+}
+
 int main(int argc, char* argv[])
 {
     try
@@ -101,7 +109,16 @@ int main(int argc, char* argv[])
             pluginManager.tryRegisterPluginOps(fileName, registry);
         }
 
-        return riplMain1(registry, argc - 1, argv + 1);
+        if (argc == 2 && isHelpCommand(argv[1]))
+        {
+            showHelp(registry);
+            return EXIT_SUCCESS;
+        }
+        else
+        {
+            return riplMain1(registry, argc - 1, argv + 1);
+        }
+
     }
     catch (const OSError& ex)
     {

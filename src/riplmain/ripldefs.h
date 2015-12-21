@@ -90,15 +90,13 @@
  * Default: undefined (no extra debugging code)
  */
 
-/*
- * General-purpose macros.
- */
-#define RIPL_APPNAME				"RIPL"
-#define RIPL_VERSION				"1.1"
-#define RIPL_AUTHOR				"Richard A. Cook"
-#define RIPL_DESCRIPTION		"Richard's Image-Processing Library"
-#define RIPL_DATE					__DATE__ " " __TIME__
-#define RIPL_EXENAME				"ripl"
-#define RIPL_CMDLINE				"<input> <output>"
+// Command-line and version macros
+#define RIPL_APPNAME        "RIPL"
+#define RIPL_VERSION        "vFuture"
+#define RIPL_AUTHOR         "Richard Cook"
+#define RIPL_DESCRIPTION    "Richard's Image-Processing Library"
+#define RIPL_BUILD_DATE     __DATE__ " " __TIME__
+#define RIPL_EXENAME        "ripl"
+#define RIPL_CMDLINE        "<input> <output>"
 
 #endif

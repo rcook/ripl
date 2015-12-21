@@ -20,4 +20,4 @@ if [[ "$build_type" == '' ]]; then
   build_type=Debug
 fi
 
-$CMAKEDIR/$build_type/install/bin/ripl
+$CMAKEDIR/$build_type/install/bin/ripl --help

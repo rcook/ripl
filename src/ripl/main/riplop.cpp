@@ -64,7 +64,7 @@ bool riplOperatorHelp(const unordered_map<string, Op>& ops, const char* name)
         if (riplMatch(name, pair.second.name().data(), 0/*prefixLength*/))
         {
             riplMessage(itInfo,
-                RIPL_APPNAME " Version " RIPL_VERSION ", built " RIPL_DATE "\n"
+                RIPL_APPNAME " Version " RIPL_VERSION ", built " RIPL_BUILD_DATE "\n"
                 RIPL_DESCRIPTION "\n"
                 "Written by " RIPL_AUTHOR "\n\n"
                 "Help for '%s':\n"

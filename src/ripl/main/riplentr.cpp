@@ -27,8 +27,6 @@ static bool help_arguments(
     unsigned argc,
     char **argv);
 
-static void general_help(const unordered_map<string, Op>& ops);
-
 /*
  *		riplMain1
  *		Main (command-line) entrypoint for programme.
@@ -45,7 +43,7 @@ int riplMain1(const RegistryImpl& registry, unsigned argc, char **argv)
         // Take command line from a response file
         if (argc > 1)
         {
-            general_help(registry.ops());
+            showHelp(registry);
             return EXIT_FAILURE;
         }
 
@@ -70,7 +68,7 @@ int riplMain1(const RegistryImpl& registry, unsigned argc, char **argv)
     if (argc == 0)
     {
         // No arguments supplied
-        general_help(registry.ops());
+        showHelp(registry);
         return EXIT_FAILURE;
     }
 
@@ -79,7 +77,7 @@ int riplMain1(const RegistryImpl& registry, unsigned argc, char **argv)
         // User is requesting some help
         if (argc < 2)
         {
-            general_help(registry.ops());
+            showHelp(registry);
             return EXIT_FAILURE;
         }
         else
@@ -94,7 +92,7 @@ int riplMain1(const RegistryImpl& registry, unsigned argc, char **argv)
 
     if (argc < 3)
     {
-        general_help(registry.ops());
+        showHelp(registry);
         return EXIT_FAILURE;
     }
 
@@ -147,7 +145,7 @@ int riplMain2(
         // Take command line from a response file
         if (argc > 1)
         {
-            general_help(registry.ops());
+            showHelp(registry);
             return EXIT_FAILURE;
         }
 
@@ -172,7 +170,7 @@ int riplMain2(
     if (argc == 0)
     {
         // No arguments supplied
-        general_help(registry.ops());
+        showHelp(registry);
         return EXIT_FAILURE;
     }
 
@@ -181,14 +179,14 @@ int riplMain2(
         // User is requesting some help
         if (argc < 2)
         {
-            general_help(registry.ops());
+            showHelp(registry);
             return EXIT_FAILURE;
         }
         else
         {
             riplMessage(
                 itInfo,
-                RIPL_APPNAME " Version " RIPL_VERSION ", built " RIPL_DATE "\n"
+                RIPL_APPNAME " Version " RIPL_VERSION ", built " RIPL_BUILD_DATE "\n"
                 RIPL_DESCRIPTION "\n"
                 "Written by " RIPL_AUTHOR "\n\n");
             if (!help_arguments(registry.ops(), argc - 1, argv + 1))
@@ -276,21 +274,20 @@ static bool help_arguments(
     return true;
 }
 
-/* Displays general help information. */
-static void general_help(const unordered_map<string, Op>& ops)
+void showHelp(const RegistryImpl& registry)
 {
+    const char* opSummary = riplGetOperatorSummary(registry.ops());
+
     riplMessage(
         itInfo,
-        RIPL_APPNAME " Version " RIPL_VERSION ", built " RIPL_DATE "\n"
+        RIPL_APPNAME " Version " RIPL_VERSION ", built " RIPL_BUILD_DATE "\n"
         RIPL_DESCRIPTION "\n"
-        "Written by " RIPL_AUTHOR "\n"
-        "Signal Processing and Communications Group\n"
-        "Cambridge University Engineering Department\n\n"
+        "Written by " RIPL_AUTHOR "\n\n"
         "Usage: " RIPL_EXENAME " <input file> <output file> "
         "<op> (<args>) ...\n"
         "Or:    " RIPL_EXENAME " @<response file>\n\n"
         "Where <op> is one of the following:\n"
         "%s\n"
         "For help on a specific operation:\n\n"
-        "Usage: " RIPL_EXENAME " ? <op>\n", riplGetOperatorSummary(ops));
+        "Usage: " RIPL_EXENAME " ? <op>\n", opSummary);
 }

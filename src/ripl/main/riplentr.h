@@ -14,3 +14,6 @@ int riplMain2(
     char** argv,
     riplGreyMap* pinputGreyMap,
     riplGreyMap* poutputGreyMap);
+
+/** Shows general help information */
+void showHelp(const RegistryImpl& registry);
