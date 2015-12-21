@@ -1,39 +1,12 @@
-/*
- *		misc.c
- *		Source file for miscellaneous image-processing support functions.
- *
- *		Version 1.1, last update: 9 May 1998.
- *
- *		History:
- *			9/5/98:		added miscSubimageF/G functions.
- *			10/2/98:		added rescaling functions.
- *			31/1/98:		renamed mathematical constants.
- *			23/1/98:		minor modification: M_PI --> RIPL_PI etc.
- *			21/1/98:		moved FFT functions to new file 'miscfft.c'.
- *			21/1/98:		added more FFT stuff.
- *			19/1/98:		added FFT functions.
- *			24/12/97:	bug in miscCarve fixed.
- *			16/12/97:	comments updated.
- *			15/12/97:	added miscCarve function.
- *			27/11/97:	first serious version.
- *
- *		Copyright © 1997/8, Richard A. Cook.
- */
+#include "misc.h"
+
+#include "alloc.h"
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-#include "misc.h"
-#include "riplallc.h"
-
-
-
 
 /* Only needed for diagnostic purposes. */
 #include <stdio.h>
-
-
-
-
 
 /* Sets an entire output image to the specified grey level. */
 void miscSetImage(riplGreyMap *pgreyMap, riplGrey fillValue)

@@ -1,21 +1,8 @@
-/*
- *		spectrum.c
- *		Source file for Spectrum operator.
- *
- *		Version 1.1, last update: 24 January 1998.
- *
- *		History:
- *			24/1/98:		slight modifications.
- *			23/1/98:		operator renamed 'spectrum'.
- *			21/1/98:		actually made it do something.
- *			16/12/97:	updated comments.
- *			27/11/97:	first implemented.
- *
- *		Copyright © 1997/8, Richard A. Cook.
- */
-#include <math.h>
 #include "spectrum.h"
+
+#include "alloc.h"
 #include "riplfft.h"
+#include <math.h>
 
 /* Internal entrypoint. */
 bool spectrumApplyOperator(riplGreyMap *pinputGreyMap,

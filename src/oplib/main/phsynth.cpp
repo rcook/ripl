@@ -1,19 +1,10 @@
-/*
- *		phsynth.c
- *		Source file for phase-only synthesis operator.
- *
- *		Version 1.1, last update: 16 February 1998.
- *
- *		History:
- *			16/2/98:		first implemented.
- *
- *		Copyright © 1998, Richard A. Cook.
- */
-#include <math.h>
-#include <stdio.h>
 #include "phsynth.h"
+
+#include "alloc.h"
 #include "riplfft.h"
 #include "misc.h"
+#include <math.h>
+#include <stdio.h>
 
 /* Internal entrypoint. */
 bool phasesynthApplyOperator(riplGreyMap *pinputGreyMap,

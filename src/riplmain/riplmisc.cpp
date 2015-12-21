@@ -1,26 +1,10 @@
-/*
- *		RIPL---Richard's Image-Processing Library.
- *		Written by Richard Cook.
- *
- *		riplmisc.c
- *		Source file defining some useful general-purpose functions.
- *
- *		Version 1.1, last update: 24 January 1998.
- *
- *		History:
- *			24/1/98:		fixed bug in riplParseResponseFile.
- *			20/1/98:		version 1.1.
- *			27/11/97:	first implemented.
- *
- *		Copyright © 1997/8, Richard A. Cook.
- */
+#include "riplmisc.h"
+
+#include "ripldbug.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "riplmisc.h"
-#include "ripldbug.h"
-#include "riplallc.h"
 
 /* Constants for local use. */
 #define ARG_BUFFER_SIZE		256
@@ -64,7 +48,7 @@ char **riplParseResponseFile(const char *pfileName,
     }
     fclose(pfile);
     *pargc=count;
-    pargv=(char **)riplCalloc(count, sizeof(char *));
+    pargv=(char **)calloc(count, sizeof(char *));
     RIPL_VALIDATE(pargv)
     for (arg_ptr=arg_buffer, i=0; i<count; i++) {
         pargv[i]=arg_ptr;

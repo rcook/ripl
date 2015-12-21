@@ -1,17 +1,6 @@
-/*
- *		conv.c
- *		Source file for convolution of arbitrary 2D integer kernel with image.
- *
- *		Version 1.1, last update: 24 January 1998.
- *
- *		History:
- *			24/1/98:		introduced RIPL_PARAMERROR.
- *			16/12/97:	updated comments.
- *			27/11/97:	first implemented.
- *
- *		Copyright © 1997/8, Richard A. Cook.
- */
 #include "conv.h"
+
+#include "alloc.h"
 #include "misc.h"
 
 /* Internal entrypoint. */

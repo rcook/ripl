@@ -1,23 +1,8 @@
-/*
- *		sobel.c
- *		Source file for Sobel edge detection.
- *
- *		Version 1.1, last update: 24 January 1998.
- *
- *		History:
- *			24/1/98:		introduced RIPL_PARAMERROR.
- *			16/12/97:	updated comments.
- *			27/11/97:	first implemented.
- *
- *		Copyright © 1997/8, Richard A. Cook.
- *
- *		Based on the algorithm in 'Practical Image Processing in C' by
- *		Craig A. Lindley. (This is an enhanced and more general version
- *		of the routine---unfortunately it's still anisotropic).
- */
-#include <stdlib.h>
 #include "sobel.h"
+
+#include "alloc.h"
 #include "misc.h"
+#include <stdlib.h>
 
 /* Internal entrypoint. */
 bool sobelApplyOperator(riplGreyMap *pinputGreyMap,

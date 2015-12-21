@@ -1,22 +1,6 @@
-/*
- *		glmorph.c
- *		Source file for grey-level morphological operators.
- *
- *		Version 1.1, last update: 24 January 1998.
- *
- *		History:
- *			24/1/98:		introduced RIPL_PARAMERROR.
- *			16/12/97:	updated comments.
- *			27/11/97:	first implemented.
- *
- *		Copyright © 1997/8, Richard A. Cook.
- *
- *		Based loosely on the Matlab routines 'gerode.m' and 'gdilate.m'
- *		in P.Y.Yee's EIST Project Report (1993/4 I think). In this version
- *		I assume the foreground is light and background dark (opposite of
- *		Yee). This corresponds to the convention adopted by Paint Shop Pro.
- */
 #include "glmorph.h"
+
+#include "alloc.h"
 #include "thresh.h"
 
 /* Prototypes of static functions. */

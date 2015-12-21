@@ -1,23 +1,10 @@
-/*
- *		fftfilt.c
- *		Source file for FFT-based filtering operator.
- *
- *		Version 1.1, last update: 10 February 1998.
- *
- *		History:
- *			10/2/98:		modified to use miscRescaleF.
- *			2/2/98:		improved error messages.
- *			24/1/98:		slight modifications.
- *			21/1/98:		slight modifications.
- *			19/1/98:		first implemented.
- *
- *		Copyright © 1998, Richard A. Cook.
- */
-#include <math.h>
-#include <stdio.h>
 #include "fftfilt.h"
+
+#include "alloc.h"
 #include "riplfft.h"
 #include "misc.h"
+#include <math.h>
+#include <stdio.h>
 
 /* Locally used macros. */
 #define MULTIPLY_REAL(a, b, c, d)	((a)*(c)-(b)*(d))

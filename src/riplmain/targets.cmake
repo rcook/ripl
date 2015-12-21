@@ -13,8 +13,6 @@ add_library(riplmain STATIC
   ${RIPLMAINMAIN}/RegistryImpl.h
   ${RIPLMAINMAIN}/defs.h
   ${RIPLMAINMAIN}/ripl.h
-  ${RIPLMAINMAIN}/riplallc.cpp
-  ${RIPLMAINMAIN}/riplallc.h
   ${RIPLMAINMAIN}/ripldbug.h
   ${RIPLMAINMAIN}/ripldefs.h
   ${RIPLMAINMAIN}/riplfilt.cpp

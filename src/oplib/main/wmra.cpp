@@ -1,16 +1,6 @@
-/*
- *		wmra.c
- *		Source file for wavelet-based multiresolution analysis operator.
- *
- *		Version 1.1, last update: 23 February 1998.
- *
- *		History:
- *			23/2/98:		added support for additional wavelet types.
- *			10/2/98:		first implemented.
- *
- *		Copyright © 1998, Richard A. Cook.
- */
 #include "wmra.h"
+
+#include "alloc.h"
 #include "misc.h"
 
 /* Internal entrypoint. */

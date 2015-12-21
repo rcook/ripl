@@ -1,20 +1,8 @@
-/*
- *		siahe.c
- *		Source file for adaptive histogram equalization operator.
- *
- *		Version 1.1, last update: 10 February 1998.
- *
- *		History:
- *			10/2/98:		modified to use miscRescaleMG.
- *			24/1/98:		introduced RIPL_PARAMERROR.
- *			16/12/97:	updated comments.
- *			27/11/97:	first implemented.
- *
- *		Copyright © 1997/8, Richard A. Cook.
- */
+#include "siahe.h"
+
+#include "alloc.h"
 #include <stdio.h>
 #include <string.h>
-#include "siahe.h"
 
 /* Internal entrypoint. */
 bool siaheApplyOperator(riplGreyMap *pinputGreyMap,

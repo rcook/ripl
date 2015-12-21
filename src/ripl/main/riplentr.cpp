@@ -21,7 +21,7 @@ static ResponseFileArgPtr parseResponseFile(
 {
     return ResponseFileArgPtr(
         riplParseResponseFile(fileName, argCount),
-        [](char** p) { riplFree(p); });
+        [](char** p) { free(p); });
 }
 
 // Execute all operators specified on command line in order

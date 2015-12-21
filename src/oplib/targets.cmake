@@ -7,6 +7,7 @@ add_library(oplib-objs OBJECT
   ${OPLIBMAIN}/add.h
   ${OPLIBMAIN}/ahe.cpp
   ${OPLIBMAIN}/ahe.h
+  ${OPLIBMAIN}/alloc.h
   ${OPLIBMAIN}/binmorph.cpp
   ${OPLIBMAIN}/binmorph.h
   ${OPLIBMAIN}/carve.cpp

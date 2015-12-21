@@ -1,26 +1,8 @@
-/*
- *		riplwave.c
- *		Source file for Ripl Wavelet Transform Toolbox.
- *
- *		Version 1.1, last update: 23 February 1998.
- *
- *		History:
- *			23/2/98:		added some more filter types from Lewis95.
- *			23/2/98:		added some more Daubechies coefficients.
- *			23/2/98:		revised copyright message.
- *			31/1/98:		rewrote riplwtPartialWT and a few other bits.
- *			30/1/98:		added Haar wavelet.
- *			30/1/98:		slight modifications.
- *			25/1/98:		first implemented.
- *
- *		Several functions based loosely on the specified functions
- *		published in Press92.
- *
- *		Coefficients from Press92, Chui97 and Lewis95.
- *
- *		Parts copyright © 1998, Richard A. Cook.
- */
 #include "riplwave.h"
+#include <cstdlib>
+
+#define riplCalloc calloc
+#define riplFree free
 
 /*
  * Applies a one-dimensional discrete wavelet transform to the

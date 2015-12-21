@@ -1,24 +1,9 @@
-/*
- *		ahe.c
- *		Source file for adaptive histogram equalization based on JASHE.
- *
- *		Version 1.1, last update: 3 May 1998.
- *
- *		History:
- *			3/5/98:		minor bug fix (hamming option not correctly parsed)
- *			31/1/98:		mathematical constants renamed.
- *			24/1/98:		introduced RIPL_PARAMERROR.
- *			23/1/98:		minor modification: M_PI --> RIPL_PI etc.
- *			24/12/97:	updated on-line info.
- *			16/12/97:	updated comments.
- *			15/12/97:	first implemented.
- *
- *		Copyright © 1997/8, Richard A. Cook.
- */
+#include "ahe.h"
+
+#include "alloc.h"
 #include <string.h>
 #include <math.h>
 #include <float.h>
-#include "ahe.h"
 
 /* Local defines, enums and structs. */
 #define BSHIFT								(BIG_TMP_BITS-HLB)
