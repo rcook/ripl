@@ -9,20 +9,19 @@ bool spectrumApplyOperator(riplGreyMap *pinputGreyMap,
     riplGreyMap *poutputGreyMap,
     bool subtract_mean) {
 
-    float *data, *nyquist, *ptr1, *ptr2;
+    float* ptr1;
+    float* ptr2;
     float mean, max_abs;
     unsigned long i, j, k, r1, r2;
     riplGrey *pgrey1, *pgrey2;
 
-    RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
-    RIPL_VALIDATE_IS_POWER_OF_2(pinputGreyMap->height())
-    RIPL_VALIDATE_IS_POWER_OF_2(pinputGreyMap->width())
+    RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap);
+    RIPL_VALIDATE_IS_POWER_OF_2(pinputGreyMap->height());
+    RIPL_VALIDATE_IS_POWER_OF_2(pinputGreyMap->width());
 
     /* Allocate float vectors for input/output to/from FFT routine. */
-    data=(float *)riplCalloc(pinputGreyMap->size(), sizeof(float));
-    RIPL_VALIDATE(data)
-    nyquist=(float *)riplCalloc(pinputGreyMap->height()<<1, sizeof(float));
-    RIPL_VALIDATE(nyquist)
+    auto data = makeArray<float>(pinputGreyMap->size());
+    auto nyquist = makeArray<float>(pinputGreyMap->height() << 1);
 
     /* Calculate average pixel intensity. */
     mean=0.0;
@@ -33,31 +32,37 @@ bool spectrumApplyOperator(riplGreyMap *pinputGreyMap,
     }
 
     /* Put grey levels in float vector after subtracting mean. */
-    ptr1=data;
+    ptr1 = data.get();
     pgrey1=pinputGreyMap->data();
     for (i=pinputGreyMap->size(); i>0; i--) *ptr1++=(float)(*pgrey1++)-mean;
 
     /* Perform the FFT operation. */
-    riplfftReal2DFT(data, nyquist,
-        pinputGreyMap->height(), pinputGreyMap->width(), ttForward);
+    riplfftReal2DFT(
+        data.get(),
+        nyquist.get(),
+        pinputGreyMap->height(),
+        pinputGreyMap->width(),
+        ttForward);
 
     /* Calculate squared absolute values and find maximum. */
     max_abs=0.0;
     /* Nyquist critical frequency part of spectrum. */
     r1=(pinputGreyMap->height()>>1)+1;
-    for (i=0, ptr1=ptr2=nyquist; i<r1; i++, ptr2++, ptr1+=2) {
+    for (i=0, ptr1 = ptr2 = nyquist.get(); i < r1; ++i, ++ptr2, ptr1+=2)
+    {
         ptr2[0]=ptr1[0]*ptr1[0]+ptr1[1]*ptr1[1];
         if (ptr2[0]>max_abs) max_abs=ptr2[0];
     }
     /* Zero and positive frequency half of spectrum. */
     r2=pinputGreyMap->height()*(pinputGreyMap->width()>>1);
-    for (i=0, ptr1=ptr2=data; i<r2; i++, ptr2++, ptr1+=2) {
+    for (i=0, ptr1 = ptr2 = data.get(); i < r2; ++i, ++ptr2, ptr1+=2)
+    {
         ptr2[0]=ptr1[0]*ptr1[0]+ptr1[1]*ptr1[1];
         if (ptr2[0]>max_abs) max_abs=ptr2[0];
     }
 
     /* Rescale absolute values and copy spectrum into greymap. */
-    ptr1=data;
+    ptr1 = data.get();
     pgrey1=poutputGreyMap->data();
     pgrey2=poutputGreyMap->data()+poutputGreyMap->size();
     for (i=0; pgrey2>=pgrey1; i++) {
@@ -83,9 +88,6 @@ bool spectrumApplyOperator(riplGreyMap *pinputGreyMap,
         ptr1+=(pinputGreyMap->width()>>1);
     }
 
-    /* Deallocate FFT input/output vectors. */
-    riplFree(nyquist);
-    riplFree(data);
     return true;
 }
 
