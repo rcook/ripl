@@ -20,4 +20,4 @@ if [[ "$build_type" == '' ]]; then
   build_type=Debug
 fi
 
-$CMAKEDIR/$build_type/install/bin/ripl $*
+valgrind --tool=memcheck $CMAKEDIR/$build_type/install/bin/ripl $*

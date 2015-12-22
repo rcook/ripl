@@ -12,5 +12,4 @@ CMAKEDIR=$REPODIR/cmake
 $SCRIPTDIR/run-cmake && \
   $SCRIPTDIR/run-make && \
   $SCRIPTDIR/run-unittest && \
-  $SCRIPTDIR/run-app
-
+  $SCRIPTDIR/run-app --help

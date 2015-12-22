@@ -10,9 +10,11 @@ addons:
     packages:
       - g++-4.9
       - cmake
+      - valgrind
 
 install:
   - export CXX="g++-4.9" CC="gcc-4.9"
 
-script: script/run-check
-
+script:
+  - script/run-check
+  - script/run-valgrind --help
