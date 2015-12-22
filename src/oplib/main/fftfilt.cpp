@@ -3,6 +3,7 @@
 #include "alloc.h"
 #include "riplfft.h"
 #include "misc.h"
+#include "register.h"
 #include <math.h>
 #include <stdio.h>
 
@@ -221,3 +222,8 @@ const char *fftfiltHelp(void) {
         "   response filters.\n";
 }
 
+OPLIB_REGISTER_OP(
+    fftfilt,
+    "apply FFT-based filter",
+    fftfiltExecute,
+    fftfiltHelp);

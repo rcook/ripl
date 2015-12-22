@@ -3,6 +3,7 @@
 #include "alloc.h"
 #include "riplfft.h"
 #include "misc.h"
+#include "register.h"
 #include <math.h>
 #include <stdio.h>
 
@@ -97,3 +98,8 @@ const char *magsynthHelp(void) {
         "   coefficients\n";
 }
 
+OPLIB_REGISTER_OP(
+    magsynth,
+    "perform Fourier-magnitude-only synthesis",
+    magsynthExecute,
+    magsynthHelp);

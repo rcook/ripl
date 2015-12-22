@@ -1,11 +1,6 @@
-/*
- *		nop.c
- *		Implementation of no-op operator
- *
- *		Copyright (C) 1997/8, 2015, Richard A. Cook.
- */
-
 #include "nop.h"
+
+#include "register.h"
 #include <string.h>
 
 // Internal entrypoint
@@ -62,3 +57,8 @@ char const *nopHelp(void)
         "   Do nothing: copy input image to output.\n";
 }
 
+OPLIB_REGISTER_OP(
+    nop,
+    "no-op filter",
+    nopExecute,
+    nopHelp);

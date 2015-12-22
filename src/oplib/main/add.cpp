@@ -1,18 +1,9 @@
-/*
- *		add.c
- *		Source file for adding operator.
- *
- *		Version 1.1, last update: 24 January 1998.
- *
- *		History:
-            24/1/98:		introduced RIPL_PARAMERROR.
- *			16/12/97:	updated comments.
- *			15/12/97:	first implemented.
- *
- *		Copyright © 1997/8, Richard A. Cook.
- */
-
 #include "add.h"
+
+#include "register.h"
+#include "riplfilt.h"
+#include "riplmsg.h"
+#include "riplpars.h"
 
 using namespace std;
 using namespace ripl;
@@ -48,7 +39,7 @@ namespace ripl { namespace oplib {
         }
     }
 
-    int addExecute(riplGreyMap& output, const vector<string>& args, const riplGreyMap& input)
+    static int addExecute(riplGreyMap& output, const vector<string>& args, const riplGreyMap& input)
     {
         if (args.size() < 2)
         {
@@ -73,7 +64,7 @@ namespace ripl { namespace oplib {
         return 2;
     }
 
-    const char* addHelp()
+    static const char* addHelp()
     {
         return
             " add <weight> <file-name>\n\n"
@@ -82,5 +73,11 @@ namespace ripl { namespace oplib {
             "   input image and image in <file-name> must have the same\n"
             "   pixel dimensions.\n";
     }
+
+    OPLIB_REGISTER_OP(
+        add,
+        "add images together pixel by pixel",
+        wrapNewStyleExecuteFunc<addExecute>,
+        addHelp);
 
 }} // namespace ripl::oplib

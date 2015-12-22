@@ -1,6 +1,7 @@
 #include "spectrum.h"
 
 #include "alloc.h"
+#include "register.h"
 #include "riplfft.h"
 #include <math.h>
 
@@ -124,3 +125,8 @@ const char *spectrumHelp(void) {
         "   from it before taking the FFT (default=false).\n";
 }
 
+OPLIB_REGISTER_OP(
+    spectrum,
+    "obtain normalized spectrum of image",
+    spectrumExecute,
+    spectrumHelp);

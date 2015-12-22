@@ -1,6 +1,7 @@
 #include "binmorph.h"
 
 #include "alloc.h"
+#include "register.h"
 #include "thresh.h"
 
 #define BINMORPH_THRESHOLD			(RIPL_GREY_LEVELS/2)
@@ -329,3 +330,8 @@ const char *binmorphHelp(void) {
         "   for binary images and so is slightly quicker.\n";
 }
 
+OPLIB_REGISTER_OP(
+    binmorph,
+    "apply binary morphological operators",
+    binmorphExecute,
+    binmorphHelp);

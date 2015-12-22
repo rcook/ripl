@@ -2,6 +2,7 @@
 
 #include "alloc.h"
 #include "misc.h"
+#include "register.h"
 
 /* Internal entrypoint. */
 bool wmraApplyOperator(riplGreyMap *pinputGreyMap,
@@ -118,3 +119,8 @@ const char *wmraHelp(void) {
         "      haar       Haar filter.\n";
 }
 
+OPLIB_REGISTER_OP(
+    wmra,
+    "wavelet-based multiresolution analysis",
+    wmraExecute,
+    wmraHelp);

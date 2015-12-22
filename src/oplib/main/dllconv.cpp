@@ -2,6 +2,7 @@
 
 #include "alloc.h"
 #include "misc.h"
+#include "register.h"
 
 /* Internal entrypoint. */
 bool dllconvApplyOperator(riplGreyMap *pinputGreyMap,
@@ -157,3 +158,8 @@ const char *dllconvHelp(void) {
         "   absolute values stored in the final convolution.";
 }
 
+OPLIB_REGISTER_OP(
+    dllconv,
+    "perform 2D convolution (alternative syntax)",
+    dllconvExecute,
+    dllconvHelp);

@@ -2,6 +2,7 @@
 
 #include "alloc.h"
 #include "misc.h"
+#include "register.h"
 
 /* Internal entrypoint. */
 bool gaussApplyOperator(riplGreyMap *pinputGreyMap,
@@ -84,3 +85,8 @@ const char *gaussHelp(void) {
         "   where <var> is the variance of the kernel.\n";
 }
 
+OPLIB_REGISTER_OP(
+    gaussian,
+    "perform Gaussian smoothing",
+    gaussExecute,
+    gaussHelp);

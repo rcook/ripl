@@ -2,6 +2,7 @@
 
 #include "alloc.h"
 #include "misc.h"
+#include "register.h"
 
 /* Internal entrypoint. */
 bool marrhildApplyOperator(riplGreyMap *pinputGreyMap,
@@ -94,3 +95,8 @@ const char *marrhildHelp(void) {
         "   with the image and detecting zero crossings (EVENTUALLY).\n";
 }
 
+OPLIB_REGISTER_OP(
+    marrhildreth,
+    "perform Marr-Hildreth edge detection",
+    marrhildExecute,
+    marrhildHelp);

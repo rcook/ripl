@@ -1,19 +1,6 @@
-/*
- *		siahe2.c
- *		Source file for extended raised-cosine subimage AHE as described in
- *		an appendix of `Image-Processing Techniques with Application in Image
- *		Restoration' by Richard A. Cook.
- *
- *		Usage: ripl <in-file> <out-file> siahe2 <w-r> <w-c> <d-r> <d-c> <wp>
- *
- *		Version 1.1, last update: 9 May 1998.
- *
- *		History:
- *			9/5/98:		first implemented.
- *
- *		Copyright © 1998, Richard A. Cook.
- */
 #include "siahe2.h"
+
+#include "register.h"
 
 static void do_histogram_eq(riplGrey *pinput,
     unsigned rows,
@@ -127,3 +114,8 @@ static void do_histogram_eq(riplGrey *pinput,
     miscHistogramEQ(pinput, pinput, rows*cols);
 }
 
+OPLIB_REGISTER_OP(
+    siahe2,
+    "apply extended raised-cosine subimage AHE to image",
+    siahe2Execute,
+    siahe2Help);

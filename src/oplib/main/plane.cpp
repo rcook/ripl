@@ -1,17 +1,6 @@
-/*
- *		plane.c
- *		Source file for bit-plane extraction operator.
- *
- *		Version 1.1, last update: 24 January 1998.
- *
- *		History:
- *			24/1/98:		introduced RIPL_PARAMERROR.
- *			16/12/97:	updated comments.
- *			27/11/97:	first implemented.
- *
- *		Copyright © 1997/8, Richard A. Cook.
- */
 #include "plane.h"
+
+#include "register.h"
 
 /* Internal entrypoint. */
 bool planeApplyOperator(riplGreyMap *pinputGreyMap,
@@ -66,3 +55,8 @@ const char *planeHelp(void) {
         "   high-frequency information in the image).\n";
 }
 
+OPLIB_REGISTER_OP(
+    plane,
+    "extract bitplane from image",
+    planeExecute,
+    planeHelp);

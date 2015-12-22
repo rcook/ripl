@@ -41,6 +41,7 @@ add_library(oplib-objs OBJECT
   ${OPLIBMAIN}/plane.cpp
   ${OPLIBMAIN}/plane.h
   ${OPLIBMAIN}/register.cpp
+  ${OPLIBMAIN}/register.h
   ${OPLIBMAIN}/siahe.cpp
   ${OPLIBMAIN}/siahe.h
   ${OPLIBMAIN}/siahe2.cpp
@@ -75,6 +76,7 @@ add_library(oplib-test-objs OBJECT
 target_include_directories(oplib-test-objs PRIVATE
   ${OPLIBMAIN}
   ${SRC}/riplmain
+  ${SRC}/riplregistry/public
   ${SRC}/testlib/public
 )
 

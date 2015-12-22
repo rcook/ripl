@@ -1,17 +1,6 @@
-/*
- *		zero.c
- *		Source file for zeroing operator.
- *
- *		Version 1.1, last update: 24 January 1998.
- *
- *		History:
- *			24/1/98:		introduced use of RIPL_PARAMERROR.
- *			16/12/97:	updated comments.
- *			27/11/97:	first implemented.
- *
- *		Copyright © 1997/8, Richard A. Cook.
- */
 #include "zero.h"
+
+#include "register.h"
 
 /* Internal entrypoint. */
 bool zeroApplyOperator(riplGreyMap *pinputGreyMap,
@@ -60,3 +49,8 @@ const char *zeroHelp(void) {
         "   the threshold <level>.\n";
 }
 
+OPLIB_REGISTER_OP(
+    zero,
+    "apply zeroing operator to image",
+    zeroExecute,
+    zeroHelp);

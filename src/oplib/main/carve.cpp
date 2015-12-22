@@ -2,6 +2,7 @@
 
 #include "alloc.h"
 #include "misc.h"
+#include "register.h"
 #include <string.h>
 
 /* Some local defines. */
@@ -212,3 +213,8 @@ const char *carveHelp(void) {
         "   subimage is then locally histogram-equalized.\n";
 }
 
+OPLIB_REGISTER_OP(
+    carve,
+    "carve image up",
+    carveExecute,
+    carveHelp);

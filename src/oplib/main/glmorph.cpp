@@ -1,6 +1,7 @@
 #include "glmorph.h"
 
 #include "alloc.h"
+#include "register.h"
 #include "thresh.h"
 
 /* Prototypes of static functions. */
@@ -317,3 +318,8 @@ const char *glmorphHelp(void) {
         "   dark.\n";
 }
 
+OPLIB_REGISTER_OP(
+    glmorph,
+    "apply grey-level morphological operators",
+    glmorphExecute,
+    glmorphHelp);

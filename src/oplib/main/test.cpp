@@ -1,17 +1,6 @@
-/*
- *		test.c
- *		Test RConsole.
- *
- *		Version 1.1, last update: 24 January 1998.
- *
- *		History:
- *			24/1/98:		introduced RIPL_PARAMERROR.
- *			16/12/97:	updated comments.
- *			6/12/97:		first implemented.
- *
- *		Copyright © 1997/8, Richard A. Cook.
- */
 #include "test.h"
+
+#include "register.h"
 
 /* Internal entrypoint. */
 bool testApplyOperator(riplGreyMap *pinputGreyMap,
@@ -48,3 +37,8 @@ const char *testHelp(void) {
         "   Test RConsole.\n";
 }
 
+OPLIB_REGISTER_OP(
+    test,
+    "test RConsole",
+    testExecute,
+    testHelp);

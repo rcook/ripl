@@ -1,6 +1,7 @@
 #include "siahe.h"
 
 #include "alloc.h"
+#include "register.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -123,3 +124,8 @@ const char *siaheHelp(void) {
         "   should be one of 'rect', 'hanning', 'hamming' or 'triang'.\n";
 }
 
+OPLIB_REGISTER_OP(
+    siahe,
+    "apply subimage-based AHE to image",
+    siaheExecute,
+    siaheHelp);

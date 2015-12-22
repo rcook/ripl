@@ -1,6 +1,7 @@
 #include "median.h"
 
 #include "alloc.h"
+#include "register.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -92,3 +93,8 @@ const char *medianHelp(void) {
         "   window size <win-size>.\n";
 }
 
+OPLIB_REGISTER_OP(
+    median,
+    "apply median filter",
+    medianExecute,
+    medianHelp);

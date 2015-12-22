@@ -7,7 +7,6 @@ add_library(riplregistry STATIC
   ${RIPLREGISTRYMAIN}/Registry.cpp
   ${RIPLREGISTRYPUBLIC}/riplregistry/ExecuteFunc.h
   ${RIPLREGISTRYPUBLIC}/riplregistry/HelpFunc.h
-  ${RIPLREGISTRYPUBLIC}/riplregistry/OpFunc.h
   ${RIPLREGISTRYPUBLIC}/riplregistry/Registry.h
 )
 
@@ -20,7 +19,6 @@ target_include_directories(riplregistry PRIVATE
 
 add_library(riplregistry-test-objs OBJECT
   ${SHAREDSRCS}
-  ${RIPLREGISTRYTEST}/OpFuncTest.cpp
   ${RIPLREGISTRYTEST}/RegistryTest.cpp
 )
 

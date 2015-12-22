@@ -2,6 +2,7 @@
 
 #include "alloc.h"
 #include "misc.h"
+#include "register.h"
 
 /* Internal entrypoint. */
 bool wavethreshApplyOperator(riplGreyMap *pinputGreyMap,
@@ -127,3 +128,8 @@ const char *wavethreshHelp(void) {
         "      haar       Haar filter.\n";
 }
 
+OPLIB_REGISTER_OP(
+    wavethresh,
+    "reconstruct after wavelet thresholding",
+    wavethreshExecute,
+    wavethreshHelp);

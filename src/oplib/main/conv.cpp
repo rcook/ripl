@@ -2,6 +2,7 @@
 
 #include "alloc.h"
 #include "misc.h"
+#include "register.h"
 
 /* Internal entrypoint. */
 bool convApplyOperator(riplGreyMap *pinputGreyMap,
@@ -130,3 +131,8 @@ const char *convHelp(void) {
         "   type the kernel is.\n";
 }
 
+OPLIB_REGISTER_OP(
+    conv,
+    "perform 2D convolution",
+    convExecute,
+    convHelp);

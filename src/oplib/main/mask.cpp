@@ -1,17 +1,6 @@
-/*
- *		mask.c
- *		Source file for masking operator.
- *
- *		Version 1.1, last update: 24 January 1998.
- *
- *		History:
- *			24/1/98:		introduced RIPL_PARAMERROR.
- *			16/12/97:	updated comments.
- *			27/11/97:	first implemented.
- *
- *		Copyright © 1997/8, Richard A. Cook.
- */
 #include "mask.h"
+
+#include "register.h"
 
 /* Internal entrypoint. */
 bool maskApplyOperator(riplGreyMap *pinputGreyMap,
@@ -53,3 +42,8 @@ const char *maskHelp(void) {
         "   mask <bit-pat>.\n";
 }
 
+OPLIB_REGISTER_OP(
+    mask,
+    "apply mask to image",
+    maskExecute,
+    maskHelp);

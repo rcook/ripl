@@ -1,6 +1,7 @@
 #include "phsynth.h"
 
 #include "alloc.h"
+#include "register.h"
 #include "riplfft.h"
 #include "misc.h"
 #include <math.h>
@@ -111,3 +112,8 @@ const char *phasesynthHelp(void) {
         "   to unity.\n";
 }
 
+OPLIB_REGISTER_OP(
+    phasesynth,
+    "perform Fourier-phase-only synthesis",
+    phasesynthExecute,
+    phasesynthHelp);

@@ -1,6 +1,7 @@
 #include "ahe.h"
 
 #include "alloc.h"
+#include "register.h"
 #include <string.h>
 #include <math.h>
 #include <float.h>
@@ -764,3 +765,8 @@ const char *aheHelp(void) {
         "Based on JASHE programme written by J. Alex Stark.\n";
 }
 
+OPLIB_REGISTER_OP(
+    ahe,
+    "perform adaptive histogram equalization",
+    aheExecute,
+    aheHelp);

@@ -2,6 +2,7 @@
 
 #include "alloc.h"
 #include "misc.h"
+#include "register.h"
 #include <stdlib.h>
 
 /* Internal entrypoint. */
@@ -143,3 +144,8 @@ const char *sobelHelp(void) {
         "   The original image is overlaid is <over> is TRUE.\n";
 }
 
+OPLIB_REGISTER_OP(
+    sobel,
+    "perform Sobel edge detection",
+    sobelExecute,
+    sobelHelp);
