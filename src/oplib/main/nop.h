@@ -1,27 +1,17 @@
-/*
- *		nop.c
- *		No-op operator
- *
- *		Copyright (C) 1997/8, 2015, Richard A. Cook.
- */
-
 #pragma once
 
 #include "ripl.h"
+#include <vector>
 
-// Internal entrypoint
-bool nopApplyOperator(
-    riplGreyMap const *pinputGreyMap,
-    riplGreyMap *poutputGreyMap,
-    riplGrey threshold);
+namespace ripl { namespace oplib {
 
-// Command-line entrypoint
-int nopExecute(
-    unsigned argc,
-    char const **argv,
-    riplGreyMap /*const*/ *pinputGreyMap,
-    riplGreyMap *poutputGreyMap);
+    /** Returns input image unchanged */
+    void nop(riplGreyMap& output, const riplGreyMap& input);
 
-// Command-line help
-char const *nopHelp(void);
+    /** Command-line entry point **/
+    int nopExecute(riplGreyMap& output, const std::vector<std::string>& args, const riplGreyMap& input);
 
+    /** Provide help for operator */
+    const char* nopHelp();
+
+}} // namespace ripl::oplib

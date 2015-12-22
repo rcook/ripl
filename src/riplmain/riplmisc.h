@@ -21,6 +21,7 @@ typedef signed long riplBigGreyS;
 /* It doesn't make sense to define the following any other way. */
 #define RIPL_MAX_GREY			(RIPL_GREY_LEVELS-1)
 /* Return codes. */
+#define RIPL_SUCCESS        2
 #define RIPL_FIRSTERRORCODE	-1
 #define RIPL_PARAMERROR			(RIPL_FIRSTERRORCODE)
 #define RIPL_EXECUTEERROR		(RIPL_FIRSTERRORCODE-1)

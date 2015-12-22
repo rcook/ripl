@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+
 namespace ripl { namespace test { namespace logging {
     class Logger
     {

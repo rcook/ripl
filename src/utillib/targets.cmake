@@ -3,9 +3,12 @@ set(UTILLIBPUBLIC ${SRC}/utillib/public)
 
 add_library(utillib STATIC
   ${SHAREDSRCS}
+  ${UTILLIBMAIN}/MemoryBuffer.cpp
   ${UTILLIBMAIN}/OSError.cpp
   ${UTILLIBMAIN}/fs.cpp
   ${UTILLIBMAIN}/string.cpp
+  ${UTILLIBMAIN}/validate.h
+  ${UTILLIBPUBLIC}/utillib/MemoryBuffer.h
   ${UTILLIBPUBLIC}/utillib/OSError.h
   ${UTILLIBPUBLIC}/utillib/ScopedHandle.h
   ${UTILLIBPUBLIC}/utillib/Trie.h

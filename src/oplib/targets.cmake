@@ -69,6 +69,7 @@ target_include_directories(oplib-objs PRIVATE
 )
 
 add_library(oplib-test-objs OBJECT
+  ${CMAKE_CURRENT_BINARY_DIR}/generated/resources.h
   ${SHAREDSRCS}
   ${OPLIBTEST}/AddTest.cpp
   ${OPLIBTEST}/GlobalheTest.cpp

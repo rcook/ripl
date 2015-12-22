@@ -1,6 +1,7 @@
 #include "riplfilt.h"
 
 #include "riplpbm.h"
+#include "utillib/MemoryBuffer.h"
 #include <fstream>
 
 using namespace std;
@@ -20,6 +21,15 @@ riplGreyMap riplLoadImage(istream& stream)
     default:
         RIPL_REQUIRE_FAIL(error::InvalidOperation);
     }
+}
+
+riplGreyMap riplLoadImage(const char* buffer, size_t bufferSize)
+{
+    RIPL_VALIDATE_ARG_NAME(buffer, "buffer");
+
+    MemoryBuffer memoryBuffer(buffer, buffer + bufferSize);
+    istream stream(&memoryBuffer);
+    return riplLoadImage(stream);
 }
 
 riplGreyMap riplLoadImage(const char* fileName)
@@ -61,6 +71,15 @@ ImageFormat riplReadGraphicFormat(istream& stream)
     case '6': return ImageFormat::PpmBinary;
     default: return ImageFormat::Invalid;
     }
+}
+
+ImageFormat riplReadGraphicFormat(const char* buffer, size_t bufferSize)
+{
+    RIPL_VALIDATE_ARG_NAME(buffer, "buffer");
+
+    MemoryBuffer memoryBuffer(buffer, buffer + bufferSize);
+    istream stream(&memoryBuffer);
+    return riplReadGraphicFormat(stream);
 }
 
 ImageFormat riplReadGraphicFormat(const char* fileName)

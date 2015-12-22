@@ -61,7 +61,7 @@ namespace ripl { namespace oplib {
         auto otherInput = riplLoadImage(fileName.data());
 
         add(output, input, otherInput, weight);
-        return 2;
+        return RIPL_SUCCESS;
     }
 
     static const char* addHelp()

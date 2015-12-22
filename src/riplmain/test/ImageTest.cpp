@@ -24,4 +24,20 @@ TEST_CASE("Image", "[Image]")
         REQUIRE(image0.hasSameDimensionsAs(image1));
         REQUIRE(!image0.hasSameDimensionsAs(image2));
     }
+
+    SECTION("hasSameDimensionsAs")
+    {
+        riplGreyMap image0 { 4, 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } };
+        riplGreyMap image1 { 4, 3, { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } };
+        riplGreyMap image2 { 4, 3, { 10, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } };
+        REQUIRE(image0.isEqualTo(image0));
+        REQUIRE(image0.isEqualTo(image1));
+        REQUIRE(!image0.isEqualTo(image2));
+        REQUIRE(image1.isEqualTo(image0));
+        REQUIRE(image1.isEqualTo(image1));
+        REQUIRE(!image1.isEqualTo(image2));
+        REQUIRE(!image2.isEqualTo(image0));
+        REQUIRE(!image2.isEqualTo(image1));
+        REQUIRE(image2.isEqualTo(image2));
+    }
 }

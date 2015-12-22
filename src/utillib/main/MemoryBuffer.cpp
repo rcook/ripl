@@ -1,18 +1,16 @@
-#include "testlib/MemoryBuffer.h"
+#include "utillib/MemoryBuffer.h"
 
-#include "Error.h"
 #include "validate.h"
 #include <functional>
 
 using namespace std;
-using namespace ripl;
 
 MemoryBuffer::MemoryBuffer(ConstCharPtr begin, ConstCharPtr end)
     : m_begin(begin)
     , m_end(end)
     , m_current(m_begin)
 {
-    RIPL_VALIDATE_ARG_NAME(less_equal<ConstCharPtr>()(begin, end), "end");
+    UTILLIB_VALIDATE_ARG_NAME(less_equal<ConstCharPtr>()(begin, end), "end");
 }
 
 MemoryBuffer::int_type MemoryBuffer::underflow()
@@ -47,6 +45,7 @@ MemoryBuffer::int_type MemoryBuffer::pbackfail(int_type c)
 
 streamsize MemoryBuffer::showmanyc()
 {
-    RIPL_REQUIRE(less_equal<ConstCharPtr>()(m_current, m_end), error::InvalidOperation);
+    UTILLIB_REQUIRE(less_equal<ConstCharPtr>()(m_current, m_end));
     return m_end - m_current;
 }
+

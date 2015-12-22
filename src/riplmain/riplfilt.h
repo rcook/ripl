@@ -2,20 +2,26 @@
 
 #include "riplgrey.h"
 
-/** Loads specified image from the specified stream converting it to greyscale if required */
+/** Loads image from specified stream converting it to greyscale if required */
 riplGreyMap riplLoadImage(std::istream& stream);
 
-/** Loads specified image from the specified file converting it to greyscale if required */
+/** Loads image from specified buffer converting it to greyscale if required */
+riplGreyMap riplLoadImage(const char* buffer, size_t bufferSize);
+
+/** Loads image from specified file converting it to greyscale if required */
 riplGreyMap riplLoadImage(const char* fileName);
 
-/** Saves specified image under specified file name in specified format */
+/** Saves specified image with specified file name in specified format */
 void riplSaveImage(
     const char* fileName,
     ImageFormat format,
     const riplGreyMap& image);
 
-/** Determines the graphic format from the specified stream */
+/** Determines the image format from the specified stream */
 ImageFormat riplReadGraphicFormat(std::istream& stream);
 
-/** Determines the graphic format of the specified file */
+/** Determines the image format from the specified buffer */
+ImageFormat riplReadGraphicFormat(const char* buffer, size_t bufferSize);
+
+/** Determines the image format of the specified file */
 ImageFormat riplReadGraphicFormat(const char* fileName);

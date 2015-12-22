@@ -40,7 +40,6 @@ target_include_directories(riplmain PRIVATE
 )
 
 add_library(riplmain-test-objs OBJECT
-  ${CMAKE_CURRENT_BINARY_DIR}/generated/resources.cpp
   ${CMAKE_CURRENT_BINARY_DIR}/generated/resources.h
   ${RIPLMAINTEST}/ImageTest.cpp
   ${RIPLMAINTEST}/NetpbmTest.cpp

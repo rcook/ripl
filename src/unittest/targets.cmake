@@ -1,6 +1,7 @@
 set(UNITTESTMAIN ${SRC}/unittest/main)
 
 add_executable(unittest
+  ${CMAKE_CURRENT_BINARY_DIR}/generated/resources.cpp
   ${SHAREDSRCS}
   $<TARGET_OBJECTS:oplib-objs>
   $<TARGET_OBJECTS:oplib-test-objs>
@@ -34,3 +35,4 @@ set_target_properties(
   unittest
   PROPERTIES FOLDER unittest
 )
+

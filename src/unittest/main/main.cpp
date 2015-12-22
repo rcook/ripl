@@ -6,8 +6,13 @@
 #include "testlib/logging.h"
 #include "utillib/fs.h"
 #include <array>
+#ifdef BUILD_WINDOWS
 #include <direct.h>
+#endif
 #include <iostream>
+#ifdef BUILD_LINUX
+#include <sys/stat.h>
+#endif
 
 using namespace std;
 using namespace ripl;
@@ -60,7 +65,13 @@ string makeLogDir(const string& dir)
 LoggerImpl::LoggerImpl(const string& dir)
     : m_logDir(makeLogDir(dir))
 {
+#ifdef BUILD_WINDOWS
     RIPL_REQUIRE(!mkdir(m_logDir.data()), error::IOError);
+#else
+    RIPL_REQUIRE(
+        !mkdir(m_logDir.data(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH),
+        error::IOError);
+#endif
 }
 
 void LoggerImpl::logBinaryBlob(const char* fileName, const char* buffer, size_t bufferSize)

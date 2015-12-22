@@ -79,6 +79,11 @@ namespace ripl
 
         bool hasSameDimensionsAs(const Image& other) const { return m_width == other.m_width && m_height == other.m_height; }
 
+        bool isEqualTo(const Image& other) const
+        {
+            return hasSameDimensionsAs(other) && m_data == other.m_data;
+        }
+
         const T* data() const { return m_data.data(); }
         T* data() { return m_data.data(); }
 

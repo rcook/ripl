@@ -1,64 +1,50 @@
 #include "nop.h"
 
 #include "register.h"
-#include <string.h>
+#include <cstring>
 
-// Internal entrypoint
-bool nopApplyOperator(
-    riplGreyMap const *pinputGreyMap,
-    riplGreyMap *poutputGreyMap,
-    riplGrey threshold)
-{
-    riplGrey const *inP = pinputGreyMap->data();
-    riplGrey *outP = poutputGreyMap->data();
+using namespace std;
+using namespace ripl;
 
-    RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
+namespace ripl { namespace oplib {
 
-    // Just copy straight from input to output
-    memcpy(
-      poutputGreyMap->data(),
-      pinputGreyMap->data(),
-      pinputGreyMap->size() * sizeof(riplGrey));
-
-    return true;
-}
-
-// Command-line version
-int nopExecute(
-    unsigned argc,
-    char const **argv,
-    riplGreyMap /*const*/ *pinputGreyMap,
-    riplGreyMap *poutputGreyMap)
-{
-    riplGrey threshold = 0;
-
-    if (argc > 0)
+    void nop(riplGreyMap& output, const riplGreyMap& input)
     {
-        riplMessage(
-            itError,
-            "Incorrect number of parameters!\n"
-            "Usage: " RIPL_EXENAME " " RIPL_CMDLINE " nop\n");
-        return RIPL_PARAMERROR;
+        RIPL_VALIDATE_ARG_NAME(input.hasSameDimensionsAs(output), "input");
+
+        // Just copy straight from input to output
+        memcpy(
+            output.data(),
+            input.data(),
+            input.size() * sizeof(riplGrey));
     }
 
-    if (!nopApplyOperator(pinputGreyMap, poutputGreyMap, threshold))
+    int nopExecute(riplGreyMap& output, const vector<string>& args, const riplGreyMap& input)
     {
-        return RIPL_EXECUTEERROR;
+        if (!args.empty())
+        {
+            riplMessage(
+                itError,
+                "Incorrect number of parameters!\n"
+                "Usage: " RIPL_EXENAME " " RIPL_CMDLINE " nop\n");
+            return RIPL_PARAMERROR;
+        }
+
+        nop(output, input);
+        return RIPL_SUCCESS;
     }
 
-    // Number of command-line arguments consumed
-    return 0;
-}
+    const char* nopHelp()
+    {
+        return " nop\n\n"
+            "   Do nothing: copy input image to output.\n";
+    }
 
-// Command-line help
-char const *nopHelp(void)
-{
-    return " nop\n\n"
-        "   Do nothing: copy input image to output.\n";
-}
+    OPLIB_REGISTER_OP(
+        nop,
+        "no-op filter",
+        wrapNewStyleExecuteFunc<nopExecute>,
+        nopHelp);
 
-OPLIB_REGISTER_OP(
-    nop,
-    "no-op filter",
-    nopExecute,
-    nopHelp);
+}} // namespace ripl::oplib
+
