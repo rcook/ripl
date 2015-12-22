@@ -70,11 +70,27 @@ static vector<string> getFileNames(const string& dir, function<bool(const dirent
     return fileNames;
 }
 
+// Usually, we'd check for DT_REG, but Travis-CI reports DT_UNKNOWN
+// for regular files. Instead, we'll consider directory entries that
+// are _not_ any of the non-DT_UNKNOWN values.
+static bool isRegularFile(const dirent* entry)
+{
+    auto type = entry->d_type;
+
+    return type != DT_FIFO &&
+        type != DT_CHR &&
+        type != DT_DIR &&
+        type != DT_BLK &&
+        type != DT_LNK &&
+        type != DT_SOCK &&
+        type != DT_WHT;
+}
+
 vector<string> getCandidatePluginFileNames(const string& pluginDir)
 {
     return getFileNames(pluginDir, [](const dirent* entry)
     {
-        return entry->d_type == DT_REG
+        return isRegularFile(entry)
             && stringBeginsWith(entry->d_name, "lib")
 #ifdef BUILD_LINUX
             && stringEndsWith(entry->d_name, ".so");
