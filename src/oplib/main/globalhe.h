@@ -1,30 +1,18 @@
-/*
- *		globalhe.h
- *		Header file for global histogram equalization operator.
- *
- *		Version 1.1, last update: 24 January 1998.
- *
- *		History:
- *			24/1/98:		introduced RIPL_PARAMERROR.
- *			16/12/97:	updated comments.
- *			27/11/97:	first implemented.
- *
- *		Copyright © 1997/8, Richard A. Cook.
- */
-#ifndef _GLOBALHE_H_INCLUDED
-#define _GLOBALHE_H_INCLUDED
+#pragma once
 
 #include "ripl.h"
+#include <vector>
 
-/* Command-line version. */
-int globalHEExecute(unsigned argc,
-    const char **argv,
-    riplGreyMap *pinputGreyMap,
-    riplGreyMap *poutputGreyMap);
-const char *globalHEHelp(void);
-/* Internal entrypoint. */
-bool globalHEApplyOperator(riplGreyMap *pinputGreyMap,
-    riplGreyMap *poutputGreyMap);
+namespace ripl { namespace oplib {
 
-#endif
+    /** Returns input image unchanged */
+    void globalHE(riplGreyMap& output, const riplGreyMap& input);
+
+    /** Command-line entry point **/
+    int globalHEExecute(riplGreyMap& output, const std::vector<std::string>& args, const riplGreyMap& input);
+
+    /** Provide help for operator */
+    const char* globalHEHelp();
+
+}} // namespace ripl::oplib
 

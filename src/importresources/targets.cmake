@@ -15,6 +15,7 @@ add_custom_command(
   DEPENDS
     ${RESOURCES}/casablanca.ascii.pgm
     ${RESOURCES}/casablanca.dat
+    ${RESOURCES}/lena-globalhe.dat
     ${RESOURCES}/lena.dat
     ${RESOURCES}/lena.pgm
     ${IMPORTRESOURCESSRC}
@@ -24,3 +25,4 @@ set_target_properties(
   importresources
   PROPERTIES FOLDER importresources
 )
+

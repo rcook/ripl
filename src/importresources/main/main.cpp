@@ -118,6 +118,7 @@ static string makeIdentifier(const string& resourcePath)
     auto index = resourcePath.find_last_of("/\\");
     auto identifier = index == string::npos ? resourcePath : resourcePath.substr(index + 1);
     replace(identifier.begin(), identifier.end(), '.', '_');
+    replace(identifier.begin(), identifier.end(), '-', '_');
     return identifier;
 }
 
@@ -197,3 +198,4 @@ int main(int argc, char* argv[])
 
     h << "} // namespace resources\n";
 }
+

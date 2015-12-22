@@ -72,7 +72,7 @@ add_library(oplib-test-objs OBJECT
   ${CMAKE_CURRENT_BINARY_DIR}/generated/resources.h
   ${SHAREDSRCS}
   ${OPLIBTEST}/AddTest.cpp
-  ${OPLIBTEST}/GlobalheTest.cpp
+  ${OPLIBTEST}/GlobalHETest.cpp
   ${OPLIBTEST}/NopTest.cpp
 )
 

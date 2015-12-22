@@ -2,36 +2,45 @@
 
 #include "misc.h"
 #include "register.h"
+#include "validate.h"
 
-/* Internal entrypoint. */
-bool globalHEApplyOperator(riplGreyMap *pinputGreyMap,
-    riplGreyMap *poutputGreyMap) {
+namespace ripl { namespace oplib {
 
-    RIPL_VALIDATE_OP_GREYMAPS(pinputGreyMap, poutputGreyMap)
-    return miscHistogramEQ(pinputGreyMap->data(), poutputGreyMap->data(),
-        pinputGreyMap->size());
-}
+    void globalHE(riplGreyMap& output, const riplGreyMap& input)
+    {
+        RIPL_VALIDATE_ARG_NAME(input.hasSameDimensionsAs(output), "input");
 
-/* Command-line version. */
-#ifdef __BORLANDC__
-#	pragma argsused
-#endif
-int globalHEExecute(unsigned argc, const char **argv,
-    riplGreyMap *pinputGreyMap, riplGreyMap *poutputGreyMap) {
+        RIPL_REQUIRE(
+            miscHistogramEQ(input.data(), output.data(), output.size()),
+            error::InvalidOperation);
+    }
 
-    if (!globalHEApplyOperator(pinputGreyMap, poutputGreyMap))
-        return RIPL_EXECUTEERROR;
-    return 0;
-}
+    int globalHEExecute(riplGreyMap& output, const std::vector<std::string>& args, const riplGreyMap& input)
+    {
+        if (!args.empty())
+        {
+            riplMessage(
+                itError,
+                "Incorrect number of parameters!\n"
+                "Usage: " RIPL_EXENAME " " RIPL_CMDLINE " nop\n");
+            return RIPL_PARAMERROR;
+        }
 
-/* Display help screen. */
-const char *globalHEHelp(void) {
-    return "globalhe\n\n"
-        "   Applies simplified global histogram equalization to the image.\n";
-}
+        globalHE(output, input);
+        return RIPL_SUCCESS;
+    }
 
-OPLIB_REGISTER_OP(
-    globalhe,
-    "apply global histogram equalization to image",
-    globalHEExecute,
-    globalHEHelp);
+    const char* globalHEHelp()
+    {
+        return "globalhe\n\n"
+            "   Applies simplified global histogram equalization to the image.\n";
+    }
+
+    OPLIB_REGISTER_OP(
+        globalhe,
+        "apply global histogram equalization to image",
+        wrapNewStyleExecuteFunc<globalHEExecute>,
+        globalHEHelp);
+
+}} // namespace ripl::oplib
+
