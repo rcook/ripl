@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdexcept>
+
 #define UTILLIB_REQUIRE(expr) \
     do \
     { \
