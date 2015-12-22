@@ -3,7 +3,7 @@
 #include "Op.h"
 #include "riplregistry/Registry.h"
 #include "utillib/Trie.h"
-#include <unordered_map>
+#include <map>
 
 class RegistryImpl : public Registry
 {
@@ -17,11 +17,11 @@ public:
         ExecuteFunc executeFunc,
         HelpFunc helpFunc) override;
 
-    const std::unordered_map<std::string, Op>& ops() const { return m_ops; }
+    const std::map<std::string, Op>& ops() const { return m_ops; }
 
     const Op* findOpByPrefix(const std::string& prefix) const;
 
 private:
     Trie<char, std::string> m_names;
-    std::unordered_map<std::string, Op> m_ops;
+    std::map<std::string, Op> m_ops;
 };
