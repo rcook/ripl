@@ -15,8 +15,10 @@ if(NOT NO_USE_CATCH_MAIN)
 endif()
 
 target_include_directories(unittest PRIVATE
+  ${SRC}/riplmain
   ${SRC}/riplregistry/test
-  ${SRC}/utillib/test
+  ${SRC}/testlib/public
+  ${SRC}/utillib/public
 )
 
 target_link_libraries(unittest

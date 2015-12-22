@@ -5,8 +5,10 @@ add_library(testlib STATIC
   ${SHAREDSRCS}
   ${TESTLIBMAIN}/MemoryBuffer.cpp
   ${TESTLIBMAIN}/helper.cpp
+  ${TESTLIBMAIN}/logging.cpp
   ${TESTLIBPUBLIC}/testlib/MemoryBuffer.h
   ${TESTLIBPUBLIC}/testlib/helper.h
+  ${TESTLIBPUBLIC}/testlib/logging.h
 )
 
 target_include_directories(testlib PRIVATE

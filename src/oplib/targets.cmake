@@ -71,6 +71,8 @@ target_include_directories(oplib-objs PRIVATE
 add_library(oplib-test-objs OBJECT
   ${SHAREDSRCS}
   ${OPLIBTEST}/AddTest.cpp
+  ${OPLIBTEST}/GlobalheTest.cpp
+  ${OPLIBTEST}/NopTest.cpp
 )
 
 target_include_directories(oplib-test-objs PRIVATE
