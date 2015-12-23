@@ -70,6 +70,7 @@ include(src/utillib/targets.cmake)
 
 install(TARGETS
   ripl
+  riplmain
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
 )
@@ -80,3 +81,4 @@ install(TARGETS
 
 enable_testing()
 add_test(NAME unittest COMMAND unittest)
+

@@ -1,7 +1,7 @@
 set(RIPLMAINMAIN ${SRC}/riplmain)
 set(RIPLMAINTEST ${SRC}/riplmain/test)
 
-add_library(riplmain STATIC
+add_library(riplmain SHARED
   ${SHAREDSRCS}
   ${RIPLMAINMAIN}/Error.cpp
   ${RIPLMAINMAIN}/Error.h
@@ -60,3 +60,4 @@ set_target_properties(
   riplmain
   PROPERTIES FOLDER riplmain
 )
+
