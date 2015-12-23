@@ -20,4 +20,5 @@ if [[ "$build_type" == '' ]]; then
   build_type=Debug
 fi
 
-valgrind --tool=memcheck $CMAKEDIR/$build_type/install/bin/ripl $*
+valgrind --error-exitcode=1 --tool=memcheck $CMAKEDIR/$build_type/install/bin/ripl $*
+
