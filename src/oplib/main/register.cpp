@@ -1,10 +1,11 @@
 #include "register.h"
 #include "riplregistry/Registry.h"
+#include <memory>
 
 using namespace std;
 using namespace ripl::oplib;
 
-OpInfoRegistry* g_opInfoRegistry = nullptr;
+unique_ptr<OpInfoRegistry> g_opInfoRegistry;
 
 RIPL_REGISTER_PLUGIN_OPS(registry)
 {
@@ -41,8 +42,9 @@ void OpInfoRegistry::registerOp(OpInfo&& opInfo)
 {
     if (!g_opInfoRegistry)
     {
-        g_opInfoRegistry = new OpInfoRegistry;
+        g_opInfoRegistry = make_unique<OpInfoRegistry>();
     }
 
     g_opInfoRegistry->m_opInfos.emplace_back(std::move(opInfo));
 }
+
