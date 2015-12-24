@@ -70,6 +70,7 @@ include(src/utillib/targets.cmake)
 
 install(TARGETS
   ripl
+  ripllib
   riplmain
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
