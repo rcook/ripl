@@ -1,10 +1,11 @@
 #pragma once
 
+#include "riplmain-defs.h"
 #include <string>
 
 namespace ripl { namespace error
 {
-    class Error
+    class RIPL_RIPLMAIN_API Error
     {
     public:
         Error() = delete;
@@ -22,14 +23,14 @@ namespace ripl { namespace error
         const char* m_message;
     };
 
-    extern Error OutOfMemory;
-    extern Error InvalidOperation;
-    extern Error FileNotFound;
-    extern Error EndOfFile;
-    extern Error IOError;
-    extern Error ImageTooBig;
-    extern Error InvalidWidth;
-    extern Error InvalidHeight;
-    extern Error InvalidSize;
-    extern Error InvalidFileFormat;
+    RIPL_RIPLMAIN_API extern Error OutOfMemory;
+    RIPL_RIPLMAIN_API extern Error InvalidOperation;
+    RIPL_RIPLMAIN_API extern Error FileNotFound;
+    RIPL_RIPLMAIN_API extern Error EndOfFile;
+    RIPL_RIPLMAIN_API extern Error IOError;
+    RIPL_RIPLMAIN_API extern Error ImageTooBig;
+    RIPL_RIPLMAIN_API extern Error InvalidWidth;
+    RIPL_RIPLMAIN_API extern Error InvalidHeight;
+    RIPL_RIPLMAIN_API extern Error InvalidSize;
+    RIPL_RIPLMAIN_API extern Error InvalidFileFormat;
 }} // namespace ripl::error

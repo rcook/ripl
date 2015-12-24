@@ -3,13 +3,14 @@
 #include "common.h"
 #include "ripllib/ExecuteFunc.h"
 #include "ripllib/HelpFunc.h"
+#include "ripllib/ripllib-defs.h"
 #include <string>
 
 #define RIPL_REGISTER_PLUGIN_OPS_FUNCTION_NAME "__riplRegisterPluginOps"
 #define RIPL_REGISTER_PLUGIN_OPS(__registry) \
     extern "C" DLLEXPORT void __riplRegisterPluginOps(Registry& __registry)
 
-class Registry
+class RIPL_RIPLLIB_API Registry
 {
 protected:
     Registry();

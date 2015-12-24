@@ -1,7 +1,8 @@
 #pragma once
 
-#include "ripldefs.h"
 #include "config.h"
+#include "ripldefs.h"
+#include "riplmain-defs.h"
 #include <string>
 #include <vector>
 
@@ -42,8 +43,8 @@ enum class ImageFormat
 };
 
 /** Reads command-line arguments from the specified response file */
-std::vector<std::string> riplParseResponseFile(const std::string& fileName);
+RIPL_RIPLMAIN_API std::vector<std::string> riplParseResponseFile(const std::string& fileName);
 
-bool riplFileExists(const char *pfileName);
+RIPL_RIPLMAIN_API bool riplFileExists(const char* fileName);
 
-int riplRound(double val);
+RIPL_RIPLMAIN_API int riplRound(double val);

@@ -17,24 +17,39 @@
 #define _RIPLPARS_H_INCLUDED
 
 #include "ripldefs.h"
+#include "riplmain-defs.h"
 #include "riplmisc.h"
 
-bool riplArgGet_bool(const char *text,
-    bool *value);
-bool riplArgGet_riplGrey(const char *text,
-    riplGrey *value);
-bool riplArgGet_unsigned(const char *text,
-    unsigned *value);
-bool riplArgGet_int(const char *text,
-    int *value);
+RIPL_RIPLMAIN_API bool riplArgGet_bool(
+    const char* text,
+    bool* value);
+
+RIPL_RIPLMAIN_API bool riplArgGet_riplGrey(
+    const char* text,
+    riplGrey* value);
+
+RIPL_RIPLMAIN_API bool riplArgGet_unsigned(
+    const char* text,
+    unsigned* value);
+
+RIPL_RIPLMAIN_API bool riplArgGet_int(
+    const char* text,
+    int* value);
+
 bool riplArgGet_long(const char *text,
     long *value);
-bool riplArgGet_float(const char *text,
-    float *value);
-bool riplArgGet_double(const char *text,
-    double *value);
-bool riplMatch(const char *input,
-    const char *ref,
+
+RIPL_RIPLMAIN_API bool riplArgGet_float(
+    const char* text,
+    float* value);
+
+RIPL_RIPLMAIN_API bool riplArgGet_double(
+    const char* text,
+    double* value);
+
+RIPL_RIPLMAIN_API bool riplMatch(
+    const char*input,
+    const char* ref,
     unsigned match_chars);
 
 #endif

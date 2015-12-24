@@ -16,8 +16,9 @@
 #ifndef _RIPLMSG_H_INCLUDED
 #define _RIPLMSG_H_INCLUDED
 
-#include <stdarg.h>
 #include "ripldefs.h"
+#include "riplmain-defs.h"
+#include <cstdarg>
 
 typedef enum tagriplIconType {
     itWarning,
@@ -28,7 +29,7 @@ typedef enum tagriplIconType {
     itDebug
 } riplIconType;
 
-int riplMessage(riplIconType icon, const char *format, ...);
+RIPL_RIPLMAIN_API int riplMessage(riplIconType icon, const char* format, ...);
 int riplVMessage(riplIconType icon, const char *format, va_list ap);
 
 #endif
