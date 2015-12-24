@@ -5,6 +5,8 @@ add_executable(unittest
   ${SHAREDSRCS}
   $<TARGET_OBJECTS:oplib-objs>
   $<TARGET_OBJECTS:oplib-test-objs>
+  $<TARGET_OBJECTS:ripl-objs>
+  $<TARGET_OBJECTS:ripl-test-objs>
   $<TARGET_OBJECTS:ripllib-test-objs>
   $<TARGET_OBJECTS:riplmain-test-objs>
   $<TARGET_OBJECTS:utillib-test-objs>

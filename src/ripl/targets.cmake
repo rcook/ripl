@@ -3,6 +3,8 @@ set(RIPLTEST ${SRC}/ripl/test)
 
 add_library(ripl-objs OBJECT
   ${SHAREDSRCS}
+  ${RIPLMAIN}/Op.cpp
+  ${RIPLMAIN}/Op.h
   ${RIPLMAIN}/PluginManager.cpp
   ${RIPLMAIN}/PluginManager.h
   ${RIPLMAIN}/plugin_helper.cpp
@@ -39,8 +41,19 @@ target_link_libraries(ripl
   utillib
 )
 
+add_library(ripl-test-objs OBJECT
+  ${RIPLTEST}/OpTest.cpp
+)
+
+target_include_directories(ripl-test-objs PRIVATE
+  ${RIPLMAIN}
+  ${SRC}/ripllib/public
+  ${SRC}/riplmain
+)
+
 set_target_properties(
   ripl-objs
   ripl
+  ripl-test-objs
   PROPERTIES FOLDER ripl
 )

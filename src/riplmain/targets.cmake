@@ -6,8 +6,6 @@ add_library(riplmain SHARED
   ${RIPLMAINMAIN}/Error.cpp
   ${RIPLMAINMAIN}/Error.h
   ${RIPLMAINMAIN}/Image.h
-  ${RIPLMAINMAIN}/Op.cpp
-  ${RIPLMAINMAIN}/Op.h
   ${RIPLMAINMAIN}/Ranges.h
   ${RIPLMAINMAIN}/ripl.h
   ${RIPLMAINMAIN}/ripldbug.h
@@ -47,7 +45,6 @@ add_library(riplmain-test-objs OBJECT
   ${CMAKE_CURRENT_BINARY_DIR}/generated/resources.h
   ${RIPLMAINTEST}/ImageTest.cpp
   ${RIPLMAINTEST}/NetpbmTest.cpp
-  ${RIPLMAINTEST}/OpTest.cpp
   ${RIPLMAINTEST}/data.cpp
   ${RIPLMAINTEST}/data.h
 )
