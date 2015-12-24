@@ -11,7 +11,6 @@ add_library(riplmain SHARED
   ${RIPLMAINMAIN}/Ranges.h
   ${RIPLMAINMAIN}/RegistryImpl.cpp
   ${RIPLMAINMAIN}/RegistryImpl.h
-  ${RIPLMAINMAIN}/defs.h
   ${RIPLMAINMAIN}/ripl.h
   ${RIPLMAINMAIN}/ripldbug.h
   ${RIPLMAINMAIN}/ripldefs.h
@@ -19,6 +18,7 @@ add_library(riplmain SHARED
   ${RIPLMAINMAIN}/riplfilt.h
   ${RIPLMAINMAIN}/riplgrey.h
   ${RIPLMAINMAIN}/riplimg.h
+  ${RIPLMAINMAIN}/riplmain-defs.h
   ${RIPLMAINMAIN}/riplmisc.cpp
   ${RIPLMAINMAIN}/riplmisc.h
   ${RIPLMAINMAIN}/riplmsg.cpp
@@ -32,11 +32,17 @@ add_library(riplmain SHARED
   ${RIPLMAINMAIN}/validate.h
 )
 
-# $TODO: Eliminate circular dependency between riplmain and riplregistry!
+target_compile_definitions(riplmain PRIVATE BUILD_RIPLMAIN)
+
+# $TODO: Eliminate circular dependency between riplmain and ripllib by merging them!
 target_include_directories(riplmain PRIVATE
   ${RIPLMAINMAIN}
-  ${SRC}/riplregistry/public
+  ${SRC}/ripllib/public
   ${SRC}/utillib/public
+)
+
+target_link_libraries(riplmain
+  utillib
 )
 
 add_library(riplmain-test-objs OBJECT
@@ -50,7 +56,7 @@ add_library(riplmain-test-objs OBJECT
 
 target_include_directories(riplmain-test-objs PRIVATE
   ${RIPLMAINMAIN}
-  ${SRC}/riplregistry/public
+  ${SRC}/ripllib/public
   ${SRC}/testlib/public
 )
 
@@ -59,4 +65,3 @@ set_target_properties(
   riplmain
   PROPERTIES FOLDER riplmain
 )
-

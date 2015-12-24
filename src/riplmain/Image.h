@@ -1,8 +1,8 @@
 #pragma once
 
-#include "defs.h"
-#include "validate.h"
 #include "Ranges.h"
+#include "riplmain-defs.h"
+#include "validate.h"
 #include <utility>
 #include <vector>
 
