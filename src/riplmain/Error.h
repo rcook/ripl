@@ -14,12 +14,12 @@ namespace ripl { namespace error
     public:
         ~Error() = default;
 
-        Error(const std::string& message);
+        Error(const char* message);
 
-        const std::string& message() const;
+        const char* message() const;
 
     private:
-        const std::string m_message;
+        const char* m_message;
     };
 
     extern Error OutOfMemory;

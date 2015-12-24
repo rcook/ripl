@@ -3,12 +3,12 @@
 using namespace std;
 using namespace ripl::error;
 
-Error::Error(const string& message)
+Error::Error(const char* message)
     : m_message(message)
 {
 }
 
-const string& Error::message() const
+const char* Error::message() const
 {
     return m_message;
 }
