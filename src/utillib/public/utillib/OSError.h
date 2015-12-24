@@ -15,6 +15,8 @@ public:
 
     OSError(int code, const char* osFunctionName, const char* message);
 
+    static void throwError(int code, const char* osFunctionName);
+
     static void throwCurrentError(const char* osFunctionName);
 
     int code() const { return m_code; }

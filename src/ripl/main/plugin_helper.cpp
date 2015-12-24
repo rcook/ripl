@@ -27,12 +27,13 @@ vector<string> getCandidatePluginFileNames(const string& pluginDir)
     FindHandle handle(FindFirstFile(filter.data(), &findData), FindClose);
     if (!handle)
     {
-        if (GetLastError() == ERROR_PATH_NOT_FOUND)
+        DWORD dwError = GetLastError();
+        if (dwError == ERROR_FILE_NOT_FOUND || dwError == ERROR_PATH_NOT_FOUND)
         {
             return fileNames;
         }
 
-        OSError::throwCurrentError("FindFirstFile");
+        OSError::throwError(dwError, "FindFirstFile");
     }
 
     do

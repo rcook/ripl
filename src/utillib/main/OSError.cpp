@@ -1,10 +1,17 @@
 #include "utillib/OSError.h"
 #include "utillib/ScopedHandle.h"
+#ifdef BUILD_LINUX
+#include <errno.h>
+#endif
 #ifdef BUILD_WINDOWS
 #include <windows.h>
 #endif
 
 using namespace std;
+
+#ifdef BUILD_LINUX
+static_assert(sizeof(decltype(errno)) <= sizeof(int), "Must be able to store errno error code in int");
+#endif
 
 #ifdef BUILD_WINDOWS
 static_assert(sizeof(DWORD) <= sizeof(int), "Must be able to store DWORD error code in int");
@@ -33,13 +40,22 @@ OSError::OSError(int code, const char* osFunctionName, const char* message)
 {
 }
 
-void OSError::throwCurrentError(const char* osFunctionName)
+void OSError::throwError(int code, const char* osFunctionName)
 {
 #ifdef BUILD_WINDOWS
-    DWORD dwError = GetLastError();
-    auto message = FormatErrorMessage(dwError);
-    throw OSError(dwError, osFunctionName, static_cast<const char*>(message.get()));
+    auto message = FormatErrorMessage(code);
+    throw OSError(code, osFunctionName, static_cast<const char*>(message.get()));
 #else
-    throw OSError(-1, osFunctionName, "<no message>");
+    throw OSError(code, osFunctionName, "<no message>");
+#endif
+}
+
+void OSError::throwCurrentError(const char* osFunctionName)
+{
+#ifdef BUILD_LINUX
+    throwError(errno, osFunctionName);
+#endif
+#ifdef BUILD_WINDOWS
+    throwError(GetLastError(), osFunctionName);
 #endif
 }
