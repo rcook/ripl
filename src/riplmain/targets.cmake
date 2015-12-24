@@ -9,8 +9,6 @@ add_library(riplmain SHARED
   ${RIPLMAINMAIN}/Op.cpp
   ${RIPLMAINMAIN}/Op.h
   ${RIPLMAINMAIN}/Ranges.h
-  ${RIPLMAINMAIN}/RegistryImpl.cpp
-  ${RIPLMAINMAIN}/RegistryImpl.h
   ${RIPLMAINMAIN}/ripl.h
   ${RIPLMAINMAIN}/ripldbug.h
   ${RIPLMAINMAIN}/ripldefs.h

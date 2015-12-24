@@ -7,6 +7,8 @@ add_library(ripl-objs OBJECT
   ${RIPLMAIN}/PluginManager.h
   ${RIPLMAIN}/plugin_helper.cpp
   ${RIPLMAIN}/plugin_helper.h
+  ${RIPLMAIN}/RegistryImpl.cpp
+  ${RIPLMAIN}/RegistryImpl.h
   ${RIPLMAIN}/riplentr.cpp
   ${RIPLMAIN}/riplentr.h
 )
