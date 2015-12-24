@@ -2,12 +2,13 @@ set(RIPLLIBMAIN ${SRC}/ripllib/main)
 set(RIPLLIBPUBLIC ${SRC}/ripllib/public)
 set(RIPLLIBTEST ${SRC}/ripllib/test)
 
-add_library(ripllib STATIC
+add_library(ripllib SHARED
   ${SHAREDSRCS}
   ${RIPLLIBMAIN}/Registry.cpp
   ${RIPLLIBPUBLIC}/ripllib/ExecuteFunc.h
   ${RIPLLIBPUBLIC}/ripllib/HelpFunc.h
   ${RIPLLIBPUBLIC}/ripllib/Registry.h
+  ${RIPLLIBPUBLIC}/ripllib/ripllib-defs.h
 )
 
 target_compile_definitions(ripllib PRIVATE BUILD_RIPLLIB)
