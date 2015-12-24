@@ -1,5 +1,5 @@
 #include "register.h"
-#include "riplregistry/Registry.h"
+#include "ripllib/Registry.h"
 #include <memory>
 
 using namespace std;

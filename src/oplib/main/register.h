@@ -1,7 +1,7 @@
 #pragma once
 
-#include "riplregistry/ExecuteFunc.h"
-#include "riplregistry/HelpFunc.h"
+#include "ripllib/ExecuteFunc.h"
+#include "ripllib/HelpFunc.h"
 #include <vector>
 
 #define OPLIB_REGISTER_OP(name, description, executeFunc, helpFunc) \

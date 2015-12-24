@@ -1,8 +1,8 @@
 #pragma once
 
-#include "riplregistry/ExecuteFunc.h"
-#include "riplregistry/HelpFunc.h"
-#include "riplregistry/Registry.h"
+#include "ripllib/ExecuteFunc.h"
+#include "ripllib/HelpFunc.h"
+#include "ripllib/Registry.h"
 
 class Op
 {

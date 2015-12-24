@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "riplregistry/Registry.h"
+#include "ripllib/Registry.h"
 
 using namespace std;
 

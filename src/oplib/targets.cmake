@@ -63,8 +63,8 @@ add_library(oplib-objs OBJECT
 )
 
 target_include_directories(oplib-objs PRIVATE
+  ${SRC}/ripllib/public
   ${SRC}/riplmain
-  ${SRC}/riplregistry/public
   ${SRC}/ripltool
 )
 
@@ -78,8 +78,8 @@ add_library(oplib-test-objs OBJECT
 
 target_include_directories(oplib-test-objs PRIVATE
   ${OPLIBMAIN}
+  ${SRC}/ripllib/public
   ${SRC}/riplmain
-  ${SRC}/riplregistry/public
   ${SRC}/testlib/public
 )
 

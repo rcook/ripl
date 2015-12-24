@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Op.h"
-#include "riplregistry/Registry.h"
+#include "ripllib/Registry.h"
 #include "utillib/Trie.h"
 #include <map>
 

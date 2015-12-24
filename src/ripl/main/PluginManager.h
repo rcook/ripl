@@ -1,6 +1,6 @@
 #pragma once
 
-#include "riplregistry/Registry.h"
+#include "ripllib/Registry.h"
 #include <memory>
 #include <string>
 

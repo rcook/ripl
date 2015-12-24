@@ -14,8 +14,8 @@ add_library(ripl-objs OBJECT
 )
 
 target_include_directories(ripl-objs PRIVATE
+  ${SRC}/ripllib/public
   ${SRC}/riplmain
-  ${SRC}/riplregistry/public
   ${SRC}/utillib/public
 )
 
@@ -27,15 +27,15 @@ add_executable(ripl
 
 target_include_directories(ripl PRIVATE
   ${RIPLMAIN}
+  ${SRC}/ripllib/public
   ${SRC}/riplmain
-  ${SRC}/riplregistry/public
   ${SRC}/utillib/public
 )
 
 target_link_libraries(ripl
   ${CMAKE_DL_LIBS}
+  ripllib
   riplmain
-  riplregistry
   utillib
 )
 

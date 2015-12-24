@@ -1,8 +1,8 @@
 #pragma once
 
 #include "common.h"
-#include "riplregistry/ExecuteFunc.h"
-#include "riplregistry/HelpFunc.h"
+#include "ripllib/ExecuteFunc.h"
+#include "ripllib/HelpFunc.h"
 #include <string>
 
 #define RIPL_REGISTER_PLUGIN_OPS_FUNCTION_NAME "__riplRegisterPluginOps"

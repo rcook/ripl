@@ -60,8 +60,8 @@ include_directories(
 
 include(src/oplib/targets.cmake)
 include(src/ripl/targets.cmake)
+include(src/ripllib/targets.cmake)
 include(src/riplmain/targets.cmake)
-include(src/riplregistry/targets.cmake)
 include(src/ripltool/targets.cmake)
 include(src/testlib/targets.cmake)
 include(src/importresources/targets.cmake)
