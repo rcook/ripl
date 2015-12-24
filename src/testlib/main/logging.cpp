@@ -1,5 +1,7 @@
 #include "testlib/logging.h"
 
+using namespace std;
+
 namespace ripl { namespace test { namespace logging {
     Logger::Logger()
     {
@@ -12,7 +14,7 @@ namespace ripl { namespace test { namespace logging {
         s_logger = &logger;
     }
 
-    void logBinaryBlob(const char* fileName, const char* buffer, size_t bufferSize)
+    void logBinaryBlob(const string& fileName, const char* buffer, size_t bufferSize)
     {
         if (s_logger)
         {
@@ -20,3 +22,4 @@ namespace ripl { namespace test { namespace logging {
         }
     }
 }}} // namespace ripl::test::logging
+

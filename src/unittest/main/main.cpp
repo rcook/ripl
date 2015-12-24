@@ -24,7 +24,7 @@ public:
 
     LoggerImpl(const string& dir);
 
-    void logBinaryBlob(const char* fileName, const char* buffer, size_t bufferSize) override;
+    void logBinaryBlob(const string& fileName, const char* buffer, size_t bufferSize) override;
 
 private:
     const string m_logDir;
@@ -62,7 +62,7 @@ LoggerImpl::LoggerImpl(const string& dir)
 {
 }
 
-void LoggerImpl::logBinaryBlob(const char* fileName, const char* buffer, size_t bufferSize)
+void LoggerImpl::logBinaryBlob(const string& fileName, const char* buffer, size_t bufferSize)
 {
     string path = joinPaths(m_logDir, fileName);
     ofstream os(path, ios::out | ios::binary);
