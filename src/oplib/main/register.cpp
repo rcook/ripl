@@ -1,50 +1,76 @@
 #include "register.h"
 #include "ripllib/Registry.h"
-#include <memory>
 
 using namespace std;
 using namespace ripl::oplib;
 
-unique_ptr<OpInfoRegistry> g_opInfoRegistry;
+struct OpInfo
+{
+    const char* name;
+    const char* description;
+    const ExecuteFunc executeFunc;
+    const HelpFunc helpFunc;
+};
+
+// MSVC won't let us manage the vector<OpInfo> as a global due
+// to initialization order, so we wrap it in this class instead
+// and dynamically allocate and free it
+class OpInfoContainer
+{
+public:
+    OpInfoContainer(const OpInfoContainer&) = delete;
+    OpInfoContainer& operator=(const OpInfoContainer&) = delete;
+
+public:
+    OpInfoContainer() = default;
+
+    ~OpInfoContainer()
+    {
+        delete m_opInfos;
+        m_opInfos = nullptr;
+    }
+
+    vector<OpInfo>& opInfos()
+    {
+        if (!m_opInfos)
+        {
+            m_opInfos = new vector<OpInfo>;
+        }
+
+        return *m_opInfos;
+    }
+
+private:
+    vector<OpInfo>* m_opInfos;
+} g_container;
+
+namespace ripl { namespace oplib {
+
+    void registerOp(
+        const char* name,
+        const char* description,
+        ExecuteFunc executeFunc,
+        HelpFunc helpFunc)
+    {
+        g_container.opInfos().emplace_back(OpInfo
+        {
+            name,
+            description,
+            executeFunc,
+            helpFunc
+        });
+    }
+
+}} // namespace ripl::oplib
 
 RIPL_REGISTER_PLUGIN_OPS(registry)
 {
-    if (g_opInfoRegistry)
+    for (const auto& opInfo : g_container.opInfos())
     {
-        for (const auto& opInfo : g_opInfoRegistry->opInfos())
-        {
-            registry.registerOp(
-                opInfo.name(),
-                opInfo.description(),
-                opInfo.executeFunc(),
-                opInfo.helpFunc());
-        }
+        registry.registerOp(
+            opInfo.name,
+            opInfo.description,
+            opInfo.executeFunc,
+            opInfo.helpFunc);
     }
 }
-
-OpInfo::OpInfo(OpInfo&& other)
-    : m_name(std::move(other.m_name))
-    , m_description(std::move(other.m_description))
-    , m_executeFunc(std::move(other.m_executeFunc))
-    , m_helpFunc(std::move(other.m_helpFunc))
-{
-}
-
-OpInfo::OpInfo(const char* name, const char* description, ExecuteFunc executeFunc, HelpFunc helpFunc)
-    : m_name(name)
-    , m_description(description)
-    , m_executeFunc(executeFunc)
-    , m_helpFunc(helpFunc)
-{
-}
-
-void OpInfoRegistry::registerOp(OpInfo&& opInfo)
-{
-    if (!g_opInfoRegistry)
-    {
-        g_opInfoRegistry = make_unique<OpInfoRegistry>();
-    }
-
-    g_opInfoRegistry->m_opInfos.emplace_back(std::move(opInfo));
-}
-
