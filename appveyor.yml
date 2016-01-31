@@ -1,0 +1,11 @@
+version: 1.0.{build}
+clone_folder: c:\project
+install:
+- git submodule update --init --recursive
+- script\run-cmake.cmd Debug
+build:
+  project: cmake\Debug\ripl.sln
+  verbosity: minimal
+test_script:
+- cmake\Debug\Debug\unittest.exe
+- cmake\Debug\Debug\ripl.exe --plugin-dir cmake\Debug\Debug --help

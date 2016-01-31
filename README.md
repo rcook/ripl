@@ -1,6 +1,4 @@
-# Richard's image-processing library
-
-[![Build status](https://travis-ci.org/rcook/ripl.png)](https://travis-ci.org/rcook/ripl)
+# Richard's image-processing library [![Travis build](https://img.shields.io/travis/rcook/ripl/p-rcook-future.svg?label=Linux%20build)](https://travis-ci.org/rcook/ripl) [![AppVeyor build](https://img.shields.io/appveyor/ci/rcook/ripl/p-rcook-future.svg?label=Windows%20build)](https://ci.appveyor.com/project/rcook/ripl/branch/p-rcook-future)
 
 ## Overview
 
